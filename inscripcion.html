@@ -1,465 +1,768 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nueva inscripción — Sistema Electoral FCB UNSAAC</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscripción de Lista Electoral</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, sans-serif; }
 
-    :root {
-      --azul:       #1A5276;
-      --azul-hover: #154560;
-      --azul-claro: #E8F0F7;
-      --texto:      #0F172A;
-      --muted:      #64748B;
-      --borde:      #E2E8F0;
-      --fondo:      #F8FAFC;
-      --blanco:     #FFFFFF;
-      --error:      #DC2626;
-      --error-bg:   #FEF2F2;
-      --success:    #059669;
-      --radio:      8px;
+  .app-wrap { display: flex; gap: 0; min-height: 100vh; background: #F7F7F6; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px; min-width: 240px; background: #fff;
+    border-right: 1px solid #E2E2E0; padding: 24px 0;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .sidebar-header { padding: 0 20px 20px; border-bottom: 1px solid #E2E2E0; margin-bottom: 16px; }
+  .sidebar-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .sidebar-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: #1A5276; }
+  .sidebar-title { font-size: 11px; font-weight: 600; color: #1A5276; letter-spacing: 0.08em; text-transform: uppercase; }
+  .sidebar-sub { font-size: 11px; color: #6B6B6A; margin-top: 2px; }
+  .sidebar-section-label { font-size: 10px; color: #6B6B6A; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; padding: 0 20px 8px; }
+  .sidebar-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 20px; font-size: 13px; color: #2E2E2C; cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; }
+  .sidebar-item:hover { background: #F7F7F6; }
+  .sidebar-item.active { background: #E8F0F7; border-left-color: #1A5276; color: #1A5276; font-weight: 500; }
+  .sidebar-item-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #CBD9E2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sidebar-item-check.done { background: #1A5276; border-color: #1A5276; }
+  .sidebar-item-check.done i { font-size: 10px; color: #fff; }
+  .sidebar-badge { font-size: 10px; color: #6B6B6A; background: #E8F0F7; padding: 2px 7px; border-radius: 10px; }
+  .sidebar-badge.warn { background: #FFF3E0; color: #B45309; }
+
+  /* MAIN */
+  .main { flex: 1; padding: 40px 48px; max-width: 880px; margin: 0 auto; width: 100%; }
+
+  /* PROGRESS BAR */
+  .progress-card {
+    background: #fff; border: 1px solid #E2E2E0; border-radius: 10px;
+    padding: 18px 24px; margin-bottom: 28px;
+  }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .progress-label { font-size: 12px; font-weight: 600; color: #1A5276; letter-spacing: 0.05em; text-transform: uppercase; }
+  .progress-pct { font-size: 22px; font-weight: 600; color: #1A5276; }
+  .progress-bar-wrap { height: 7px; background: #E2E2E0; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+  .progress-bar-fill { height: 100%; background: #1A5276; border-radius: 4px; transition: width 0.4s ease; }
+  .progress-docs { font-size: 12px; color: #6B6B6A; }
+  .progress-docs span { font-weight: 600; color: #1A5276; }
+
+  /* SECTION */
+  .section { margin-bottom: 20px; }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; background: #fff; border: 1px solid #E2E2E0;
+    border-radius: 10px; cursor: pointer; transition: border-color 0.15s;
+  }
+  .section-header:hover { border-color: #CBD9E2; }
+  .section-header.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: 1px solid #E8F0F7; }
+  .section-header-left { display: flex; align-items: center; gap: 14px; }
+  .section-num { width: 28px; height: 28px; border-radius: 50%; background: #E8F0F7; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #1A5276; flex-shrink: 0; }
+  .section-num.done { background: #1A5276; color: #fff; }
+  .section-title { font-size: 14px; font-weight: 600; color: #1C1C1B; }
+  .section-meta { font-size: 12px; color: #6B6B6A; margin-top: 2px; }
+  .section-meta.ok { color: #1A5276; }
+  .section-header-right { display: flex; align-items: center; gap: 12px; }
+  .btn-edit { font-size: 12px; font-weight: 500; color: #1A5276; background: #E8F0F7; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
+  .btn-edit:hover { background: #DCE9F1; }
+  .chevron { font-size: 14px; color: #6B6B6A; transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+
+  .section-body {
+    background: #fff; border: 1px solid #E2E2E0; border-top: none;
+    border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;
+    padding: 24px; display: none;
+  }
+  .section-body.open { display: block; }
+
+  /* FORM GRID */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 12px; font-weight: 600; color: #2E2E2C; letter-spacing: 0.02em; text-transform: uppercase; }
+  .form-group input { height: 38px; border: 1px solid #E2E2E0; border-radius: 7px; padding: 0 12px; font-size: 14px; color: #1C1C1B; background: #FAFAF9; outline: none; transition: border-color 0.15s; font-family: inherit; }
+  .form-group input:focus { border-color: #1A5276; background: #fff; }
+  .form-note { font-size: 12px; color: #6B6B6A; background: #F7F7F6; border: 1px solid #E2E2E0; border-radius: 7px; padding: 12px 14px; margin-bottom: 20px; line-height: 1.6; }
+  .form-note strong { color: #1C1C1B; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: #E8F0F7; margin: 20px 0; }
+  .sub-label { font-size: 11px; font-weight: 700; color: #6B6B6A; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+
+  /* DOCUMENT CARD */
+  .doc-list { display: flex; flex-direction: column; gap: 10px; }
+  .doc-card { border: 1px solid #E2E2E0; border-radius: 8px; padding: 14px 16px; background: #FAFAF9; display: flex; align-items: center; gap: 14px; }
+  .doc-card.loaded { background: #E8F0F7; border-color: #A9C6D6; }
+  .doc-icon { width: 36px; height: 36px; border-radius: 7px; background: #E8F0F7; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .doc-icon i { font-size: 18px; color: #6B6B6A; }
+  .doc-card.loaded .doc-icon { background: #DCEAF1; }
+  .doc-card.loaded .doc-icon i { color: #1A5276; }
+  .doc-info { flex: 1; min-width: 0; }
+  .doc-name { font-size: 13px; font-weight: 600; color: #1C1C1B; }
+  .doc-desc { font-size: 11px; color: #6B6B6A; margin-top: 2px; }
+  .doc-file { font-size: 11px; color: #1A5276; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .doc-status { font-size: 11px; color: #B5B5B3; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .doc-status.loaded { color: #1A5276; }
+  .doc-status i { font-size: 13px; }
+  .doc-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+  .btn-upload { font-size: 11px; font-weight: 600; color: #1A5276; background: #fff; border: 1px solid #A9C6D6; padding: 5px 12px; border-radius: 6px; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+  .btn-upload:hover { background: #E8F0F7; }
+  .btn-replace { font-size: 10px; color: #6B6B6A; background: none; border: none; cursor: pointer; padding: 0; }
+  .btn-replace:hover { color: #2E2E2C; }
+  input[type="file"].hidden-file { display: none; }
+
+  /* SECRETARIAS */
+  .secretaria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sec-card { border: 1px solid #E2E2E0; border-radius: 9px; padding: 16px; background: #FAFAF9; cursor: pointer; transition: border-color 0.15s; }
+  .sec-card:hover { border-color: #CBD9E2; }
+  .sec-card.done { background: #E8F0F7; border-color: #A9C6D6; }
+  .sec-card-title { font-size: 13px; font-weight: 600; color: #1C1C1B; margin-bottom: 6px; }
+  .sec-card-stats { display: flex; flex-direction: column; gap: 3px; }
+  .sec-stat { font-size: 11px; color: #6B6B6A; display: flex; align-items: center; gap: 5px; }
+  .sec-stat i { font-size: 12px; }
+  .sec-stat.ok { color: #1A5276; }
+  .sec-card-btn { font-size: 11px; font-weight: 600; color: #1A5276; margin-top: 10px; cursor: pointer; }
+
+  /* PERSONA CARD EXPANDED */
+  .persona-card { border: 1px solid #E2E2E0; border-radius: 9px; overflow: hidden; margin-bottom: 16px; }
+  .persona-card-header { padding: 14px 18px; background: #F7F7F6; display: flex; justify-content: space-between; align-items: center; }
+  .persona-card-role { font-size: 11px; font-weight: 700; color: #1A5276; letter-spacing: 0.06em; text-transform: uppercase; }
+  .persona-card-body { padding: 20px; background: #fff; }
+
+  /* BOTTOM ACTIONS */
+  .section-footer { margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px; }
+  .btn-secondary { font-size: 13px; color: #2E2E2C; background: #E8F0F7; border: none; padding: 9px 20px; border-radius: 7px; cursor: pointer; font-weight: 500; transition: background 0.15s; }
+  .btn-secondary:hover { background: #DCE9F1; }
+  .btn-primary { font-size: 13px; color: #fff; background: #1A5276; border: none; padding: 9px 20px; border-radius: 7px; cursor: pointer; font-weight: 600; transition: background 0.15s; }
+  .btn-primary:hover { background: #154560; }
+  .btn-primary:disabled { background: #B5B5B3; cursor: not-allowed; }
+
+  /* RESUMEN FINAL */
+  .review-card { border: 1px solid #E2E2E0; border-radius: 9px; background: #fff; overflow: hidden; }
+  .review-item { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; border-bottom: 1px solid #E8F0F7; }
+  .review-item:last-child { border-bottom: none; }
+  .review-item-left { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #1C1C1B; }
+  .review-item-left i { font-size: 16px; }
+  .review-item-left i.ok { color: #1A5276; }
+  .review-item-left i.warn { color: #B45309; }
+  .review-missing { font-size: 11px; color: #B45309; }
+
+  /* MODAL SEC */
+  .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; align-items: center; justify-content: center; }
+  .modal-backdrop.open { display: flex; }
+  .modal { background: #fff; border-radius: 12px; width: 560px; max-height: 80vh; overflow-y: auto; }
+  .modal-header { padding: 20px 24px; border-bottom: 1px solid #E2E2E0; display: flex; justify-content: space-between; align-items: center; }
+  .modal-title { font-size: 15px; font-weight: 700; color: #1C1C1B; }
+  .modal-close { background: none; border: none; font-size: 20px; color: #6B6B6A; cursor: pointer; padding: 0; }
+  .modal-body { padding: 24px; }
+
+  /* PANTALLAS GRANDES */
+  @media (min-width: 1400px) {
+    .main { max-width: 960px; padding: 48px 56px; }
+  }
+
+  /* TABLET */
+  @media (max-width: 1024px) {
+    .main { padding: 28px 24px; max-width: 100%; margin: 0; }
+  }
+
+  /* MOBILE / TABLET CHICA */
+  @media (max-width: 680px) {
+    .app-wrap { flex-direction: column; }
+    .sidebar {
+      width: 100%; min-width: 0; height: auto; position: relative;
+      border-right: none; border-bottom: 1px solid #E2E2E0;
+      padding: 16px 0; display: flex; flex-direction: column;
     }
+    .sidebar-header { padding: 0 16px 16px; }
+    .sidebar-section-label { padding: 0 16px 8px; }
+    .sidebar-item { padding: 10px 16px; }
+    .main { padding: 16px; }
+    .progress-card { padding: 16px 18px; margin-bottom: 20px; }
+    .section-header { padding: 14px 16px; }
+    .section-body { padding: 18px 16px; }
+    .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    .secretaria-grid { grid-template-columns: 1fr; }
+    .persona-card-body { padding: 16px; }
+    .doc-card { flex-wrap: wrap; }
+    .doc-actions { align-items: flex-start; flex-direction: row; }
+    .section-footer { flex-wrap: wrap; }
+    .section-footer .btn-primary, .section-footer .btn-secondary { flex: 1; text-align: center; }
+    .modal { width: 92vw; max-height: 88vh; }
+    .modal-body { padding: 18px; }
+  }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--fondo);
-      color: var(--texto);
-      min-height: 100vh;
-      padding: 2rem;
-      -webkit-font-smoothing: antialiased;
-    }
+  /* MOBILE PEQUEÑO */
+  @media (max-width: 400px) {
+    .main { padding: 12px; }
+    .progress-pct { font-size: 18px; }
+    .section-title { font-size: 13px; }
+  }
 
-    .layout {
-      max-width: 560px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      padding: 2rem 0;
-    }
-
-    /* Encabezado */
-    .cabecera { display: flex; flex-direction: column; gap: 6px; }
-
-    .volver {
-      font-size: 13px;
-      color: var(--muted);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-bottom: 1rem;
-    }
-
-    .volver:hover { color: var(--texto); }
-
-    .cabecera h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .cabecera p {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* Pasos */
-    .pasos {
-      display: flex;
-      gap: 0;
-      border: 1px solid var(--borde);
-      border-radius: var(--radio);
-      overflow: hidden;
-      background: var(--blanco);
-    }
-
-    .paso {
-      flex: 1;
-      padding: 10px 16px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted);
-      text-align: center;
-      border-right: 1px solid var(--borde);
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .paso:last-child { border-right: none; }
-    .paso.activo { color: var(--azul); background: var(--azul-claro); }
-    .paso.completado { color: var(--success); }
-
-    .paso-num {
-      font-size: 18px;
-      font-weight: 600;
-      line-height: 1;
-    }
-
-    /* Tarjeta */
-    .tarjeta {
-      background: var(--blanco);
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .tarjeta-titulo {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--texto);
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--borde);
-    }
-
-    .grupo { display: grid; gap: 1rem; }
-    .grupo-2 { grid-template-columns: 1fr 1fr; }
-
-    .campo { display: flex; flex-direction: column; gap: 6px; }
-
-    .campo label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--texto);
-    }
-
-    .campo label span {
-      color: var(--error);
-      margin-left: 2px;
-    }
-
-    .campo input, .campo select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--borde);
-      border-radius: var(--radio);
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      color: var(--texto);
-      background: var(--blanco);
-      transition: border-color 0.15s, box-shadow 0.15s;
-      outline: none;
-    }
-
-    .campo input:focus, .campo select:focus {
-      border-color: var(--azul);
-      box-shadow: 0 0 0 3px rgba(26, 82, 118, 0.1);
-    }
-
-    .campo input.invalido { border-color: var(--error); }
-
-    .campo-ayuda {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .campo-error {
-      font-size: 12px;
-      color: var(--error);
-      display: none;
-    }
-
-    .campo-error.visible { display: block; }
-
-    /* Aviso */
-    .aviso {
-      background: var(--azul-claro);
-      border: 1px solid #C5D9EA;
-      border-radius: var(--radio);
-      padding: 12px 16px;
-      font-size: 13px;
-      color: var(--azul);
-      line-height: 1.5;
-    }
-
-    /* Error global */
-    .error-global {
-      display: none;
-      background: var(--error-bg);
-      border: 1px solid #FECACA;
-      border-radius: var(--radio);
-      padding: 12px 16px;
-      font-size: 13px;
-      color: var(--error);
-    }
-
-    .error-global.visible { display: block; }
-
-    /* Botón */
-    .btn-submit {
-      width: 100%;
-      padding: 12px;
-      background: var(--azul);
-      color: white;
-      border: none;
-      border-radius: var(--radio);
-      font-size: 14px;
-      font-weight: 500;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: background 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-submit:hover:not(:disabled) { background: var(--azul-hover); }
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .spinner {
-      display: none;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-
-    .btn-submit.cargando .spinner { display: block; }
-    .btn-submit.cargando .btn-texto { display: none; }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .pie-form {
-      text-align: center;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .pie-form a {
-      color: var(--azul);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .pie-form a:hover { text-decoration: underline; }
-
-    @media (max-width: 520px) {
-      .grupo-2 { grid-template-columns: 1fr; }
-    }
-  </style>
+  html, body { height: 100%; }
+</style>
 </head>
 <body>
 
-  <div class="layout">
+<div class="app-wrap">
 
-    <div class="cabecera">
-      <a href="index.html" class="volver" aria-label="Volver al portal">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        Volver al portal
-      </a>
-      <h1>Crear nueva inscripción</h1>
-      <p>Registra los datos básicos de tu lista. Podrás completar el resto del expediente después de crear tu cuenta.</p>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-dot"></div>
+        <span class="sidebar-title">Sistema Electoral</span>
+      </div>
+      <div class="sidebar-sub">Inscripción de Lista — 2025</div>
     </div>
 
-    <div class="pasos" role="list" aria-label="Pasos del registro">
-      <div class="paso activo" role="listitem">
-        <span class="paso-num">1</span>
-        <span>Datos de la lista</span>
+    <div class="sidebar-section-label">Estado del expediente</div>
+
+    <div class="sidebar-item active" data-sec="0" onclick="jumpTo(0)">
+      <span>Datos generales</span>
+      <div class="sidebar-item-check" id="sb-check-0"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="1" onclick="jumpTo(1)">
+      <span>Presidente</span>
+      <div class="sidebar-item-check" id="sb-check-1"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="2" onclick="jumpTo(2)">
+      <span>Vicepresidente</span>
+      <div class="sidebar-item-check" id="sb-check-2"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="3" onclick="jumpTo(3)">
+      <span>Secretarías</span>
+      <div class="sidebar-badge warn" id="sb-badge-sec">0 / 9</div>
+    </div>
+    <div class="sidebar-item" data-sec="4" onclick="jumpTo(4)">
+      <span>Docs. generales</span>
+      <div class="sidebar-badge" id="sb-badge-docs">0 / 5</div>
+    </div>
+    <div class="sidebar-item" data-sec="5" onclick="jumpTo(5)">
+      <span>Revisión y envío</span>
+      <div class="sidebar-item-check" id="sb-check-5"><i class="ti ti-check"></i></div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- PROGRESS -->
+    <div class="progress-card">
+      <div class="progress-top">
+        <span class="progress-label">Registro de lista</span>
+        <span class="progress-pct" id="pct-label">0%</span>
       </div>
-      <div class="paso" role="listitem">
-        <span class="paso-num">2</span>
-        <span>Tu cuenta</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="pct-bar" style="width:0%"></div>
       </div>
-      <div class="paso" role="listitem">
-        <span class="paso-num">3</span>
-        <span>Expediente listo</span>
+      <div class="progress-docs">Documentos cargados: <span id="docs-count">0 / 23</span></div>
+    </div>
+
+    <!-- S1: DATOS GENERALES -->
+    <div class="section" id="sec-0">
+      <div class="section-header" onclick="toggleSec(0)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-0">1</div>
+          <div>
+            <div class="section-title">Datos generales de la lista</div>
+            <div class="section-meta" id="meta-0">Nombre de lista, gestor responsable</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(0)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-0"></i>
+        </div>
+      </div>
+      <div class="section-body open" id="body-0">
+        <div class="form-note">
+          <strong>Gestor responsable:</strong> El gestor general será el único punto de contacto oficial durante todo el proceso de inscripción. Es responsable de la veracidad y completitud del expediente presentado.
+        </div>
+        <div class="form-grid" style="margin-bottom:16px">
+          <div class="form-group" style="grid-column: span 2">
+            <label for="lista_nombre">Nombre de la lista</label>
+            <input type="text" id="lista_nombre" name="lista_nombre" placeholder="Ej. Lista Renovación Universitaria" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_nombre">Nombre del gestor general</label>
+            <input type="text" id="gestor_nombre" name="gestor_nombre" placeholder="Apellidos y nombres" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_dni">DNI del gestor</label>
+            <input type="text" id="gestor_dni" name="gestor_dni" maxlength="8" placeholder="00000000" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_email">Correo electrónico</label>
+            <input type="email" id="gestor_email" name="gestor_email" placeholder="correo@universidad.edu.pe" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_telefono">Teléfono</label>
+            <input type="text" id="gestor_telefono" name="gestor_telefono" placeholder="9XX XXX XXX" oninput="updateProgress()">
+          </div>
+        </div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(0)">Guardar y continuar</button>
+        </div>
       </div>
     </div>
 
-    <form id="form-inscripcion" novalidate>
-
-      <!-- Datos de la lista -->
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Datos de la lista</h2>
-
-        <div class="grupo">
-          <div class="campo">
-            <label for="nombre_lista">Nombre de la lista <span aria-hidden="true">*</span></label>
-            <input type="text" id="nombre_lista" name="nombre_lista" placeholder="Ej: Lista Verde" required />
-            <span class="campo-error" id="err-nombre_lista"></span>
+    <!-- S2: PRESIDENTE -->
+    <div class="section" id="sec-1">
+      <div class="section-header" onclick="toggleSec(1)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-1">2</div>
+          <div>
+            <div class="section-title">Presidente</div>
+            <div class="section-meta" id="meta-1">Datos personales y documentos</div>
           </div>
-
-          <div class="campo">
-            <label for="nombre_agrupacion">Nombre de la agrupación</label>
-            <input type="text" id="nombre_agrupacion" name="nombre_agrupacion" placeholder="Ej: Movimiento Biología Unida" />
-            <span class="campo-ayuda">Opcional — nombre político o de campaña.</span>
-          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(1)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-1"></i>
         </div>
       </div>
-
-      <!-- Datos del personero -->
-      <div class="tarjeta" style="margin-top: 1rem;">
-        <h2 class="tarjeta-titulo">Datos del personero</h2>
-
-        <div class="grupo grupo-2">
-          <div class="campo">
-            <label for="personero_nombre">Nombres <span aria-hidden="true">*</span></label>
-            <input type="text" id="personero_nombre" name="personero_nombre" placeholder="Ej: Juan Carlos" required />
-            <span class="campo-error" id="err-personero_nombre"></span>
+      <div class="section-body" id="body-1">
+        <div class="persona-card">
+          <div class="persona-card-header">
+            <span class="persona-card-role">Presidente de lista</span>
           </div>
-
-          <div class="campo">
-            <label for="personero_apellidos">Apellidos <span aria-hidden="true">*</span></label>
-            <input type="text" id="personero_apellidos" name="personero_apellidos" placeholder="Ej: Mamani Quispe" required />
-            <span class="campo-error" id="err-personero_apellidos"></span>
-          </div>
-        </div>
-
-        <div class="grupo grupo-2">
-          <div class="campo">
-            <label for="personero_dni">DNI <span aria-hidden="true">*</span></label>
-            <input type="text" id="personero_dni" name="personero_dni" placeholder="12345678" maxlength="8" inputmode="numeric" required />
-            <span class="campo-error" id="err-personero_dni"></span>
-          </div>
-
-          <div class="campo">
-            <label for="personero_telefono">Teléfono</label>
-            <input type="tel" id="personero_telefono" name="personero_telefono" placeholder="987654321" inputmode="numeric" />
+          <div class="persona-card-body">
+            <div class="form-grid" style="margin-bottom:20px">
+              <div class="form-group">
+                <label for="pres_nombres">Nombres</label>
+                <input type="text" id="pres_nombres" name="pres_nombres" placeholder="Nombres" oninput="updateProgress()">
+              </div>
+              <div class="form-group">
+                <label for="pres_apellidos">Apellidos</label>
+                <input type="text" id="pres_apellidos" name="pres_apellidos" placeholder="Apellidos" oninput="updateProgress()">
+              </div>
+              <div class="form-group">
+                <label for="pres_dni">DNI</label>
+                <input type="text" id="pres_dni" name="pres_dni" maxlength="8" placeholder="00000000" oninput="updateProgress()">
+              </div>
+              <div class="form-group">
+                <label for="pres_codigo">Código universitario</label>
+                <input type="text" id="pres_codigo" name="pres_codigo" placeholder="Ej. 20200123" oninput="updateProgress()">
+              </div>
+            </div>
+            <div class="sub-label">Documentos requeridos</div>
+            <div class="doc-list" id="docs-pres"></div>
           </div>
         </div>
-      </div>
-
-      <!-- Cuenta de acceso -->
-      <div class="tarjeta" style="margin-top: 1rem;">
-        <h2 class="tarjeta-titulo">Cuenta de acceso</h2>
-
-        <div class="campo">
-          <label for="email">Correo electrónico <span aria-hidden="true">*</span></label>
-          <input type="email" id="email" name="email" placeholder="tu@correo.com" autocomplete="email" required />
-          <span class="campo-ayuda">Usarás este correo para ingresar al sistema.</span>
-          <span class="campo-error" id="err-email"></span>
-        </div>
-
-        <div class="grupo grupo-2">
-          <div class="campo">
-            <label for="password">Contraseña <span aria-hidden="true">*</span></label>
-            <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" required />
-            <span class="campo-error" id="err-password"></span>
-          </div>
-
-          <div class="campo">
-            <label for="password_confirm">Confirmar contraseña <span aria-hidden="true">*</span></label>
-            <input type="password" id="password_confirm" name="password_confirm" placeholder="Repite la contraseña" autocomplete="new-password" required />
-            <span class="campo-error" id="err-password_confirm"></span>
-          </div>
-        </div>
-
-        <div class="aviso" role="note">
-          Con estos datos podrás ingresar al sistema en cualquier momento para continuar completando tu expediente antes de enviarlo.
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(1)">Guardar y continuar</button>
         </div>
       </div>
+    </div>
 
-      <div class="error-global" id="error-global" role="alert" style="margin-top: 1rem;"></div>
+    <!-- S3: VICEPRESIDENTE -->
+    <div class="section" id="sec-2">
+      <div class="section-header" onclick="toggleSec(2)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-2">3</div>
+          <div>
+            <div class="section-title">Vicepresidente</div>
+            <div class="section-meta" id="meta-2">Datos personales y documentos</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(2)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-2"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-2">
+        <div class="persona-card">
+          <div class="persona-card-header">
+            <span class="persona-card-role">Vicepresidente de lista</span>
+          </div>
+          <div class="persona-card-body">
+            <div class="form-grid" style="margin-bottom:20px">
+              <div class="form-group">
+                <label for="vp_nombres">Nombres</label>
+                <input type="text" id="vp_nombres" name="vp_nombres" placeholder="Nombres" oninput="updateProgress()">
+              </div>
+              <div class="form-group">
+                <label for="vp_apellidos">Apellidos</label>
+                <input type="text" id="vp_apellidos" name="vp_apellidos" placeholder="Apellidos" oninput="updateProgress()">
+              </div>
+              <div class="form-group">
+                <label for="vp_dni">DNI</label>
+                <input type="text" id="vp_dni" name="vp_dni" maxlength="8" placeholder="00000000" oninput="updateProgress()">
+              </div>
+              <div class="form-group">
+                <label for="vp_codigo">Código universitario</label>
+                <input type="text" id="vp_codigo" name="vp_codigo" placeholder="Ej. 20200456" oninput="updateProgress()">
+              </div>
+            </div>
+            <div class="sub-label">Documentos requeridos</div>
+            <div class="doc-list" id="docs-vp"></div>
+          </div>
+        </div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(2)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
 
-      <button class="btn-submit" id="btn-registrar" type="submit" style="margin-top: 1rem;">
-        <span class="spinner" aria-hidden="true"></span>
-        <span class="btn-texto">Crear expediente</span>
-      </button>
+    <!-- S4: SECRETARÍAS -->
+    <div class="section" id="sec-3">
+      <div class="section-header" onclick="toggleSec(3)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-3">4</div>
+          <div>
+            <div class="section-title">Secretarías</div>
+            <div class="section-meta" id="meta-3">9 secretarías por completar</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <i class="ti ti-chevron-down chevron" id="chev-3"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-3">
+        <div class="secretaria-grid" id="sec-grid"></div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(3)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
 
-      <p class="pie-form" style="margin-top: 1rem;">
-        ¿Ya tienes una cuenta? <a href="login.html">Ingresar</a>
-      </p>
+    <!-- S5: DOCS GENERALES -->
+    <div class="section" id="sec-4">
+      <div class="section-header" onclick="toggleSec(4)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-4">5</div>
+          <div>
+            <div class="section-title">Documentos generales de la lista</div>
+            <div class="section-meta" id="meta-4">Documentos que pertenecen a la lista en su conjunto</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(4)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-4"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-4">
+        <div class="doc-list" id="docs-general"></div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(4)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
 
-    </form>
+    <!-- S6: REVISIÓN Y ENVÍO -->
+    <div class="section" id="sec-5">
+      <div class="section-header" onclick="toggleSec(5)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-5">6</div>
+          <div>
+            <div class="section-title">Revisión y envío del expediente</div>
+            <div class="section-meta" id="meta-5">Verificar antes de enviar</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <i class="ti ti-chevron-down chevron" id="chev-5"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-5">
+        <div class="form-note" style="margin-bottom:20px">
+          Revise cada sección antes de enviar. Una vez enviado el expediente, no podrá realizarse modificaciones sin comunicarse con la comisión electoral.
+        </div>
+        <div class="review-card" id="review-list"></div>
+        <div class="section-footer" style="margin-top:20px">
+          <button class="btn-secondary" onclick="jumpTo(0)">Revisar expediente</button>
+          <button class="btn-primary" id="btn-enviar" disabled onclick="enviarExpediente()">Enviar expediente</button>
+        </div>
+      </div>
+    </div>
 
+  </main>
+</div>
+
+<!-- MODAL SECRETARIA -->
+<div class="modal-backdrop" id="modal-sec">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-sec-title">Secretaría</span>
+      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body" id="modal-sec-body"></div>
   </div>
+</div>
 
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script>
-    if (Auth.estaAutenticado()) {
-      window.location.href = 'expediente.html';
+<script>
+const DOCS_PERSONA = [
+  { id:'dni', name:'Copia del DNI', desc:'Escaneado a color, legible', icon:'ti-id' },
+  { id:'matricula', name:'Constancia de matrícula', desc:'Vigente para el semestre actual', icon:'ti-school' },
+  { id:'decjurada', name:'Declaración jurada', desc:'Formato descargable de la comisión electoral', icon:'ti-file-text' },
+  { id:'notas', name:'Récord de notas', desc:'Certificado oficial de la facultad', icon:'ti-certificate' },
+];
+
+const DOCS_GENERAL = [
+  { id:'plan_trabajo', name:'Plan de trabajo', desc:'Documento PDF con el plan de gestión propuesto', icon:'ti-clipboard-list' },
+  { id:'padron', name:'Padrón de adherentes', desc:'Lista firmada de estudiantes adherentes', icon:'ti-users' },
+  { id:'logo', name:'Logo de la lista', desc:'Imagen PNG o JPG, fondo transparente preferible', icon:'ti-photo' },
+  { id:'decl_general', name:'Declaración general', desc:'Declaración jurada firmada por todos los candidatos', icon:'ti-file-certificate' },
+  { id:'reglamento', name:'Estatuto de lista', desc:'Reglamento interno según formato oficial', icon:'ti-book' },
+];
+
+const SECRETARIAS = [
+  'Secretaría de Economía',
+  'Secretaría Académica',
+  'Secretaría de Bienestar',
+  'Secretaría de Cultura',
+  'Secretaría de Deporte',
+  'Secretaría de Comunicaciones',
+  'Secretaría de Medio Ambiente',
+  'Secretaría de Género',
+  'Secretaría de Asuntos Internacionales',
+];
+
+let state = {
+  secDone: [false,false,false,false,false,false],
+  uploadedDocs: {},
+  secDataDone: Array(9).fill(false),
+};
+
+function makeDocCard(docObj, prefix) {
+  const key = prefix + '_' + docObj.id;
+  const isLoaded = !!state.uploadedDocs[key];
+  return `
+    <div class="doc-card ${isLoaded?'loaded':''}" id="dc-${key}">
+      <div class="doc-icon"><i class="ti ${docObj.icon}" aria-hidden="true"></i></div>
+      <div class="doc-info">
+        <div class="doc-name">${docObj.name}</div>
+        <div class="doc-desc">${docObj.desc}</div>
+        ${isLoaded ? `<div class="doc-file"><i class="ti ti-paperclip" style="font-size:11px"></i> ${state.uploadedDocs[key]}</div>` : ''}
+      </div>
+      <div class="doc-actions">
+        <span class="doc-status ${isLoaded?'loaded':''}">
+          ${isLoaded ? '<i class="ti ti-circle-check"></i> Cargado' : '<i class="ti ti-clock"></i> Pendiente'}
+        </span>
+        <input type="file" class="hidden-file" id="file-${key}" name="${key}" data-key="${key}" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(this)">
+        ${isLoaded
+          ? `<button class="btn-replace" onclick="document.getElementById('file-${key}').click()">Reemplazar</button>`
+          : `<button class="btn-upload" onclick="document.getElementById('file-${key}').click()">Seleccionar archivo</button>`
+        }
+      </div>
+    </div>`;
+}
+
+function renderDocList(containerId, docs, prefix) {
+  const el = document.getElementById(containerId);
+  if(el) el.innerHTML = docs.map(d => makeDocCard(d, prefix)).join('');
+}
+
+function renderSecGrid() {
+  const grid = document.getElementById('sec-grid');
+  grid.innerHTML = SECRETARIAS.map((s,i) => {
+    const done = state.secDataDone[i];
+    return `
+      <div class="sec-card ${done?'done':''}" id="sc-${i}">
+        <div class="sec-card-title">${s}</div>
+        <div class="sec-card-stats">
+          <div class="sec-stat ${done?'ok':''}"><i class="ti ${done?'ti-circle-check':'ti-circle'}"></i> ${done?'Datos completos':'Datos pendientes'}</div>
+          <div class="sec-stat"><i class="ti ti-file"></i> ${getSecDocCount(i)} / 4 documentos</div>
+        </div>
+        <div class="sec-card-btn" onclick="openSecModal(${i})">
+          ${done ? 'Ver / Editar' : 'Completar'} <i class="ti ti-arrow-right" style="font-size:11px"></i>
+        </div>
+      </div>`;
+  }).join('');
+  updateSecMeta();
+}
+
+function getSecDocCount(i) {
+  return DOCS_PERSONA.filter(d => !!state.uploadedDocs['sec'+i+'_'+d.id]).length;
+}
+
+function openSecModal(i) {
+  const sec = SECRETARIAS[i];
+  document.getElementById('modal-sec-title').textContent = sec;
+  document.getElementById('modal-sec-body').innerHTML = `
+    <div class="form-grid" style="margin-bottom:20px">
+      <div class="form-group">
+        <label for="sec${i}_nombres">Nombres</label>
+        <input type="text" id="sec${i}_nombres" name="sec${i}_nombres" placeholder="Nombres" value="${state['sec'+i+'_nombres']||''}" oninput="state['sec${i}_nombres']=this.value">
+      </div>
+      <div class="form-group">
+        <label for="sec${i}_apellidos">Apellidos</label>
+        <input type="text" id="sec${i}_apellidos" name="sec${i}_apellidos" placeholder="Apellidos" value="${state['sec'+i+'_apellidos']||''}" oninput="state['sec${i}_apellidos']=this.value">
+      </div>
+      <div class="form-group">
+        <label for="sec${i}_dni">DNI</label>
+        <input type="text" id="sec${i}_dni" name="sec${i}_dni" maxlength="8" placeholder="00000000" value="${state['sec'+i+'_dni']||''}" oninput="state['sec${i}_dni']=this.value">
+      </div>
+      <div class="form-group">
+        <label for="sec${i}_codigo">Código universitario</label>
+        <input type="text" id="sec${i}_codigo" name="sec${i}_codigo" placeholder="Ej. 20200789" value="${state['sec'+i+'_codigo']||''}" oninput="state['sec${i}_codigo']=this.value">
+      </div>
+    </div>
+    <div class="sub-label">Documentos requeridos</div>
+    <div class="doc-list">${DOCS_PERSONA.map(d=>makeDocCard(d,'sec'+i)).join('')}</div>
+    <div style="display:flex;justify-content:flex-end;margin-top:20px;gap:10px">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveSecModal(${i})">Guardar secretaría</button>
+    </div>`;
+  document.getElementById('modal-sec').classList.add('open');
+}
+
+function saveSecModal(i) {
+  const n = document.getElementById('sec'+i+'_nombres')?.value||'';
+  const a = document.getElementById('sec'+i+'_apellidos')?.value||'';
+  const d = document.getElementById('sec'+i+'_dni')?.value||'';
+  const c = document.getElementById('sec'+i+'_codigo')?.value||'';
+  if(n && a && d && c) { state.secDataDone[i] = true; }
+  state['sec'+i+'_nombres'] = n;
+  state['sec'+i+'_apellidos'] = a;
+  state['sec'+i+'_dni'] = d;
+  state['sec'+i+'_codigo'] = c;
+  closeModal();
+  renderSecGrid();
+  updateProgress();
+}
+
+function closeModal() {
+  document.getElementById('modal-sec').classList.remove('open');
+}
+
+function handleFile(input) {
+  const key = input.dataset.key;
+  const file = input.files[0];
+  if(!file) return;
+  state.uploadedDocs[key] = file.name;
+  refreshDocArea(key);
+  updateProgress();
+}
+
+function refreshDocArea(key) {
+  const prefix = key.replace(/_[^_]+$/, '').replace(/_/g,'_');
+  const parts = key.split('_');
+  if(parts[0]==='pres') renderDocList('docs-pres', DOCS_PERSONA, 'pres');
+  else if(parts[0]==='vp') renderDocList('docs-vp', DOCS_PERSONA, 'vp');
+  else if(parts[0]==='general') renderDocList('docs-general', DOCS_GENERAL, 'general');
+  else if(parts[0]==='sec') {
+    const i = parseInt(parts[1]);
+    const modalEl = document.getElementById('modal-sec-body');
+    if(modalEl && modalEl.innerHTML) {
+      const docArea = modalEl.querySelector('.doc-list');
+      if(docArea) docArea.innerHTML = DOCS_PERSONA.map(d=>makeDocCard(d,'sec'+i)).join('');
     }
+    renderSecGrid();
+  }
+}
 
-    const form       = document.getElementById('form-inscripcion');
-    const btnReg     = document.getElementById('btn-registrar');
-    const errorGlobal = document.getElementById('error-global');
+function updateSecMeta() {
+  const done = state.secDataDone.filter(Boolean).length;
+  document.getElementById('meta-3').textContent = `${done} de ${SECRETARIAS.length} secretarías completas`;
+  document.getElementById('sb-badge-sec').textContent = `${done} / ${SECRETARIAS.length}`;
+  document.getElementById('sb-badge-sec').className = 'sidebar-badge' + (done<SECRETARIAS.length?' warn':'');
+}
 
-    function mostrarError(campo, msg) {
-      const el = document.getElementById('err-' + campo);
-      const input = document.getElementById(campo);
-      if (el) { el.textContent = msg; el.classList.add('visible'); }
-      if (input) input.classList.add('invalido');
-    }
+function countAllDocs() {
+  const total = (DOCS_PERSONA.length * 2) + (DOCS_PERSONA.length * SECRETARIAS.length) + DOCS_GENERAL.length;
+  const loaded = Object.keys(state.uploadedDocs).length;
+  return { loaded, total };
+}
 
-    function limpiarErrores() {
-      document.querySelectorAll('.campo-error').forEach(e => {
-        e.textContent = ''; e.classList.remove('visible');
-      });
-      document.querySelectorAll('input.invalido').forEach(i => i.classList.remove('invalido'));
-      errorGlobal.textContent = '';
-      errorGlobal.classList.remove('visible');
-    }
+function getSecFieldsDone(prefix) {
+  const ids = ['nombres','apellidos','dni','codigo'];
+  return ids.every(f => (document.getElementById(prefix+'_'+f)||{value:''}).value || state[prefix+'_'+f]);
+}
 
-    function validarFormulario(datos) {
-      let ok = true;
+function getSec1Done() {
+  const ids = ['lista_nombre','gestor_nombre','gestor_dni','gestor_email','gestor_telefono'];
+  return ids.every(f => (document.getElementById(f)||{value:''}).value);
+}
 
-      if (!datos.nombre_lista) { mostrarError('nombre_lista', 'El nombre de la lista es obligatorio.'); ok = false; }
-      if (!datos.personero_nombre) { mostrarError('personero_nombre', 'El nombre es obligatorio.'); ok = false; }
-      if (!datos.personero_apellidos) { mostrarError('personero_apellidos', 'Los apellidos son obligatorios.'); ok = false; }
-      if (!/^\d{8}$/.test(datos.personero_dni)) { mostrarError('personero_dni', 'El DNI debe tener exactamente 8 dígitos.'); ok = false; }
-      if (!datos.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.email)) { mostrarError('email', 'Ingresa un correo válido.'); ok = false; }
-      if (!datos.password || datos.password.length < 8) { mostrarError('password', 'La contraseña debe tener al menos 8 caracteres.'); ok = false; }
-      if (datos.password !== datos.password_confirm) { mostrarError('password_confirm', 'Las contraseñas no coinciden.'); ok = false; }
+function updateProgress() {
+  const { loaded, total } = countAllDocs();
+  const s1 = getSec1Done();
+  const s2 = getSecFieldsDone('pres');
+  const s3 = getSecFieldsDone('vp');
+  const s4 = state.secDataDone.filter(Boolean).length;
+  const s5ok = DOCS_GENERAL.filter(d => !!state.uploadedDocs['general_'+d.id]).length;
 
-      return ok;
-    }
+  const totalSteps = 1+1+1+SECRETARIAS.length+DOCS_GENERAL.length;
+  const doneSteps = (s1?1:0)+(s2?1:0)+(s3?1:0)+s4+s5ok;
+  const pct = Math.round((doneSteps/totalSteps)*100);
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      limpiarErrores();
+  document.getElementById('pct-label').textContent = pct+'%';
+  document.getElementById('pct-bar').style.width = pct+'%';
+  document.getElementById('docs-count').textContent = loaded+' / '+total;
 
-      const datos = {
-        nombre_lista:        document.getElementById('nombre_lista').value.trim(),
-        nombre_agrupacion:   document.getElementById('nombre_agrupacion').value.trim(),
-        personero_nombre:    document.getElementById('personero_nombre').value.trim(),
-        personero_apellidos: document.getElementById('personero_apellidos').value.trim(),
-        personero_dni:       document.getElementById('personero_dni').value.trim(),
-        personero_telefono:  document.getElementById('personero_telefono').value.trim(),
-        email:               document.getElementById('email').value.trim(),
-        password:            document.getElementById('password').value,
-        password_confirm:    document.getElementById('password_confirm').value,
-      };
+  const docsGeneral = DOCS_GENERAL.filter(d => !!state.uploadedDocs['general_'+d.id]).length;
+  document.getElementById('sb-badge-docs').textContent = `${docsGeneral} / ${DOCS_GENERAL.length}`;
+  document.getElementById('sb-badge-docs').className = 'sidebar-badge'+(docsGeneral<DOCS_GENERAL.length?' warn':'');
 
-      if (!validarFormulario(datos)) return;
+  updateReview(s1,s2,s3,s4,docsGeneral);
+}
 
-      btnReg.classList.add('cargando');
-      btnReg.disabled = true;
+function updateReview(s1,s2,s3,s4Complete,docsGenLoaded) {
+  const items = [
+    { label:'Datos generales', ok: s1 },
+    { label:'Presidente', ok: s2 && DOCS_PERSONA.every(d=>state.uploadedDocs['pres_'+d.id]) },
+    { label:'Vicepresidente', ok: s3 && DOCS_PERSONA.every(d=>state.uploadedDocs['vp_'+d.id]) },
+    { label:`Secretarías (${s4Complete} / ${SECRETARIAS.length})`, ok: s4Complete === SECRETARIAS.length },
+    { label:`Documentos generales (${docsGenLoaded} / ${DOCS_GENERAL.length})`, ok: docsGenLoaded === DOCS_GENERAL.length },
+  ];
 
-      try {
-        const resultado = await API.post('listas.registrar', datos);
-        Auth.guardarSesion(resultado.token, resultado.usuario);
-        window.location.href = 'expediente.html';
-      } catch (err) {
-        errorGlobal.textContent = err.message || 'No se pudo crear el expediente. Inténtalo de nuevo.';
-        errorGlobal.classList.add('visible');
-      } finally {
-        btnReg.classList.remove('cargando');
-        btnReg.disabled = false;
-      }
-    });
+  const allOk = items.every(it=>it.ok);
+  document.getElementById('btn-enviar').disabled = !allOk;
 
-    // Limpiar error al escribir
-    document.querySelectorAll('input').forEach(input => {
-      input.addEventListener('input', () => {
-        const err = document.getElementById('err-' + input.id);
-        if (err) { err.textContent = ''; err.classList.remove('visible'); }
-        input.classList.remove('invalido');
-      });
-    });
-  </script>
+  const rl = document.getElementById('review-list');
+  rl.innerHTML = items.map(it=>`
+    <div class="review-item">
+      <div class="review-item-left">
+        <i class="ti ${it.ok?'ti-circle-check ok':'ti-circle-x warn'}" aria-hidden="true"></i>
+        ${it.label}
+      </div>
+      ${!it.ok?'<span class="review-missing">Incompleto</span>':''}
+    </div>`).join('');
+}
+
+function toggleSec(i) {
+  const body = document.getElementById('body-'+i);
+  const chev = document.getElementById('chev-'+i);
+  const hdr = document.querySelector('#sec-'+i+' .section-header');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+  hdr.classList.toggle('open', !isOpen);
+}
+
+function completeSec(i) {
+  state.secDone[i] = true;
+  document.getElementById('num-'+i).classList.add('done');
+  document.getElementById('num-'+i).innerHTML = '<i class="ti ti-check" style="font-size:13px"></i>';
+  const sbCheck = document.getElementById('sb-check-'+i);
+  if(sbCheck) sbCheck.classList.add('done');
+  toggleSec(i);
+  if(i<5) { toggleSec(i+1); }
+  updateProgress();
+  document.querySelectorAll('.sidebar-item').forEach((el,idx)=>el.classList.toggle('active', idx===i+1));
+}
+
+function jumpTo(i) {
+  const body = document.getElementById('body-'+i);
+  if(!body.classList.contains('open')) toggleSec(i);
+  document.getElementById('sec-'+i).scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('.sidebar-item').forEach((el,idx)=>el.classList.toggle('active', idx===i));
+}
+
+function enviarExpediente() {
+  alert('Expediente enviado correctamente. Recibirá una confirmación en su correo electrónico.');
+}
+
+renderDocList('docs-pres', DOCS_PERSONA, 'pres');
+renderDocList('docs-vp', DOCS_PERSONA, 'vp');
+renderDocList('docs-general', DOCS_GENERAL, 'general');
+renderSecGrid();
+updateProgress();
+document.getElementById('chev-0').classList.add('open');
+document.querySelector('#sec-0 .section-header').classList.add('open');
+</script>
+
 </body>
 </html>
