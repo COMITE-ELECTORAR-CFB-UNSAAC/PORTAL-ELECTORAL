@@ -1,10 +1,12 @@
 // ============================================================
 //  CONECTOR HTML → APPS SCRIPT
-//  Pega este bloque al final del <script> de tu HTML en GitHub.
+//  Pega este bloque al final del <script> de tu HTML en GitHub,
+//  o cárgalo como <script src="api.js"></script> DESPUÉS del
+//  script principal (necesita la variable global `state`).
 //  Reemplaza APPS_SCRIPT_URL con la URL de tu Web App publicada.
 // ============================================================
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgv4e-rKs25MmVXV0LIChLbYCJBpYJpSoNPTEg5OCoa6xn2JzcpXKKF87FagH5xnsR/exec"; 
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgv4e-rKs25MmVXV0LIChLbYCJBpYJpSoNPTEg5OCoa6xn2JzcpXKKF87FagH5xnsR/exec";
 // se que está mal colocarlo aqui, pero es practico y el resto del back esta en app script
 
 // ── Convierte un File a base64 ────────────────────────────────
@@ -37,6 +39,7 @@ async function subirArchivoADrive(expedienteId, campo, file) {
 // ── Función principal: reemplaza enviarExpediente() ──────────
 async function enviarExpediente() {
   const btn = document.getElementById("btn-enviar");
+  const btnEstabaDeshabilitado = btn.disabled;
   btn.disabled = true;
   btn.textContent = "Enviando expediente…";
 
@@ -64,7 +67,8 @@ async function enviarExpediente() {
       codigo:    document.getElementById("vp_codigo")?.value || "",
     };
 
-    // Secretarías (usa el estado global de tu HTML)
+    // Secretarías (usa el estado global de tu HTML — `state`, NO el DOM,
+    // porque los inputs de cada secretaría se destruyen al cerrar su modal)
     const SECRETARIAS_NOMBRES = [
       "Secretaría de Economía", "Secretaría Académica", "Secretaría de Bienestar",
       "Secretaría de Cultura", "Secretaría de Deporte", "Secretaría de Comunicaciones",
@@ -96,17 +100,29 @@ async function enviarExpediente() {
 
     const expedienteId = regData.expedienteId;
 
-    // 3. Subir todos los archivos uno a uno
-    const totalArchivos = Object.keys(state.uploadedDocs).length;
+    // 3. Subir todos los archivos uno a uno.
+    //
+    // IMPORTANTE: antes esto buscaba document.getElementById("file-"+campo)
+    // para recuperar el File real. Eso solo funcionaba para el documento
+    // que estuviera visible en pantalla en ese momento — los inputs de
+    // las secretarías se recrean cada vez que se abre su modal, así que
+    // al cerrar el modal el <input> (y el File que tenía) desaparece del
+    // DOM. Resultado: al enviar, solo se subían los archivos de la última
+    // secretaría abierta; el resto se saltaba en silencio (el `continue`
+    // de abajo) aunque el nombre del archivo sí apareciera en pantalla.
+    //
+    // Ahora usamos state.uploadedFiles, que guarda el objeto File real
+    // en memoria desde el momento en que se sube (ver handleFile en el
+    // script principal), sin depender de que el input siga en el DOM.
+    const uploadedFiles = state.uploadedFiles || {};
+    const totalArchivos = Object.keys(uploadedFiles).length;
     let subidos = 0;
 
-    for (const [campo, nombreArchivo] of Object.entries(state.uploadedDocs)) {
-      // Recuperar el File real desde el input correspondiente
-      const input = document.getElementById("file-" + campo);
-      if (!input || !input.files[0]) continue;
+    for (const [campo, file] of Object.entries(uploadedFiles)) {
+      if (!file) continue;
 
       try {
-        await subirArchivoADrive(expedienteId, campo, input.files[0]);
+        await subirArchivoADrive(expedienteId, campo, file);
         subidos++;
         btn.textContent = `Subiendo documentos… (${subidos}/${totalArchivos})`;
       } catch (fileErr) {
@@ -130,7 +146,7 @@ async function enviarExpediente() {
     document.getElementById("body-5").appendChild(resumen);
 
   } catch (err) {
-    btn.disabled = false;
+    btn.disabled = btnEstabaDeshabilitado;
     btn.textContent = "Reintentar envío";
     btn.style.background = "#db3a34";
     alert("Error al enviar el expediente:\n" + err.message);
