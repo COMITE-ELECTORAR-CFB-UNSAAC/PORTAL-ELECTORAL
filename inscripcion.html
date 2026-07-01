@@ -138,6 +138,8 @@
   .btn-primary { font-size: 13px; color: #fff; background: #1A5276; border: none; padding: 9px 20px; border-radius: 7px; cursor: pointer; font-weight: 600; transition: background 0.15s; }
   .btn-primary:hover { background: #154560; }
   .btn-primary:disabled { background: #B5B5B3; cursor: not-allowed; }
+  .btn-test { font-size: 13px; color: #B45309; background: #FFF3E0; border: 1px solid #F3D19E; padding: 9px 20px; border-radius: 7px; cursor: pointer; font-weight: 600; transition: background 0.15s; }
+  .btn-test:hover { background: #FCE7C4; }
 
   /* RESUMEN FINAL */
   .review-card { border: 1px solid #E2E2E0; border-radius: 9px; background: #fff; overflow: hidden; }
@@ -158,6 +160,13 @@
   .modal-close { background: none; border: none; font-size: 20px; color: #6B6B6A; cursor: pointer; padding: 0; }
   .modal-body { padding: 24px; }
 
+  /* TEST BANNER */
+  .test-banner {
+    display: none; background: #FFF3E0; border: 1px solid #F3D19E; color: #8A5300;
+    font-size: 12px; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px;
+    align-items: center; gap: 8px;
+  }
+  .test-banner.show { display: flex; }
   /* PANTALLAS GRANDES */
   @media (min-width: 1400px) {
     .main { max-width: 960px; padding: 48px 56px; }
@@ -189,7 +198,7 @@
     .doc-card { flex-wrap: wrap; }
     .doc-actions { align-items: flex-start; flex-direction: row; }
     .section-footer { flex-wrap: wrap; }
-    .section-footer .btn-primary, .section-footer .btn-secondary { flex: 1; text-align: center; }
+    .section-footer .btn-primary, .section-footer .btn-secondary, .section-footer .btn-test { flex: 1; text-align: center; }
     .modal { width: 92vw; max-height: 88vh; }
     .modal-body { padding: 18px; }
   }
@@ -469,9 +478,17 @@
         <div class="form-note" style="margin-bottom:20px">
           Revise cada sección antes de enviar. Una vez enviado el expediente, no podrá realizarse modificaciones sin comunicarse con la comisión electoral.
         </div>
+
+        <div class="test-banner" id="test-banner">
+          <i class="ti ti-flask"></i>
+          <span>Modo prueba: se generaron datos ficticios para verificar la conexión con Apps Script. Esto no reemplaza el envío real.</span>
+        </div>
+
         <div class="review-card" id="review-list"></div>
+
         <div class="section-footer" style="margin-top:20px">
           <button class="btn-secondary" onclick="jumpTo(0)">Revisar expediente</button>
+          <button class="btn-test" onclick="enviarPrueba()" title="Llena todo con datos ficticios y envía de inmediato, para probar que Apps Script recibe bien los datos">Enviar datos de prueba</button>
           <button class="btn-primary" id="btn-enviar" disabled onclick="enviarExpediente()">Enviar expediente</button>
         </div>
       </div>
@@ -492,11 +509,22 @@
 </div>
 
 <script>
+/*
+ * =====================================================================
+ * NOTA: el envío real a Apps Script (APPS_SCRIPT_URL, enviarExpediente,
+ * fileToBase64, subirArchivoADrive) vive en api.js, un archivo aparte.
+ * Este script NO debe redeclarar esas constantes/funciones — si lo hace,
+ * "const APPS_SCRIPT_URL" duplicado rompe el parseo de toda la página.
+ * Asegúrate de cargar api.js DESPUÉS de este bloque, justo antes de
+ * </body>, para que pueda usar la variable global `state` de aquí abajo.
+ * =====================================================================
+ */
+
 const DOCS_PERSONA = [
   { id:'dni', name:'Copia del DNI', desc:'Escaneado a color, legible', icon:'ti-id' },
   { id:'matricula', name:'Constancia de matrícula', desc:'Vigente para el semestre actual', icon:'ti-school' },
   { id:'decjurada', name:'Declaración jurada', desc:'Formato descargable de la comisión electoral', icon:'ti-file-text' },
-  { id:'notas', name:'Récord de notas', desc:'Certificado oficial de la facultad', icon:'ti-certificate' },
+  { id:'notas', name:'Constancia de notas', desc:'Certificado oficial de la facultad', icon:'ti-certificate' },
 ];
 
 const DOCS_GENERAL = [
@@ -521,7 +549,8 @@ const SECRETARIAS = [
 
 let state = {
   secDone: [false,false,false,false,false,false],
-  uploadedDocs: {},
+  uploadedDocs: {},   // key -> nombre de archivo (solo para mostrar en pantalla)
+  uploadedFiles: {},  // key -> objeto File real (esto es lo que se sube a Drive)
   secDataDone: Array(9).fill(false),
 };
 
@@ -632,24 +661,48 @@ function handleFile(input) {
   const file = input.files[0];
   if(!file) return;
   state.uploadedDocs[key] = file.name;
+  state.uploadedFiles[key] = file; // guardamos el File real, no solo el nombre
   refreshDocArea(key);
   updateProgress();
 }
 
+/*
+ * FIX: antes esta función hacía `key.split('_')` y comparaba
+ * `parts[0]==='sec'`. Pero la clave real de un documento de secretaría
+ * es algo como "sec0_dni" o "sec3_matricula": el prefijo es "sec0",
+ * "sec3", etc. (el número va pegado, sin guion bajo), así que
+ * `parts[0]` nunca era exactamente "sec" y la rama nunca se ejecutaba.
+ * Por eso el modal de secretaría no mostraba el archivo recién subido.
+ * Ahora se detecta el prefijo con una expresión regular y se refresca
+ * tanto la tarjeta dentro del modal (si está abierto) como la grilla
+ * de secretarías (para actualizar el contador X / 4 documentos).
+ */
 function refreshDocArea(key) {
-  const prefix = key.replace(/_[^_]+$/, '').replace(/_/g,'_');
   const parts = key.split('_');
-  if(parts[0]==='pres') renderDocList('docs-pres', DOCS_PERSONA, 'pres');
-  else if(parts[0]==='vp') renderDocList('docs-vp', DOCS_PERSONA, 'vp');
-  else if(parts[0]==='general') renderDocList('docs-general', DOCS_GENERAL, 'general');
-  else if(parts[0]==='sec') {
-    const i = parseInt(parts[1]);
-    const modalEl = document.getElementById('modal-sec-body');
-    if(modalEl && modalEl.innerHTML) {
-      const docArea = modalEl.querySelector('.doc-list');
-      if(docArea) docArea.innerHTML = DOCS_PERSONA.map(d=>makeDocCard(d,'sec'+i)).join('');
+  const prefix0 = parts[0];
+
+  if (prefix0 === 'pres') {
+    renderDocList('docs-pres', DOCS_PERSONA, 'pres');
+  } else if (prefix0 === 'vp') {
+    renderDocList('docs-vp', DOCS_PERSONA, 'vp');
+  } else if (prefix0 === 'general') {
+    renderDocList('docs-general', DOCS_GENERAL, 'general');
+  } else {
+    const secMatch = prefix0.match(/^sec(\d+)$/);
+    if (secMatch) {
+      const i = parseInt(secMatch[1], 10);
+      const modalTitle = document.getElementById('modal-sec-title');
+      const modalBody = document.getElementById('modal-sec-body');
+      const modalOpen = document.getElementById('modal-sec').classList.contains('open');
+      // Solo re-renderizamos las tarjetas de documento dentro del modal
+      // si el modal abierto corresponde a esta misma secretaría, para
+      // no pisar los valores que el usuario esté escribiendo en otra.
+      if (modalOpen && modalTitle && modalTitle.textContent === SECRETARIAS[i]) {
+        const docArea = modalBody.querySelector('.doc-list');
+        if (docArea) docArea.innerHTML = DOCS_PERSONA.map(d => makeDocCard(d, 'sec' + i)).join('');
+      }
+      renderSecGrid();
     }
-    renderSecGrid();
   }
 }
 
@@ -751,8 +804,93 @@ function jumpTo(i) {
   document.querySelectorAll('.sidebar-item').forEach((el,idx)=>el.classList.toggle('active', idx===i));
 }
 
-function enviarExpediente() {
-  alert('Expediente enviado correctamente. Recibirá una confirmación en su correo electrónico.');
+/* ---------------------------------------------------------------------
+ * BOTÓN DE PRUEBA
+ * ---------------------------------------------------------------------
+ * Rellena TODOS los campos (datos generales, presidente, vicepresidente,
+ * las 9 secretarías) y genera un archivo ficticio pequeño para cada
+ * documento requerido, sin que tengas que llenar el formulario a mano.
+ * Luego llama a la función real `enviarExpediente()` que vive en
+ * api.js, así que la prueba pasa por el mismo camino que un envío real:
+ * registrar_expediente + subir_archivo contra tu Code.gs.
+ *
+ * Los archivos ficticios se guardan directamente en state.uploadedDocs
+ * (nombre, para mostrar en pantalla) y state.uploadedFiles (el File
+ * real que api.js sube a Drive) — no dependen de que exista un
+ * <input type="file"> en el DOM, así que también cubre las 9
+ * secretarías aunque su modal nunca se haya abierto.
+ * ------------------------------------------------------------------- */
+function crearArchivoDePrueba(nombre) {
+  const contenido = 'Archivo de prueba generado automáticamente — ' + nombre + ' — ' + new Date().toISOString();
+  return new File([contenido], nombre, { type: 'application/pdf' });
+}
+
+function setVal(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value;
+}
+
+function llenarDocsDePrueba(prefix, docs) {
+  docs.forEach(d => {
+    const key = prefix + '_' + d.id;
+    const file = crearArchivoDePrueba('prueba_' + key + '.pdf');
+    state.uploadedDocs[key] = file.name;
+    state.uploadedFiles[key] = file;
+  });
+}
+
+function enviarPrueba() {
+  if (typeof enviarExpediente !== 'function') {
+    alert('No se encontró la función enviarExpediente(). Verifica que api.js esté cargado (con <script src="api.js"></script>) antes de usar el botón de prueba.');
+    return;
+  }
+
+  // Datos generales
+  setVal('lista_nombre', 'Lista de Prueba (TEST)');
+  setVal('gestor_nombre', 'Gestor Prueba');
+  setVal('gestor_dni', '00000001');
+  setVal('gestor_email', 'prueba@test.com');
+  setVal('gestor_telefono', '999999999');
+
+  // Presidente
+  setVal('pres_nombres', 'Nombres Presidente TEST');
+  setVal('pres_apellidos', 'Apellidos TEST');
+  setVal('pres_dni', '00000002');
+  setVal('pres_codigo', 'TEST0002');
+  llenarDocsDePrueba('pres', DOCS_PERSONA);
+
+  // Vicepresidente
+  setVal('vp_nombres', 'Nombres Vicepresidente TEST');
+  setVal('vp_apellidos', 'Apellidos TEST');
+  setVal('vp_dni', '00000003');
+  setVal('vp_codigo', 'TEST0003');
+  llenarDocsDePrueba('vp', DOCS_PERSONA);
+
+  // Secretarías (directo en `state`, sin necesidad de abrir cada modal)
+  SECRETARIAS.forEach((_, i) => {
+    state['sec'+i+'_nombres'] = 'Sec'+i+' TEST';
+    state['sec'+i+'_apellidos'] = 'Apellidos TEST';
+    state['sec'+i+'_dni'] = String(10+i).padStart(8,'0');
+    state['sec'+i+'_codigo'] = 'TESTSEC'+i;
+    state.secDataDone[i] = true;
+    llenarDocsDePrueba('sec'+i, DOCS_PERSONA);
+  });
+
+  // Documentos generales de la lista
+  llenarDocsDePrueba('general', DOCS_GENERAL);
+
+  // Refrescar toda la UI para que se vea reflejado (contador de docs,
+  // tarjetas de secretaría en verde, resumen de revisión, etc.)
+  renderDocList('docs-pres', DOCS_PERSONA, 'pres');
+  renderDocList('docs-vp', DOCS_PERSONA, 'vp');
+  renderDocList('docs-general', DOCS_GENERAL, 'general');
+  renderSecGrid();
+  updateProgress();
+
+  document.getElementById('test-banner').classList.add('show');
+
+  // Dispara el envío real (definido en api.js) con estos datos de prueba
+  enviarExpediente();
 }
 
 renderDocList('docs-pres', DOCS_PERSONA, 'pres');
@@ -763,6 +901,13 @@ updateProgress();
 document.getElementById('chev-0').classList.add('open');
 document.querySelector('#sec-0 .section-header').classList.add('open');
 </script>
+
+<!--
+  IMPORTANTE: api.js debe cargarse DESPUÉS del <script> de arriba,
+  porque usa la variable global `state` que se declara ahí.
+  Reemplaza la ruta por donde tengas el archivo (mismo repo de GitHub Pages).
+-->
+<script src="api.js"></script>
 
 </body>
 </html>
