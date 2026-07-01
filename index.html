@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elecciones — Centro Federado FCB UNSAAC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset y base ───────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --azul:        #1A5276;
+      --azul-claro:  #E8F0F7;
+      --azul-hover:  #154560;
+      --texto:       #1C1C1B;
+      --texto-muted: #6B6B6A;
+      --borde:       #E2E2E0;
+      --fondo:       #FFFFFF;
+      --fondo-alt:   #F7F7F6;
+      --radio:       6px;
+      --contenedor:  1100px;
+      --nav-h:       60px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--texto);
+      background: var(--fondo);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Navegación ─────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--borde);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      max-width: var(--contenedor);
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .nav-marca {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-escudo {
+      width: 32px;
+      height: 32px;
+      background: var(--azul);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-escudo svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
+    .nav-nombre {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--texto);
+      line-height: 1.2;
+    }
+
+    .nav-nombre small {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--texto-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--texto-muted);
+      text-decoration: none;
+      border-radius: var(--radio);
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.activo {
+      color: var(--texto);
+      background: var(--fondo-alt);
+    }
+
+    .nav-links a.activo {
+      font-weight: 500;
+    }
+
+    .nav-btn {
+      padding: 7px 16px;
+      background: var(--azul);
+      color: #fff !important;
+      border-radius: var(--radio);
+      font-size: 13px;
+      font-weight: 500 !important;
+      text-decoration: none;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .nav-btn:hover {
+      background: var(--azul-hover) !important;
+      color: #fff !important;
+    }
+
+    /* Menú hamburguesa (móvil) */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: var(--texto);
+    }
+
+    /* ── Hero ───────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: calc(var(--nav-h) + 4rem) 2rem 4rem;
+      max-width: var(--contenedor);
+      margin: 0 auto;
+    }
+
+    .hero-etiqueta {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--azul);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-titulo {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--texto);
+      max-width: 780px;
+    }
+
+    .hero-titulo span {
+      color: var(--azul);
+    }
+
+    .hero-subtitulo {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      color: var(--texto-muted);
+      max-width: 520px;
+      line-height: 1.65;
+    }
+
+    .hero-acciones {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primario {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--azul);
+      color: #fff;
+      border-radius: var(--radio);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-primario:hover { background: var(--azul-hover); transform: translateY(-1px); }
+    .btn-primario:active { transform: translateY(0); }
+
+    .btn-secundario {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: 1px solid var(--borde);
+      color: var(--texto);
+      border-radius: var(--radio);
+      font-size: 14px;
+      font-weight: 400;
+      text-decoration: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .btn-secundario:hover { border-color: #bbb; background: var(--fondo-alt); }
+
+    .hero-stats {
+      margin-top: 4rem;
+      display: flex;
+      gap: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--borde);
+    }
+
+    .stat-item { display: flex; flex-direction: column; gap: 2px; }
+    .stat-num  { font-size: 1.5rem; font-weight: 600; color: var(--texto); }
+    .stat-lbl  { font-size: 11px; color: var(--texto-muted); letter-spacing: 0.05em; }
+
+    /* ── Sección genérica ───────────────────────────── */
+    .seccion {
+      padding: 5rem 2rem;
+      border-top: 1px solid var(--borde);
+    }
+
+    .seccion-alt { background: var(--fondo-alt); }
+
+    .contenedor {
+      max-width: var(--contenedor);
+      margin: 0 auto;
+    }
+
+    .seccion-cabecera {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .seccion-etiqueta {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--azul);
+      flex-shrink: 0;
+    }
+
+    .seccion-titulo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--texto);
+    }
+
+    /* ── Cronograma (línea de tiempo horizontal) ────── */
+    .cronograma-scroll {
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .cronograma-linea {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      min-width: max-content;
+      padding: 1rem 0 1.5rem;
+      position: relative;
+    }
+
+    /* línea de fondo */
+    .cronograma-linea::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 28px;
+      right: 28px;
+      height: 1px;
+      background: var(--borde);
+    }
+
+    .etapa {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 160px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .etapa-punto {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--borde);
+      background: var(--fondo);
+      z-index: 1;
+      margin-top: 21px;
+      transition: border-color 0.2s;
+    }
+
+    .etapa.pasada .etapa-punto {
+      background: var(--azul);
+      border-color: var(--azul);
+    }
+
+    .etapa.actual .etapa-punto {
+      background: var(--azul);
+      border-color: var(--azul);
+      box-shadow: 0 0 0 4px var(--azul-claro);
+      width: 16px;
+      height: 16px;
+      margin-top: 20px;
+    }
+
+    .etapa-nombre {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--texto-muted);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .etapa.pasada .etapa-nombre { color: var(--texto); }
+    .etapa.actual .etapa-nombre  { color: var(--azul); font-weight: 600; }
+
+    .etapa-fecha {
+      font-size: 11px;
+      color: var(--texto-muted);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .etapa.actual .etapa-fecha { color: var(--azul); }
+
+    .etapa-badge {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-actual {
+      background: var(--azul-claro);
+      color: var(--azul);
+    }
+
+    /* ── Noticias ───────────────────────────────────── */
+    #noticias-cargando {
+      text-align: center;
+      color: var(--texto-muted);
+      font-size: 14px;
+      padding: 2rem 0;
+    }
+
+    .noticias-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .noticia-card {
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      padding: 1.5rem;
+      background: var(--fondo);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .noticia-card:hover {
+      border-color: #bbb;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .noticia-fecha {
+      font-size: 11px;
+      color: var(--texto-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .noticia-titulo {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--texto);
+      line-height: 1.35;
+    }
+
+    .noticia-resumen {
+      font-size: 13px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .noticia-link {
+      font-size: 13px;
+      color: var(--azul);
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .noticia-link:hover { text-decoration: underline; }
+
+    /* ── Descargas ──────────────────────────────────── */
+    #descargas-cargando {
+      text-align: center;
+      color: var(--texto-muted);
+      font-size: 14px;
+      padding: 2rem 0;
+    }
+
+    .descargas-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .descarga-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border: 1px solid var(--borde);
+      border-radius: var(--radio);
+      background: var(--fondo);
+      text-decoration: none;
+      color: var(--texto);
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .descarga-item:hover {
+      border-color: #bbb;
+      background: var(--fondo-alt);
+    }
+
+    .descarga-icono {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: var(--azul-claro);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .descarga-icono svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--azul);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .descarga-nombre { font-size: 14px; font-weight: 500; flex: 1; }
+    .descarga-tipo   { font-size: 11px; color: var(--texto-muted); letter-spacing: 0.04em; }
+
+    .descarga-dl {
+      font-size: 12px;
+      color: var(--azul);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--borde);
+      padding: 2rem;
+      text-align: center;
+      font-size: 12px;
+      color: var(--texto-muted);
+    }
+
+    /* ── Estado vacío / error ───────────────────────── */
+    .estado-vacio {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--texto-muted);
+      font-size: 14px;
+    }
+
+    /* ── Responsive ─────────────────────────────────── */
+    @media (max-width: 680px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: var(--nav-h); left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--borde); padding: 1rem; gap: 4px; }
+      .nav-links.abierto { display: flex; }
+      .nav-links a { padding: 10px 14px; }
+      .nav-toggle { display: block; }
+      .nav-btn { display: none; }
+
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      .hero-acciones { flex-direction: column; }
+      .btn-primario, .btn-secundario { justify-content: center; }
+      .seccion-cabecera { flex-direction: column; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navegación ──────────────────────────────── -->
+  <nav aria-label="Navegación principal">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-marca" aria-label="Inicio">
+        <div class="nav-escudo" aria-hidden="true">
+          <!-- Ícono hoja (Ciencias Biológicas) -->
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3C7.6 19.6 7 17.3 7 15c0-5.5 4.5-10 10-10-.5-.6-1-1.1-1.6-1.5C14.1 2.5 13.1 2 12 2z"/><path d="M17 5c-5.5 0-10 4.5-10 10 0 2.3.8 4.5 2.1 6.2C10.7 22.4 12.3 23 14 23c5.5 0 10-4.5 10-10 0-1.7-.5-3.3-1.2-4.7C21.3 6.4 19.3 5 17 5z"/></svg>
+        </div>
+        <div class="nav-nombre">
+          Centro Federado FCB
+          <small>UNSAAC · Proceso Electoral</small>
+        </div>
+      </a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+        </svg>
+      </button>
+
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="#cronograma" class="activo">Cronograma</a></li>
+        <li><a href="#noticias">Noticias</a></li>
+        <li><a href="#descargas">Descargas</a></li>
+      </ul>
+
+      <a href="inscripcion.html" class="nav-btn">Inscribir lista</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ────────────────────────────────────── -->
+  <main>
+    <section class="hero" aria-labelledby="hero-titulo">
+      <p class="hero-etiqueta" aria-hidden="true">Comité Electoral · Proceso 2025</p>
+      <h1 class="hero-titulo" id="hero-titulo">
+        Elecciones del<br/>
+        <span>Centro Federado</span><br/>
+        Ciencias Biológicas
+      </h1>
+      <p class="hero-subtitulo">
+        Portal oficial de información del proceso electoral.
+        Consulta el cronograma, descarga los formatos e inscribe
+        tu lista de candidatos.
+      </p>
+      <div class="hero-acciones">
+        <a href="inscripcion.html" class="btn-primario">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Inscribir lista
+        </a>
+        <a href="#cronograma" class="btn-secundario">
+          Ver cronograma
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="hero-stats" id="hero-stats" aria-label="Estadísticas del proceso">
+        <div class="stat-item">
+          <span class="stat-num" id="stat-listas">—</span>
+          <span class="stat-lbl">Listas inscritas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stat-aptas">—</span>
+          <span class="stat-lbl">Listas aptas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stat-integrantes">—</span>
+          <span class="stat-lbl">Candidatos registrados</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Cronograma ───────────────────────────── -->
+    <section class="seccion" id="cronograma" aria-labelledby="cronograma-titulo">
+      <div class="contenedor">
+        <div class="seccion-cabecera">
+          <span class="seccion-etiqueta" aria-hidden="true">Cronograma</span>
+          <h2 class="seccion-titulo" id="cronograma-titulo">Etapas del proceso</h2>
+        </div>
+        <div class="cronograma-scroll" role="region" aria-label="Línea de tiempo del proceso electoral">
+          <div class="cronograma-linea" id="cronograma-contenido">
+            <!-- Se carga desde la API o se muestra estático como fallback -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Noticias ─────────────────────────────── -->
+    <section class="seccion seccion-alt" id="noticias" aria-labelledby="noticias-titulo">
+      <div class="contenedor">
+        <div class="seccion-cabecera">
+          <span class="seccion-etiqueta" aria-hidden="true">Noticias</span>
+          <h2 class="seccion-titulo" id="noticias-titulo">Comunicados del comité</h2>
+        </div>
+        <div id="noticias-contenido">
+          <p id="noticias-cargando" aria-live="polite">Cargando comunicados…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Descargas ────────────────────────────── -->
+    <section class="seccion" id="descargas" aria-labelledby="descargas-titulo">
+      <div class="contenedor">
+        <div class="seccion-cabecera">
+          <span class="seccion-etiqueta" aria-hidden="true">Descargas</span>
+          <h2 class="seccion-titulo" id="descargas-titulo">Formatos y reglamento</h2>
+        </div>
+        <div id="descargas-contenido">
+          <p id="descargas-cargando" aria-live="polite">Cargando archivos…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────── -->
+  <footer>
+    <p>Comité Electoral · Centro Federado de la Facultad de Ciencias Biológicas · UNSAAC &middot; <span id="anio"></span></p>
+  </footer>
+
+  <!-- ── Scripts ─────────────────────────────────── -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+
+    // ── Config ───────────────────────────────────────
+    // Datos de fallback para cuando la API aún no esté conectada
+    const CRONOGRAMA_FALLBACK = [
+      { nombre: "Convocatoria",      fecha: "01 – 05 jun",  estado: "pasada"  },
+      { nombre: "Inscripción\nde listas", fecha: "06 – 12 jun", estado: "pasada" },
+      { nombre: "Revisión\nde expedientes", fecha: "13 – 18 jun", estado: "actual" },
+      { nombre: "Subsanación\nde observaciones", fecha: "19 – 21 jun", estado: "futura" },
+      { nombre: "Publicación\nde aptas", fecha: "22 jun",    estado: "futura"  },
+      { nombre: "Campaña\nelectoral",  fecha: "23 – 28 jun", estado: "futura"  },
+      { nombre: "Día de\nvotación",    fecha: "29 jun",      estado: "futura"  },
+    ];
+
+    // ── Menú hamburguesa ─────────────────────────────
+    const toggle = document.getElementById('nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    toggle.addEventListener('click', () => {
+      const abierto = navLinks.classList.toggle('abierto');
+      toggle.setAttribute('aria-expanded', abierto);
+    });
+
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('abierto');
+        toggle.setAttribute('aria-expanded', false);
+      });
+    });
+
+    // ── Nav activo según scroll ──────────────────────
+    const secciones = ['cronograma', 'noticias', 'descargas'];
+    const navAnchors = {};
+    secciones.forEach(id => {
+      navAnchors[id] = document.querySelector(`.nav-links a[href="#${id}"]`);
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          Object.values(navAnchors).forEach(a => a && a.classList.remove('activo'));
+          const a = navAnchors[entry.target.id];
+          if (a) a.classList.add('activo');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    secciones.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    // ── Año en el footer ─────────────────────────────
+    document.getElementById('anio').textContent = new Date().getFullYear();
+
+    // ── Cronograma ───────────────────────────────────
+    function renderCronograma(etapas) {
+      const contenedor = document.getElementById('cronograma-contenido');
+      contenedor.innerHTML = etapas.map(e => `
+        <div class="etapa ${e.estado}" role="listitem">
+          <div class="etapa-punto" aria-hidden="true"></div>
+          <span class="etapa-nombre">${e.nombre.replace(/\n/g, '<br>')}</span>
+          <span class="etapa-fecha">${e.fecha}</span>
+          ${e.estado === 'actual' ? '<span class="etapa-badge badge-actual">En curso</span>' : ''}
+        </div>
+      `).join('');
+    }
+
+    async function cargarCronograma() {
+      try {
+        const data = await API.get('portal.cronograma');
+        if (data && data.length > 0) {
+          renderCronograma(data);
+        } else {
+          renderCronograma(CRONOGRAMA_FALLBACK);
+        }
+      } catch {
+        renderCronograma(CRONOGRAMA_FALLBACK);
+      }
+    }
+
+    // ── Noticias ─────────────────────────────────────
+    function formatearFecha(iso) {
+      if (!iso) return '';
+      try {
+        return new Date(iso).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+      } catch { return iso; }
+    }
+
+    function renderNoticias(noticias) {
+      const contenedor = document.getElementById('noticias-contenido');
+      if (!noticias || noticias.length === 0) {
+        contenedor.innerHTML = '<p class="estado-vacio">No hay comunicados disponibles aún.</p>';
+        return;
+      }
+      contenedor.innerHTML = `<div class="noticias-grid">` +
+        noticias.map(n => `
+          <article class="noticia-card">
+            <time class="noticia-fecha" datetime="${n.fecha}">${formatearFecha(n.fecha)}</time>
+            <h3 class="noticia-titulo">${n.titulo}</h3>
+            <p class="noticia-resumen">${n.resumen || ''}</p>
+            ${n.url ? `<a href="${n.url}" class="noticia-link" target="_blank" rel="noopener">Leer más →</a>` : ''}
+          </article>
+        `).join('') +
+      `</div>`;
+    }
+
+    async function cargarNoticias() {
+      try {
+        const data = await API.get('portal.noticias');
+        renderNoticias(data);
+      } catch {
+        document.getElementById('noticias-contenido').innerHTML =
+          '<p class="estado-vacio">No se pudieron cargar los comunicados en este momento.</p>';
+      }
+    }
+
+    // ── Descargas ────────────────────────────────────
+    const ICONOS_DOC = {
+      'PDF': `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+      'DOCX': `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`,
+      'XLSX': `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>`,
+    };
+
+    const ICONO_DEFAULT = `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+
+    function renderDescargas(archivos) {
+      const contenedor = document.getElementById('descargas-contenido');
+      if (!archivos || archivos.length === 0) {
+        contenedor.innerHTML = '<p class="estado-vacio">No hay archivos disponibles aún.</p>';
+        return;
+      }
+      contenedor.innerHTML = `<div class="descargas-lista">` +
+        archivos.map(a => {
+          const ext = (a.tipo || '').toUpperCase();
+          const icono = ICONOS_DOC[ext] || ICONO_DEFAULT;
+          return `
+            <a href="${a.url}" class="descarga-item" target="_blank" rel="noopener" aria-label="Descargar ${a.nombre}">
+              <div class="descarga-icono" aria-hidden="true">${icono}</div>
+              <div>
+                <div class="descarga-nombre">${a.nombre}</div>
+                <div class="descarga-tipo">${ext || 'Archivo'}</div>
+              </div>
+              <span class="descarga-dl" aria-hidden="true">
+                Descargar
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </span>
+            </a>
+          `;
+        }).join('') +
+      `</div>`;
+    }
+
+    async function cargarDescargas() {
+      try {
+        const data = await API.get('portal.descargas');
+        renderDescargas(data);
+      } catch {
+        document.getElementById('descargas-contenido').innerHTML =
+          '<p class="estado-vacio">No se pudieron cargar los archivos en este momento.</p>';
+      }
+    }
+
+    // ── Dashboard stats ──────────────────────────────
+    async function cargarStats() {
+      try {
+        const data = await API.get('dashboard');
+        document.getElementById('stat-listas').textContent = data.total_listas ?? '—';
+        document.getElementById('stat-aptas').textContent   = data.estados?.APTA ?? '—';
+        document.getElementById('stat-integrantes').textContent = data.total_integrantes ?? '—';
+      } catch {
+        // Si falla, los guiones ya están; no mostrar error al usuario
+      }
+    }
+
+    // ── Inicializar ──────────────────────────────────
+    cargarCronograma();
+    cargarNoticias();
+    cargarDescargas();
+    cargarStats();
+
+  </script>
+</body>
+</html>
