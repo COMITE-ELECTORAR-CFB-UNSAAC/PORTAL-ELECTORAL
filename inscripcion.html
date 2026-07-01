@@ -483,12 +483,12 @@
           <i class="ti ti-flask"></i>
           <span>Modo prueba: se generaron datos ficticios para verificar la conexión con Apps Script. Esto no reemplaza el envío real.</span>
         </div>
- <input type="file" id="file-prueba-generico" class="hidden-file" accept=".pdf,.jpg,.jpeg,.png">
+        <input type="file" id="file-prueba-generico" class="hidden-file" accept=".pdf,.jpg,.jpeg,.png">
         <div class="review-card" id="review-list"></div>
 
         <div class="section-footer" style="margin-top:20px">
           <button class="btn-secondary" onclick="jumpTo(0)">Revisar expediente</button>
-          <button class="btn-test" onclick="enviarPrueba()" title="Llena todo con datos ficticios y envía de inmediato, para probar que Apps Script recibe bien los datos">Enviar datos de prueba</button>
+          <button class="btn-test" onclick="document.getElementById('file-prueba-generico').click()" title="Elige un archivo cualquiera; se usará para rellenar todos los documentos ficticios y se enviará de inmediato, para probar que Apps Script recibe bien los datos">Enviar datos de prueba</button>
           <button class="btn-primary" id="btn-enviar" disabled onclick="enviarExpediente()">Enviar expediente</button>
         </div>
       </div>
@@ -808,31 +808,29 @@ function jumpTo(i) {
  * BOTÓN DE PRUEBA
  * ---------------------------------------------------------------------
  * Rellena TODOS los campos (datos generales, presidente, vicepresidente,
- * las 9 secretarías) y genera un archivo ficticio pequeño para cada
- * documento requerido, sin que tengas que llenar el formulario a mano.
- * Luego llama a la función real `enviarExpediente()` que vive en
- * api.js, así que la prueba pasa por el mismo camino que un envío real:
- * registrar_expediente + subir_archivo contra tu Code.gs.
+ * las 9 secretarías) y usa el archivo que el usuario elija en
+ * #file-prueba-generico como documento ficticio para TODOS los campos
+ * de documentos requeridos. Luego llama a la función real
+ * `enviarExpediente()` que vive en api.js, así que la prueba pasa por
+ * el mismo camino que un envío real: registrar_expediente +
+ * subir_archivo contra tu Code.gs.
  *
- * Los archivos ficticios se guardan directamente en state.uploadedDocs
- * (nombre, para mostrar en pantalla) y state.uploadedFiles (el File
- * real que api.js sube a Drive) — no dependen de que exista un
- * <input type="file"> en el DOM, así que también cubre las 9
- * secretarías aunque su modal nunca se haya abierto.
+ * FIX: antes el botón llamaba a enviarPrueba() directamente sin que
+ * el usuario hubiera elegido un archivo aún, así que la función
+ * comprobaba `inputPrueba.files[0]`, lo encontraba vacío, abría el
+ * selector con inputPrueba.click() y se detenía ahí — nada volvía a
+ * llamar a enviarPrueba() después de elegir el archivo, por lo que
+ * el flujo se quedaba a medias y parecía "no funcionar".
+ *
+ * Ahora: el botón "Enviar datos de prueba" solo abre el selector de
+ * archivo, y un listener en el input dispara enviarPrueba() en cuanto
+ * el usuario elige un archivo (ver el <script> justo antes de
+ * </body>, al final de este documento).
  * ------------------------------------------------------------------- */
 
 function setVal(id, value) {
   const el = document.getElementById(id);
   if (el) el.value = value;
-}
-
-function llenarDocsDePrueba(prefix, docs) {
-  docs.forEach(d => {
-    const key = prefix + '_' + d.id;
-    const file = crearArchivoDePrueba('prueba_' + key + '.pdf');
-    state.uploadedDocs[key] = file.name;
-    state.uploadedFiles[key] = file;
-  });
 }
 
 function enviarPrueba() {
@@ -845,7 +843,7 @@ function enviarPrueba() {
   const archivoBase = inputPrueba.files[0];
 
   if (!archivoBase) {
-    alert('Selecciona primero un archivo de prueba (botón "Elegir archivo de prueba").');
+    alert('Selecciona primero un archivo de prueba.');
     inputPrueba.click();
     return;
   }
@@ -901,6 +899,13 @@ function llenarDocsConArchivoUnico(prefix, docs, archivoBase) {
     state.uploadedFiles[key] = archivoBase; // mismo File para todos
   });
 }
+
+// FIX: dispara enviarPrueba() automáticamente en cuanto el usuario
+// elige un archivo en el input oculto de prueba. Antes no existía
+// este listener y el flujo se quedaba a medias tras elegir el archivo.
+document.getElementById('file-prueba-generico').addEventListener('change', function() {
+  if (this.files[0]) enviarPrueba();
+});
 
 renderDocList('docs-pres', DOCS_PERSONA, 'pres');
 renderDocList('docs-vp', DOCS_PERSONA, 'vp');
