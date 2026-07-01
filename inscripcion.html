@@ -483,7 +483,7 @@
           <i class="ti ti-flask"></i>
           <span>Modo prueba: se generaron datos ficticios para verificar la conexión con Apps Script. Esto no reemplaza el envío real.</span>
         </div>
-
+ <input type="file" id="file-prueba-generico" class="hidden-file" accept=".pdf,.jpg,.jpeg,.png">
         <div class="review-card" id="review-list"></div>
 
         <div class="section-footer" style="margin-top:20px">
@@ -820,10 +820,6 @@ function jumpTo(i) {
  * <input type="file"> en el DOM, así que también cubre las 9
  * secretarías aunque su modal nunca se haya abierto.
  * ------------------------------------------------------------------- */
-function crearArchivoDePrueba(nombre) {
-  const contenido = 'Archivo de prueba generado automáticamente — ' + nombre + ' — ' + new Date().toISOString();
-  return new File([contenido], nombre, { type: 'application/pdf' });
-}
 
 function setVal(id, value) {
   const el = document.getElementById(id);
@@ -841,7 +837,16 @@ function llenarDocsDePrueba(prefix, docs) {
 
 function enviarPrueba() {
   if (typeof enviarExpediente !== 'function') {
-    alert('No se encontró la función enviarExpediente(). Verifica que api.js esté cargado (con <script src="api.js"></script>) antes de usar el botón de prueba.');
+    alert('No se encontró enviarExpediente(). Verifica que api.js esté cargado.');
+    return;
+  }
+
+  const inputPrueba = document.getElementById('file-prueba-generico');
+  const archivoBase = inputPrueba.files[0];
+
+  if (!archivoBase) {
+    alert('Selecciona primero un archivo de prueba (botón "Elegir archivo de prueba").');
+    inputPrueba.click();
     return;
   }
 
@@ -857,30 +862,28 @@ function enviarPrueba() {
   setVal('pres_apellidos', 'Apellidos TEST');
   setVal('pres_dni', '00000002');
   setVal('pres_codigo', 'TEST0002');
-  llenarDocsDePrueba('pres', DOCS_PERSONA);
+  llenarDocsConArchivoUnico('pres', DOCS_PERSONA, archivoBase);
 
   // Vicepresidente
   setVal('vp_nombres', 'Nombres Vicepresidente TEST');
   setVal('vp_apellidos', 'Apellidos TEST');
   setVal('vp_dni', '00000003');
   setVal('vp_codigo', 'TEST0003');
-  llenarDocsDePrueba('vp', DOCS_PERSONA);
+  llenarDocsConArchivoUnico('vp', DOCS_PERSONA, archivoBase);
 
-  // Secretarías (directo en `state`, sin necesidad de abrir cada modal)
+  // Secretarías
   SECRETARIAS.forEach((_, i) => {
     state['sec'+i+'_nombres'] = 'Sec'+i+' TEST';
     state['sec'+i+'_apellidos'] = 'Apellidos TEST';
     state['sec'+i+'_dni'] = String(10+i).padStart(8,'0');
     state['sec'+i+'_codigo'] = 'TESTSEC'+i;
     state.secDataDone[i] = true;
-    llenarDocsDePrueba('sec'+i, DOCS_PERSONA);
+    llenarDocsConArchivoUnico('sec'+i, DOCS_PERSONA, archivoBase);
   });
 
-  // Documentos generales de la lista
-  llenarDocsDePrueba('general', DOCS_GENERAL);
+  // Documentos generales
+  llenarDocsConArchivoUnico('general', DOCS_GENERAL, archivoBase);
 
-  // Refrescar toda la UI para que se vea reflejado (contador de docs,
-  // tarjetas de secretaría en verde, resumen de revisión, etc.)
   renderDocList('docs-pres', DOCS_PERSONA, 'pres');
   renderDocList('docs-vp', DOCS_PERSONA, 'vp');
   renderDocList('docs-general', DOCS_GENERAL, 'general');
@@ -888,9 +891,15 @@ function enviarPrueba() {
   updateProgress();
 
   document.getElementById('test-banner').classList.add('show');
-
-  // Dispara el envío real (definido en api.js) con estos datos de prueba
   enviarExpediente();
+}
+
+function llenarDocsConArchivoUnico(prefix, docs, archivoBase) {
+  docs.forEach(d => {
+    const key = prefix + '_' + d.id;
+    state.uploadedDocs[key] = archivoBase.name;
+    state.uploadedFiles[key] = archivoBase; // mismo File para todos
+  });
 }
 
 renderDocList('docs-pres', DOCS_PERSONA, 'pres');
