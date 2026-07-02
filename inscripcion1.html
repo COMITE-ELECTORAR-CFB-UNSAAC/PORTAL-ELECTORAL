@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscripción de Lista Electoral — CFB</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="css/inscripcion.css">
+</head>
+<body>
+
+<div class="app-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-dot"></div>
+        <span class="sidebar-title">Sistema Electoral</span>
+      </div>
+      <div class="sidebar-sub">Inscripción de Lista — CFB 2026</div>
+    </div>
+
+    <div class="sidebar-section-label">Estado del expediente</div>
+
+    <div class="sidebar-item active" data-sec="0" onclick="jumpTo(0)">
+      <span>Datos generales</span>
+      <div class="sidebar-item-check" id="sb-check-0"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="1" onclick="jumpTo(1)">
+      <span>Presidente</span>
+      <div class="sidebar-item-check" id="sb-check-1"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="2" onclick="jumpTo(2)">
+      <span>Vicepresidente</span>
+      <div class="sidebar-item-check" id="sb-check-2"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="3" onclick="jumpTo(3)">
+      <span>Secretarías</span>
+      <div class="sidebar-badge warn" id="sb-badge-sec">0 / 7</div>
+    </div>
+    <div class="sidebar-item" data-sec="4" onclick="jumpTo(4)">
+      <span>Docs. generales</span>
+      <div class="sidebar-badge" id="sb-badge-docs">0 / 5</div>
+    </div>
+    <div class="sidebar-item" data-sec="5" onclick="jumpTo(5)">
+      <span>Revisión y envío</span>
+      <div class="sidebar-item-check" id="sb-check-5"><i class="ti ti-check"></i></div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- PROGRESS -->
+    <div class="progress-card">
+      <div class="progress-top">
+        <span class="progress-label">Registro de lista</span>
+        <span class="progress-pct" id="pct-label">0%</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="pct-bar" style="width:0%"></div>
+      </div>
+      <div class="progress-docs">Candidatos completos: <span id="docs-count">0 / 23</span></div>
+    </div>
+
+    <!-- S1: DATOS GENERALES -->
+    <div class="section" id="sec-0">
+      <div class="section-header" onclick="toggleSec(0)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-0">1</div>
+          <div>
+            <div class="section-title">Datos generales de la lista</div>
+            <div class="section-meta" id="meta-0">Nombre de lista, gestor responsable</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(0)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-0"></i>
+        </div>
+      </div>
+      <div class="section-body open" id="body-0">
+        <div class="form-note">
+          <strong>Gestor responsable:</strong> El gestor general será el único punto de contacto oficial durante todo el proceso de inscripción. Es responsable de la veracidad y completitud del expediente presentado.
+        </div>
+        <div class="form-grid" style="margin-bottom:16px">
+          <div class="form-group" style="grid-column: span 2">
+            <label for="lista_nombre">Nombre de la lista</label>
+            <input type="text" id="lista_nombre" name="lista_nombre" placeholder="Ej. Lista Renovación Universitaria" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_nombre">Nombre del gestor general</label>
+            <input type="text" id="gestor_nombre" name="gestor_nombre" placeholder="Apellidos y nombres" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_dni">DNI del gestor</label>
+            <input type="text" id="gestor_dni" name="gestor_dni" maxlength="8" placeholder="00000000" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_email">Correo electrónico</label>
+            <input type="email" id="gestor_email" name="gestor_email" placeholder="correo@universidad.edu.pe" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_telefono">Teléfono</label>
+            <input type="text" id="gestor_telefono" name="gestor_telefono" placeholder="9XX XXX XXX" oninput="updateProgress()">
+          </div>
+        </div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(0)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: PRESIDENTE (inyectado por JS) -->
+    <div class="section" id="sec-1">
+      <div class="section-header" onclick="toggleSec(1)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-1">2</div>
+          <div>
+            <div class="section-title">Presidente</div>
+            <div class="section-meta" id="meta-1">Datos personales, créditos y documentos</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(1)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-1"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-1">
+        <div class="persona-card">
+          <div class="persona-card-header">
+            <span class="persona-card-role">Presidente de lista</span>
+          </div>
+          <div class="persona-card-body" id="persona-body-pres"></div>
+        </div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(1)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3: VICEPRESIDENTE (inyectado por JS) -->
+    <div class="section" id="sec-2">
+      <div class="section-header" onclick="toggleSec(2)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-2">3</div>
+          <div>
+            <div class="section-title">Vicepresidente</div>
+            <div class="section-meta" id="meta-2">Datos personales, créditos y documentos</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(2)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-2"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-2">
+        <div class="persona-card">
+          <div class="persona-card-header">
+            <span class="persona-card-role">Vicepresidente de lista</span>
+          </div>
+          <div class="persona-card-body" id="persona-body-vp"></div>
+        </div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(2)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4: SECRETARÍAS (grupos configurables: titular + N accesitarios) -->
+    <div class="section" id="sec-3">
+      <div class="section-header" onclick="toggleSec(3)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-3">4</div>
+          <div>
+            <div class="section-title">Secretarías</div>
+            <div class="section-meta" id="meta-3">Secretarías de la lista, cada una con su titular y accesitarios</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <i class="ti ti-chevron-down chevron" id="chev-3"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-3">
+        <div class="secretaria-grid" id="sec-grid"></div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(3)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5: DOCS GENERALES -->
+    <div class="section" id="sec-4">
+      <div class="section-header" onclick="toggleSec(4)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-4">5</div>
+          <div>
+            <div class="section-title">Documentos generales de la lista</div>
+            <div class="section-meta" id="meta-4">Documentos que pertenecen a la lista en su conjunto</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(4)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-4"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-4">
+        <div class="doc-list" id="docs-general"></div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(4)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6: REVISIÓN Y ENVÍO -->
+    <div class="section" id="sec-5">
+      <div class="section-header" onclick="toggleSec(5)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-5">6</div>
+          <div>
+            <div class="section-title">Revisión y envío del expediente</div>
+            <div class="section-meta" id="meta-5">Verificar antes de enviar</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <i class="ti ti-chevron-down chevron" id="chev-5"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-5">
+        <div class="form-note" style="margin-bottom:20px">
+          Revise cada sección antes de enviar. Una vez enviado el expediente, no podrá realizarse modificaciones sin comunicarse con la comisión electoral.
+        </div>
+
+        <div class="test-banner" id="test-banner">
+          <i class="ti ti-flask"></i>
+          <span>Modo prueba: se generaron datos ficticios para verificar la conexión con Apps Script. Esto no reemplaza el envío real.</span>
+        </div>
+
+        <div id="quota-banner"></div>
+
+        <input type="file" id="file-prueba-generico" class="hidden-file" accept=".pdf,.jpg,.jpeg,.png">
+        <div class="review-card" id="review-list"></div>
+
+        <div class="section-footer" style="margin-top:20px">
+          <button class="btn-secondary" onclick="jumpTo(0)">Revisar expediente</button>
+          <button class="btn-test" onclick="document.getElementById('file-prueba-generico').click()" title="Elige un archivo cualquiera; se usará para rellenar todos los documentos ficticios y se enviará de inmediato, para probar que Apps Script recibe bien los datos">Enviar datos de prueba</button>
+          <button class="btn-primary" id="btn-enviar" disabled onclick="enviarExpediente()">Enviar expediente</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL SECRETARIA -->
+<div class="modal-backdrop" id="modal-sec">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-sec-title">Secretaría</span>
+      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body" id="modal-sec-body"></div>
+  </div>
+</div>
+
+<script>
+/*
+ * =====================================================================
+ * NOTA: el envío real a Apps Script (APPS_SCRIPT_URL, enviarExpediente,
+ * fileToBase64, subirArchivoADrive) vive en api.js, un archivo aparte.
+ * Este script NO debe redeclarar esas constantes/funciones. Carga
+ * api.js DESPUÉS de este bloque, justo antes de </body>, porque usa
+ * la variable global `state` y las constantes CARGOS/SECRETARIAS de
+ * aquí abajo.
+ *
+ * CÓMO AGREGAR / QUITAR UNA SECRETARÍA:
+ *   Edita el arreglo SECRETARIAS más abajo (agrega o quita una línea)
+ *   y haz lo MISMO en el arreglo SECRETARIAS de code.gs (solo key +
+ *   nombre allá, no hace falta numAccesitarios ni limiteCreditosTitular).
+ *
+ * CÓMO CAMBIAR CUÁNTOS ACCESITARIOS TIENE UNA SECRETARÍA:
+ *   Solo aquí. Cambia "numAccesitarios" de esa secretaría (0, 1, 2, 3...).
+ *   No hace falta tocar code.gs para nada — las carpetas de Drive se
+ *   crean solas según lo que realmente llegue.
+ *
+ * ESTRUCTURA DE ESTE ARCHIVO (según el reglamento del CFB):
+ *  1. Modelo de datos: SECRETARIAS, CARGOS (dinámico), documentos
+ *  2. Estado global (`state`)
+ *  3. Render genérico de un candidato (reutilizado para todos)
+ *  4. Render de Presidente / Vicepresidente (secciones fijas)
+ *  5. Render de Secretarías (grid + modal, cantidad de personas dinámica)
+ *  6. Documentos generales de la lista
+ *  7. Progreso, cuota de género y revisión final
+ *  8. Utilidades de navegación (toggle/jump/modal)
+ *  9. Botón de datos de prueba
+ * =====================================================================
+ */
+
+/* ---------------------------------------------------------------
+ * 1. MODELO DE DATOS
+ * ------------------------------------------------------------- */
+
+const DOCS_PERSONA = [
+  { id:'dni', name:'Copia del DNI', desc:'Escaneado a color, legible', icon:'ti-id' },
+  { id:'matricula', name:'Constancia de matrícula', desc:'Vigente para el semestre 2026-I', icon:'ti-school' },
+  { id:'decjurada', name:'Declaración jurada', desc:'Formato descargable de la comisión electoral', icon:'ti-file-text' },
+  { id:'notas', name:'Constancia de notas', desc:'Certificado oficial de la facultad (créditos aprobados)', icon:'ti-certificate' },
+];
+
+const RENUNCIA_DOC = { id:'renuncia', name:'Carta de renuncia', desc:'Renuncia formal y por escrito al otro cargo (Art. 17-d)', icon:'ti-file-off' };
+
+const DOCS_GENERAL = [
+  { id:'plan_trabajo', name:'Plan de trabajo', desc:'Documento PDF con el plan de gestión propuesto', icon:'ti-clipboard-list' },
+  { id:'padron', name:'Padrón de adherentes', desc:'Lista firmada de estudiantes adherentes', icon:'ti-users' },
+  { id:'logo', name:'Logo de la lista', desc:'Imagen PNG o JPG, fondo transparente preferible', icon:'ti-photo' },
+  { id:'decl_general', name:'Declaración general', desc:'Declaración jurada firmada por todos los candidatos', icon:'ti-file-certificate' },
+  { id:'reglamento', name:'Estatuto de lista', desc:'Reglamento interno según formato oficial', icon:'ti-book' },
+];
+
+// Las secretarías del CFB (Art. 17 — estructura orgánica).
+//   numAccesitarios: cuántos accesitarios pide esa secretaría (0 = solo
+//     titular). Si se omite, se asume 2 (comportamiento anterior).
+//   limiteCreditosTitular: tope de créditos para el titular, si aplica.
+const SECRETARIAS = [
+  { key:'academica',        nombre:'Secretaría de Asuntos Académicos', numAccesitarios:2 },
+  { key:'economia',         nombre:'Secretaría de Economía y Finanzas', numAccesitarios:2, limiteCreditosTitular:140 },
+  { key:'comunicacion',     nombre:'Secretaría de Comunicación y Publicidad', numAccesitarios:2 },
+  { key:'asistencia_social',nombre:'Secretaría de Asistencia y Proyección Social', numAccesitarios:2 },
+  { key:'deporte_cultura',  nombre:'Secretaría de Deporte, Cultura y Recreación', numAccesitarios:2 },
+  { key:'actas_archivos',   nombre:'Secretaría de Actas y Archivos', numAccesitarios:2 },
+  { key:'defensoria',       nombre:'Secretaría de Defensoría del Estudiante', numAccesitarios:0 }, // ejemplo: sin accesitarios
+];
+
+// Construye la lista completa de cargos (Presidente, Vicepresidente y,
+// por cada secretaría, un titular + su cantidad configurada de
+// accesitarios). Cambiar numAccesitarios en SECRETARIAS es suficiente
+// para que esto se ajuste solo — no hay que tocar esta función.
+function construirCargos() {
+  const cargos = [];
+
+  cargos.push({
+    id:'pres', label:'Presidente', esTitular:true, grupo:null,
+    requiereCreditos:true, creditosMin:40, creditosMax:160, permiteRenuncia:true,
+  });
+  cargos.push({
+    id:'vp', label:'Vicepresidente', esTitular:true, grupo:null,
+    requiereCreditos:true, creditosMin:40, creditosMax:160, permiteRenuncia:true,
+  });
+
+  SECRETARIAS.forEach(sec => {
+    cargos.push({
+      id:'sec_'+sec.key+'_titular', label:'Titular — '+sec.nombre, esTitular:true, grupo:sec.key,
+      requiereCreditos: !!sec.limiteCreditosTitular,
+      creditosMin: 0, creditosMax: sec.limiteCreditosTitular || null,
+      permiteRenuncia:false,
+    });
+
+    const numAcc = sec.numAccesitarios != null ? sec.numAccesitarios : 2; // default 2 si no se especifica
+    for (let i = 1; i <= numAcc; i++) {
+      cargos.push({
+        id:'sec_'+sec.key+'_acc'+i, label:'Accesitario '+i+' — '+sec.nombre, esTitular:false, grupo:sec.key,
+        requiereCreditos:false, permiteRenuncia:false,
+      });
+    }
+  });
+
+  return cargos;
+}
+const CARGOS = construirCargos();
+
+function getCargo(cargoId) {
+  return CARGOS.find(c => c.id === cargoId);
+}
+
+/* ---------------------------------------------------------------
+ * 2. ESTADO GLOBAL
+ * ------------------------------------------------------------- */
+let state = {
+  secDone: [false,false,false,false,false,false], // datos generales, pres, vp, secretarías, docs generales, revisión
+  candidatos: {},      // cargoId -> { nombres, apellidos, dni, codigo, genero, creditos, perteneceOtroOrgano }
+  gruposDone: {},       // secKey -> bool (todas las personas de esa secretaría completas)
+  uploadedDocs: {},     // "cargoId__docId" -> nombre de archivo (para mostrar en pantalla)
+  uploadedFiles: {},    // "cargoId__docId" -> objeto File real (esto es lo que se sube a Drive)
+};
+SECRETARIAS.forEach(s => { state.gruposDone[s.key] = false; });
+
+function docKey(cargoId, docId) { return cargoId + '__' + docId; }
+
+/* ---------------------------------------------------------------
+ * 3. RENDER GENÉRICO DE UN CANDIDATO (se reutiliza para todos)
+ * ------------------------------------------------------------- */
+
+function setCandidatoField(cargoId, field, value) {
+  if (!state.candidatos[cargoId]) state.candidatos[cargoId] = {};
+  state.candidatos[cargoId][field] = value;
+  updateProgress();
+}
+
+function togglePerteneceOtro(cargoId, checked) {
+  if (!state.candidatos[cargoId]) state.candidatos[cargoId] = {};
+  state.candidatos[cargoId].perteneceOtroOrgano = checked;
+  const block = document.getElementById('renuncia-block-'+cargoId);
+  if (block) {
+    block.style.display = checked ? '' : 'none';
+    if (checked) {
+      const el = document.getElementById('docs-renuncia-'+cargoId);
+      if (el) el.innerHTML = makeDocCard(RENUNCIA_DOC, cargoId);
+    }
+  }
+  updateProgress();
+}
+
+function makeDocCard(docObj, cargoId) {
+  const key = docKey(cargoId, docObj.id);
+  const isLoaded = !!state.uploadedDocs[key];
+  return `
+    <div class="doc-card ${isLoaded?'loaded':''}" id="dc-${key}">
+      <div class="doc-icon"><i class="ti ${docObj.icon}" aria-hidden="true"></i></div>
+      <div class="doc-info">
+        <div class="doc-name">${docObj.name}</div>
+        <div class="doc-desc">${docObj.desc}</div>
+        ${isLoaded ? `<div class="doc-file"><i class="ti ti-paperclip" style="font-size:11px"></i> ${state.uploadedDocs[key]}</div>` : ''}
+      </div>
+      <div class="doc-actions">
+        <span class="doc-status ${isLoaded?'loaded':''}">
+          ${isLoaded ? '<i class="ti ti-circle-check"></i> Cargado' : '<i class="ti ti-clock"></i> Pendiente'}
+        </span>
+        <input type="file" class="hidden-file" id="file-${key}" data-key="${key}" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFile(this)">
+        ${isLoaded
+          ? `<button class="btn-replace" onclick="document.getElementById('file-${key}').click()">Reemplazar</button>`
+          : `<button class="btn-upload" onclick="document.getElementById('file-${key}').click()">Seleccionar archivo</button>`
+        }
+      </div>
+    </div>`;
+}
+
+function renderPersonaFields(cargo) {
+  const st = state.candidatos[cargo.id] || {};
+  let creditosHint;
+  if (cargo.requiereCreditos) {
+    creditosHint = cargo.creditosMax
+      ? `Obligatorio · rango permitido: ${cargo.creditosMin}–${cargo.creditosMax} créditos aprobados (Art. 17/18)`
+      : `Obligatorio · mínimo ${cargo.creditosMin} créditos aprobados`;
+  } else {
+    creditosHint = 'Opcional — ayuda a corroborar contra la constancia de notas';
+  }
+
+  const renunciaHtml = cargo.permiteRenuncia ? `
+    <div class="form-note" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px">
+      <input type="checkbox" id="${cargo.id}_perteneceOtro" style="margin-top:2px"
+        onchange="togglePerteneceOtro('${cargo.id}', this.checked)" ${st.perteneceOtroOrgano?'checked':''}>
+      <label for="${cargo.id}_perteneceOtro" style="text-transform:none;font-weight:500;font-size:12px;color:#2E2E2C">
+        ¿Pertenece o ha pertenecido a otro órgano de gobierno (FUC, C.I., Tercio estudiantil u otro análogo)? (Art. 17-d)
+      </label>
+    </div>
+    <div class="conditional-block" id="renuncia-block-${cargo.id}" style="${st.perteneceOtroOrgano ? '' : 'display:none'}">
+      <div class="sub-label">Documento de renuncia</div>
+      <div class="doc-list" id="docs-renuncia-${cargo.id}"></div>
+    </div>` : '';
+
+  return `
+    <div class="form-grid" style="margin-bottom:16px">
+      <div class="form-group">
+        <label for="${cargo.id}_nombres">Nombres</label>
+        <input type="text" id="${cargo.id}_nombres" placeholder="Nombres" value="${st.nombres||''}"
+          oninput="setCandidatoField('${cargo.id}','nombres',this.value)">
+      </div>
+      <div class="form-group">
+        <label for="${cargo.id}_apellidos">Apellidos</label>
+        <input type="text" id="${cargo.id}_apellidos" placeholder="Apellidos" value="${st.apellidos||''}"
+          oninput="setCandidatoField('${cargo.id}','apellidos',this.value)">
+      </div>
+      <div class="form-group">
+        <label for="${cargo.id}_dni">DNI</label>
+        <input type="text" id="${cargo.id}_dni" maxlength="8" placeholder="00000000" value="${st.dni||''}"
+          oninput="setCandidatoField('${cargo.id}','dni',this.value)">
+      </div>
+      <div class="form-group">
+        <label for="${cargo.id}_codigo">Código universitario</label>
+        <input type="text" id="${cargo.id}_codigo" placeholder="Ej. 20200123" value="${st.codigo||''}"
+          oninput="setCandidatoField('${cargo.id}','codigo',this.value)">
+      </div>
+      <div class="form-group">
+        <label for="${cargo.id}_genero">Género</label>
+        <select id="${cargo.id}_genero" onchange="setCandidatoField('${cargo.id}','genero',this.value)">
+          <option value="">Seleccionar…</option>
+          <option value="Femenino" ${st.genero==='Femenino'?'selected':''}>Femenino</option>
+          <option value="Masculino" ${st.genero==='Masculino'?'selected':''}>Masculino</option>
+          <option value="Otro" ${st.genero==='Otro'?'selected':''}>Otro</option>
+        </select>
+        <span class="field-hint">Se usa solo para calcular la cuota mínima de género de la lista (10%)</span>
+      </div>
+      <div class="form-group">
+        <label for="${cargo.id}_creditos">Créditos aprobados</label>
+        <input type="number" min="0" id="${cargo.id}_creditos" placeholder="Ej. 120" value="${st.creditos||''}"
+          oninput="setCandidatoField('${cargo.id}','creditos',this.value)">
+        <span class="field-hint ${cargo.requiereCreditos?'warn':''}">${creditosHint}</span>
+      </div>
+    </div>
+    ${renunciaHtml}
+    <div class="sub-label">Documentos requeridos</div>
+    <div class="doc-list" id="docs-${cargo.id}"></div>
+  `;
+}
+
+function pintarDocsDeCandidato(cargo) {
+  const cont = document.getElementById('docs-'+cargo.id);
+  if (cont) cont.innerHTML = DOCS_PERSONA.map(d => makeDocCard(d, cargo.id)).join('');
+  if (cargo.permiteRenuncia) {
+    const st = state.candidatos[cargo.id] || {};
+    if (st.perteneceOtroOrgano) {
+      const el = document.getElementById('docs-renuncia-'+cargo.id);
+      if (el) el.innerHTML = makeDocCard(RENUNCIA_DOC, cargo.id);
+    }
+  }
+}
+
+function candidatoDatosCompletos(cargo) {
+  const st = state.candidatos[cargo.id];
+  if (!st) return false;
+  const base = st.nombres && st.apellidos && st.dni && st.codigo && st.genero;
+  if (!base) return false;
+  if (cargo.requiereCreditos) {
+    const c = Number(st.creditos);
+    if (!st.creditos || isNaN(c)) return false;
+    if (cargo.creditosMin != null && c < cargo.creditosMin) return false;
+    if (cargo.creditosMax != null && c > cargo.creditosMax) return false;
+  }
+  return true;
+}
+
+function candidatoDocsCompletos(cargo) {
+  const docsOk = DOCS_PERSONA.every(d => !!state.uploadedDocs[docKey(cargo.id, d.id)]);
+  if (!docsOk) return false;
+  const st = state.candidatos[cargo.id] || {};
+  if (cargo.permiteRenuncia && st.perteneceOtroOrgano) {
+    return !!state.uploadedDocs[docKey(cargo.id, 'renuncia')];
+  }
+  return true;
+}
+
+function candidatoCompleto(cargo) {
+  return candidatoDatosCompletos(cargo) && candidatoDocsCompletos(cargo);
+}
+
+/* ---------------------------------------------------------------
+ * 4. PRESIDENTE / VICEPRESIDENTE (secciones fijas, siempre visibles)
+ * ------------------------------------------------------------- */
+function renderPresidenciaSecciones() {
+  const cargoPres = getCargo('pres');
+  const cargoVp = getCargo('vp');
+  document.getElementById('persona-body-pres').innerHTML = renderPersonaFields(cargoPres);
+  document.getElementById('persona-body-vp').innerHTML = renderPersonaFields(cargoVp);
+  pintarDocsDeCandidato(cargoPres);
+  pintarDocsDeCandidato(cargoVp);
+}
+
+/* ---------------------------------------------------------------
+ * 5. SECRETARÍAS (grid + modal, cantidad de personas dinámica)
+ * ------------------------------------------------------------- */
+function cargosDeGrupo(secKey) {
+  return CARGOS.filter(c => c.grupo === secKey);
+}
+
+function actualizarGrupoDone(secKey) {
+  const done = cargosDeGrupo(secKey).every(c => candidatoCompleto(c));
+  state.gruposDone[secKey] = done;
+  return done;
+}
+
+function renderSecretariasGrid() {
+  const grid = document.getElementById('sec-grid');
+  grid.innerHTML = SECRETARIAS.map(sec => {
+    const cargos = cargosDeGrupo(sec.key);
+    const done = actualizarGrupoDone(sec.key);
+    const personasCompletas = cargos.filter(c => candidatoCompleto(c)).length;
+    const docsCargados = cargos.reduce((acc,c) => acc + DOCS_PERSONA.filter(d => !!state.uploadedDocs[docKey(c.id,d.id)]).length, 0);
+    const docsTotal = cargos.length * DOCS_PERSONA.length;
+    return `
+      <div class="sec-card ${done?'done':''}" id="sc-${sec.key}">
+        <div class="sec-card-title">${sec.nombre}</div>
+        <div class="sec-card-stats">
+          <div class="sec-stat ${done?'ok':''}"><i class="ti ${done?'ti-circle-check':'ti-circle'}"></i> ${personasCompletas} / ${cargos.length} persona${cargos.length===1?'':'s'} completa${cargos.length===1?'':'s'}</div>
+          <div class="sec-stat"><i class="ti ti-file"></i> ${docsCargados} / ${docsTotal} documentos</div>
+          ${sec.limiteCreditosTitular ? `<div class="sec-stat"><i class="ti ti-alert-circle"></i> Titular: máx. ${sec.limiteCreditosTitular} créditos</div>` : ''}
+        </div>
+        <div class="sec-card-btn" onclick="openSecModal('${sec.key}')">
+          ${done ? 'Ver / Editar' : 'Completar'} <i class="ti ti-arrow-right" style="font-size:11px"></i>
+        </div>
+      </div>`;
+  }).join('');
+  updateSecMeta();
+}
+
+// Las etiquetas ("Titular", "Accesitario 1", "Accesitario 2"...) ya
+// no vienen de un arreglo fijo de 3 posiciones — se generan a partir
+// de los cargos reales de esa secretaría, sean 1, 3 o los que sea.
+function openSecModal(secKey) {
+  const sec = SECRETARIAS.find(s => s.key === secKey);
+  const cargos = cargosDeGrupo(secKey);
+
+  document.getElementById('modal-sec-title').textContent = sec.nombre;
+  document.getElementById('modal-sec-body').innerHTML = cargos.map(cargo => {
+    const etiqueta = cargo.esTitular ? 'Titular' : cargo.label.split(' — ')[0]; // "Accesitario N"
+    const badgeClass = cargo.esTitular ? 'badge-titular' : 'badge-accesitario';
+    return `
+    <div class="persona-subblock">
+      <div class="persona-subblock-header">
+        <span class="badge-role ${badgeClass}">${etiqueta}</span>
+      </div>
+      ${renderPersonaFields(cargo)}
+    </div>`;
+  }).join('') + `
+    <div style="display:flex;justify-content:flex-end;margin-top:20px;gap:10px">
+      <button class="btn-secondary" onclick="closeModal()">Cerrar</button>
+      <button class="btn-primary" onclick="saveSecModal('${secKey}')">Guardar secretaría</button>
+    </div>`;
+
+  cargos.forEach(c => pintarDocsDeCandidato(c));
+  document.getElementById('modal-sec').classList.add('open');
+}
+
+function saveSecModal(secKey) {
+  actualizarGrupoDone(secKey);
+  closeModal();
+  renderSecretariasGrid();
+  updateProgress();
+}
+
+function closeModal() {
+  document.getElementById('modal-sec').classList.remove('open');
+}
+
+function updateSecMeta() {
+  const done = SECRETARIAS.filter(s => state.gruposDone[s.key]).length;
+  document.getElementById('meta-3').textContent = `${done} de ${SECRETARIAS.length} secretarías completas`;
+  document.getElementById('sb-badge-sec').textContent = `${done} / ${SECRETARIAS.length}`;
+  document.getElementById('sb-badge-sec').className = 'sidebar-badge' + (done<SECRETARIAS.length?' warn':'');
+}
+
+/* ---------------------------------------------------------------
+ * 6. DOCUMENTOS GENERALES DE LA LISTA
+ * ------------------------------------------------------------- */
+function renderDocsGenerales() {
+  document.getElementById('docs-general').innerHTML = DOCS_GENERAL.map(d => makeDocCard(d, 'general')).join('');
+}
+
+/* ---------------------------------------------------------------
+ * 7. PROGRESO, CUOTA DE GÉNERO Y REVISIÓN FINAL
+ * ------------------------------------------------------------- */
+
+function handleFile(input) {
+  const key = input.dataset.key;
+  const file = input.files[0];
+  if (!file) return;
+  state.uploadedDocs[key] = file.name;
+  state.uploadedFiles[key] = file;
+  refreshDocArea(key);
+  updateProgress();
+}
+
+function refreshDocArea(key) {
+  const [cargoId, docId] = key.split('__');
+
+  if (cargoId === 'general') {
+    renderDocsGenerales();
+    return;
+  }
+
+  const cargo = getCargo(cargoId);
+  if (!cargo) return;
+
+  if (docId === 'renuncia') {
+    const el = document.getElementById('docs-renuncia-'+cargoId);
+    if (el) el.innerHTML = makeDocCard(RENUNCIA_DOC, cargoId);
+  } else {
+    pintarDocsDeCandidato(cargo);
+  }
+
+  if (cargo.grupo) {
+    renderSecretariasGrid();
+  }
+}
+
+function getSec1Done() {
+  const ids = ['lista_nombre','gestor_nombre','gestor_dni','gestor_email','gestor_telefono'];
+  return ids.every(f => (document.getElementById(f)||{value:''}).value);
+}
+
+function calcularCuotaGenero() {
+  const conteo = {};
+  let totalDeclarados = 0;
+  CARGOS.forEach(c => {
+    const g = (state.candidatos[c.id]||{}).genero;
+    if (g) { conteo[g] = (conteo[g]||0) + 1; totalDeclarados++; }
+  });
+  const detalle = Object.entries(conteo).map(([genero, cantidad]) => ({
+    genero, cantidad,
+    pct: totalDeclarados ? Math.round((cantidad/totalDeclarados)*1000)/10 : 0,
+  }));
+  const todosDeclarados = totalDeclarados === CARGOS.length;
+  const algunaBaja = todosDeclarados && detalle.some(d => d.pct < 10);
+  return { detalle, totalDeclarados, todosDeclarados, cumple: todosDeclarados && !algunaBaja };
+}
+
+function renderQuotaBanner(cuota) {
+  const cont = document.getElementById('quota-banner');
+  if (!cuota.todosDeclarados) {
+    cont.innerHTML = `
+      <div class="quota-banner warn">
+        <div class="quota-banner-title"><i class="ti ti-alert-circle"></i> Cuota de género pendiente</div>
+        <div>Faltan ${CARGOS.length - cuota.totalDeclarados} candidatos por declarar género para poder calcular el 10% mínimo exigido (regla general 1.4).</div>
+      </div>`;
+    return;
+  }
+  const clase = cuota.cumple ? 'ok' : 'warn';
+  const icono = cuota.cumple ? 'ti-circle-check' : 'ti-alert-circle';
+  const filas = cuota.detalle.map(d => `<div class="quota-row"><span>${d.genero}</span><span>${d.cantidad} / ${CARGOS.length} · ${d.pct}%</span></div>`).join('');
+  cont.innerHTML = `
+    <div class="quota-banner ${clase}">
+      <div class="quota-banner-title"><i class="ti ${icono}"></i> Cuota de género ${cuota.cumple ? '— cumple el mínimo de 10%' : '— no cumple el mínimo de 10%'}</div>
+      ${filas}
+    </div>`;
+}
+
+function updateProgress() {
+  const s1 = getSec1Done();
+  const presCompleto = candidatoCompleto(getCargo('pres'));
+  const vpCompleto = candidatoCompleto(getCargo('vp'));
+  const secretariasCompletas = SECRETARIAS.filter(s => actualizarGrupoDone(s.key)).length;
+  const docsGeneralesCargados = DOCS_GENERAL.filter(d => !!state.uploadedDocs[docKey('general', d.id)]).length;
+  const candidatosCompletos = CARGOS.filter(c => candidatoCompleto(c)).length;
+
+  const totalSteps = 1 + CARGOS.length + DOCS_GENERAL.length;
+  const doneSteps = (s1?1:0) + candidatosCompletos + docsGeneralesCargados;
+  const pct = Math.round((doneSteps/totalSteps)*100);
+
+  document.getElementById('pct-label').textContent = pct+'%';
+  document.getElementById('pct-bar').style.width = pct+'%';
+  document.getElementById('docs-count').textContent = candidatosCompletos + ' / ' + CARGOS.length;
+
+  document.getElementById('sb-badge-docs').textContent = `${docsGeneralesCargados} / ${DOCS_GENERAL.length}`;
+  document.getElementById('sb-badge-docs').className = 'sidebar-badge' + (docsGeneralesCargados<DOCS_GENERAL.length?' warn':'');
+  updateSecMeta();
+
+  const cuota = calcularCuotaGenero();
+  renderQuotaBanner(cuota);
+  updateReview(s1, presCompleto, vpCompleto, secretariasCompletas, docsGeneralesCargados, cuota);
+}
+
+function updateReview(s1, presCompleto, vpCompleto, secretariasCompletas, docsGenLoaded, cuota) {
+  const items = [
+    { label:'Datos generales', ok: s1 },
+    { label:'Presidente', ok: presCompleto },
+    { label:'Vicepresidente', ok: vpCompleto },
+    { label:`Secretarías (${secretariasCompletas} / ${SECRETARIAS.length})`, ok: secretariasCompletas === SECRETARIAS.length },
+    { label:`Documentos generales (${docsGenLoaded} / ${DOCS_GENERAL.length})`, ok: docsGenLoaded === DOCS_GENERAL.length },
+    { label:'Cuota de género (mín. 10%)', ok: cuota.cumple },
+  ];
+
+  const allOk = items.every(it => it.ok);
+  document.getElementById('btn-enviar').disabled = !allOk;
+
+  const rl = document.getElementById('review-list');
+  rl.innerHTML = items.map(it => `
+    <div class="review-item">
+      <div class="review-item-left">
+        <i class="ti ${it.ok?'ti-circle-check ok':'ti-circle-x warn'}" aria-hidden="true"></i>
+        ${it.label}
+      </div>
+      ${!it.ok?'<span class="review-missing">Incompleto</span>':''}
+    </div>`).join('');
+}
+
+/* ---------------------------------------------------------------
+ * 8. NAVEGACIÓN (toggle / jump / modal / completar sección)
+ * ------------------------------------------------------------- */
+function toggleSec(i) {
+  const body = document.getElementById('body-'+i);
+  const chev = document.getElementById('chev-'+i);
+  const hdr = document.querySelector('#sec-'+i+' .section-header');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+  hdr.classList.toggle('open', !isOpen);
+}
+
+function completeSec(i) {
+  state.secDone[i] = true;
+  document.getElementById('num-'+i).classList.add('done');
+  document.getElementById('num-'+i).innerHTML = '<i class="ti ti-check" style="font-size:13px"></i>';
+  const sbCheck = document.getElementById('sb-check-'+i);
+  if (sbCheck) sbCheck.classList.add('done');
+  toggleSec(i);
+  if (i<5) { toggleSec(i+1); }
+  updateProgress();
+  document.querySelectorAll('.sidebar-item').forEach((el,idx)=>el.classList.toggle('active', idx===i+1));
+}
+
+function jumpTo(i) {
+  const body = document.getElementById('body-'+i);
+  if (!body.classList.contains('open')) toggleSec(i);
+  document.getElementById('sec-'+i).scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('.sidebar-item').forEach((el,idx)=>el.classList.toggle('active', idx===i));
+}
+
+/* ---------------------------------------------------------------
+ * 9. BOTÓN DE DATOS DE PRUEBA
+ * ------------------------------------------------------------- */
+function setVal(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value;
+}
+
+function enviarPrueba() {
+  if (typeof enviarExpediente !== 'function') {
+    alert('No se encontró enviarExpediente(). Verifica que api.js esté cargado.');
+    return;
+  }
+
+  const inputPrueba = document.getElementById('file-prueba-generico');
+  const archivoBase = inputPrueba.files[0];
+  if (!archivoBase) {
+    alert('Selecciona primero un archivo de prueba.');
+    inputPrueba.click();
+    return;
+  }
+
+  setVal('lista_nombre', 'Lista de Prueba (TEST)');
+  setVal('gestor_nombre', 'Gestor Prueba');
+  setVal('gestor_dni', '00000001');
+  setVal('gestor_email', 'prueba@test.com');
+  setVal('gestor_telefono', '999999999');
+
+  const generosCiclo = ['Femenino','Masculino'];
+  CARGOS.forEach((cargo, i) => {
+    const creditos = cargo.requiereCreditos
+      ? (cargo.creditosMax ? cargo.creditosMax - 1 : (cargo.creditosMin||0) + 10)
+      : 80;
+    state.candidatos[cargo.id] = {
+      nombres: 'Nombres ' + cargo.label,
+      apellidos: 'Apellidos TEST',
+      dni: String(10000000 + i).padStart(8,'0'),
+      codigo: 'TEST' + String(i).padStart(4,'0'),
+      genero: generosCiclo[i % 2],
+      creditos: creditos,
+      perteneceOtroOrgano: false,
+    };
+    DOCS_PERSONA.forEach(d => {
+      const key = docKey(cargo.id, d.id);
+      state.uploadedDocs[key] = archivoBase.name;
+      state.uploadedFiles[key] = archivoBase;
+    });
+  });
+
+  DOCS_GENERAL.forEach(d => {
+    const key = docKey('general', d.id);
+    state.uploadedDocs[key] = archivoBase.name;
+    state.uploadedFiles[key] = archivoBase;
+  });
+
+  renderPresidenciaSecciones();
+  renderSecretariasGrid();
+  renderDocsGenerales();
+  updateProgress();
+
+  document.getElementById('test-banner').classList.add('show');
+  enviarExpediente();
+}
+
+document.getElementById('file-prueba-generico').addEventListener('change', function() {
+  if (this.files[0]) enviarPrueba();
+});
+
+/* ---------------------------------------------------------------
+ * INICIALIZACIÓN
+ * ------------------------------------------------------------- */
+renderPresidenciaSecciones();
+renderSecretariasGrid();
+renderDocsGenerales();
+updateProgress();
+document.getElementById('chev-0').classList.add('open');
+document.querySelector('#sec-0 .section-header').classList.add('open');
+</script>
+
+<!--
+  IMPORTANTE: api.js debe cargarse DESPUÉS del <script> de arriba,
+  porque usa la variable global `state` y las constantes CARGOS /
+  SECRETARIAS que se declaran ahí.
+-->
+<script src="api.js"></script>
+
+</body>
+</html>
