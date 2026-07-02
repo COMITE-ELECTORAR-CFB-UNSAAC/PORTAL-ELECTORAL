@@ -1,8 +1,9 @@
 // ============================================================
 //  CONECTOR HTML → APPS SCRIPT
-//  Pega este bloque al final del <script> de tu HTML en GitHub,
-//  o cárgalo como <script src="api.js"></script> DESPUÉS del
-//  script principal (necesita la variable global `state`).
+//  Carga este archivo DESPUÉS del <script> principal del HTML,
+//  porque usa las variables globales `state`, `CARGOS` y `getCargo`
+//  que se declaran ahí (23 candidatos: Presidente, Vicepresidente
+//  y 7 secretarías con Titular + 2 Accesitarios).
 //  Reemplaza APPS_SCRIPT_URL con la URL de tu Web App publicada.
 // ============================================================
 
@@ -20,6 +21,9 @@ function fileToBase64(file) {
 }
 
 // ── Sube UN archivo al backend ────────────────────────────────
+// `campo` es el docKey completo ("cargoId__docId") tal como lo
+// genera el HTML principal — el backend lo parsea para saber en
+// qué subcarpeta de Drive guardarlo.
 async function subirArchivoADrive(expedienteId, campo, file) {
   const base64 = await fileToBase64(file);
   const res = await fetch(APPS_SCRIPT_URL, {
@@ -36,6 +40,28 @@ async function subirArchivoADrive(expedienteId, campo, file) {
   return res.json();
 }
 
+// ── Arma el arreglo de los 23 candidatos a partir del estado real
+//    del formulario (CARGOS + state.candidatos), en vez de leer
+//    claves "sec0_nombres"..."sec8_nombres" que ya no existen en
+//    el modelo de datos actual (7 secretarías x 3 personas).
+function construirCandidatosPayload() {
+  return CARGOS.map(cargo => {
+    const st = (state.candidatos && state.candidatos[cargo.id]) || {};
+    return {
+      cargoId: cargo.id,
+      label: cargo.label,
+      grupo: cargo.grupo, // null para pres/vp, o el "key" de la secretaría
+      nombres: st.nombres || "",
+      apellidos: st.apellidos || "",
+      dni: st.dni || "",
+      codigo: st.codigo || "",
+      genero: st.genero || "",
+      creditos: st.creditos || "",
+      perteneceOtroOrgano: !!st.perteneceOtroOrgano,
+    };
+  });
+}
+
 // ── Función principal: reemplaza enviarExpediente() ──────────
 async function enviarExpediente() {
   const btn = document.getElementById("btn-enviar");
@@ -44,7 +70,7 @@ async function enviarExpediente() {
   btn.textContent = "Enviando expediente…";
 
   try {
-    // 1. Armar datos estructurados del formulario
+    // 1. Datos generales de la lista
     const datosGenerales = {
       lista_nombre:     document.getElementById("lista_nombre")?.value || "",
       gestor_nombre:    document.getElementById("gestor_nombre")?.value || "",
@@ -53,45 +79,19 @@ async function enviarExpediente() {
       gestor_telefono:  document.getElementById("gestor_telefono")?.value || "",
     };
 
-    const presidente = {
-      nombres:   document.getElementById("pres_nombres")?.value || "",
-      apellidos: document.getElementById("pres_apellidos")?.value || "",
-      dni:       document.getElementById("pres_dni")?.value || "",
-      codigo:    document.getElementById("pres_codigo")?.value || "",
-    };
+    // 2. Los 23 candidatos (Presidente, Vicepresidente y las 7
+    //    secretarías con Titular + 2 Accesitarios), leídos desde
+    //    `state.candidatos` — NO desde el DOM, porque los campos de
+    //    las secretarías se destruyen al cerrar el modal.
+    const candidatos = construirCandidatosPayload();
 
-    const vicepresidente = {
-      nombres:   document.getElementById("vp_nombres")?.value || "",
-      apellidos: document.getElementById("vp_apellidos")?.value || "",
-      dni:       document.getElementById("vp_dni")?.value || "",
-      codigo:    document.getElementById("vp_codigo")?.value || "",
-    };
-
-    // Secretarías (usa el estado global de tu HTML — `state`, NO el DOM,
-    // porque los inputs de cada secretaría se destruyen al cerrar su modal)
-    const SECRETARIAS_NOMBRES = [
-      "Secretaría de Economía", "Secretaría Académica", "Secretaría de Bienestar",
-      "Secretaría de Cultura", "Secretaría de Deporte", "Secretaría de Comunicaciones",
-      "Secretaría de Medio Ambiente", "Secretaría de Género",
-      "Secretaría de Asuntos Internacionales",
-    ];
-    const secretarias = SECRETARIAS_NOMBRES.map((cargo, i) => ({
-      cargo,
-      nombres:   state["sec" + i + "_nombres"] || "",
-      apellidos: state["sec" + i + "_apellidos"] || "",
-      dni:       state["sec" + i + "_dni"] || "",
-      codigo:    state["sec" + i + "_codigo"] || "",
-    }));
-
-    // 2. Registrar expediente (crea carpetas en Drive y fila en Sheet)
+    // 3. Registrar expediente (crea carpetas en Drive y filas en Sheet)
     const regRes = await fetch(APPS_SCRIPT_URL, {
       method: "POST",
       body: JSON.stringify({
         accion: "registrar_expediente",
         datosGenerales,
-        presidente,
-        vicepresidente,
-        secretarias,
+        candidatos,
       }),
     });
     const regData = await regRes.json();
@@ -100,20 +100,9 @@ async function enviarExpediente() {
 
     const expedienteId = regData.expedienteId;
 
-    // 3. Subir todos los archivos uno a uno.
-    //
-    // IMPORTANTE: antes esto buscaba document.getElementById("file-"+campo)
-    // para recuperar el File real. Eso solo funcionaba para el documento
-    // que estuviera visible en pantalla en ese momento — los inputs de
-    // las secretarías se recrean cada vez que se abre su modal, así que
-    // al cerrar el modal el <input> (y el File que tenía) desaparece del
-    // DOM. Resultado: al enviar, solo se subían los archivos de la última
-    // secretaría abierta; el resto se saltaba en silencio (el `continue`
-    // de abajo) aunque el nombre del archivo sí apareciera en pantalla.
-    //
-    // Ahora usamos state.uploadedFiles, que guarda el objeto File real
-    // en memoria desde el momento en que se sube (ver handleFile en el
-    // script principal), sin depender de que el input siga en el DOM.
+    // 4. Subir todos los archivos uno a uno, usando state.uploadedFiles
+    //    (guarda el objeto File real en memoria desde handleFile(), sin
+    //    depender de que el <input> siga en el DOM tras cerrar modales).
     const uploadedFiles = state.uploadedFiles || {};
     const totalArchivos = Object.keys(uploadedFiles).length;
     let subidos = 0;
@@ -130,7 +119,7 @@ async function enviarExpediente() {
       }
     }
 
-    // 4. Éxito
+    // 5. Éxito
     btn.textContent = "✔ Expediente enviado";
     btn.style.background = "#0e6b5e";
 
