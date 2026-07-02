@@ -3,763 +3,529 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elecciones — Centro Federado FCB UNSAAC</title>
+  <title>Sistema Electoral · Centro Federado FCB UNSAAC</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/F_biologia_logo.png" />
+
+  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    /* ── Reset y base ───────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
 
-    :root {
-      --azul:        #1A5276;
-      --azul-claro:  #E8F0F7;
-      --azul-hover:  #154560;
-      --texto:       #1C1C1B;
-      --texto-muted: #6B6B6A;
-      --borde:       #E2E2E0;
-      --fondo:       #FFFFFF;
-      --fondo-alt:   #F7F7F6;
-      --radio:       6px;
-      --contenedor:  1100px;
-      --nav-h:       60px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
-      color: var(--texto);
-      background: var(--fondo);
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── Navegación ─────────────────────────────────── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--borde);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-inner {
-      max-width: var(--contenedor);
-      width: 100%;
-      margin: 0 auto;
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-    }
-
-    .nav-marca {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-
-    .nav-escudo {
-      width: 32px;
-      height: 32px;
-      background: var(--azul);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-escudo svg {
-      width: 18px;
-      height: 18px;
-      fill: white;
-    }
-
-    .nav-nombre {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--texto);
-      line-height: 1.2;
-    }
-
-    .nav-nombre small {
-      display: block;
-      font-size: 10px;
-      font-weight: 400;
-      color: var(--texto-muted);
-      letter-spacing: 0.05em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      list-style: none;
-    }
-
-    .nav-links a {
-      display: block;
-      padding: 6px 14px;
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--texto-muted);
-      text-decoration: none;
-      border-radius: var(--radio);
-      transition: color 0.15s, background 0.15s;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.activo {
-      color: var(--texto);
-      background: var(--fondo-alt);
-    }
-
-    .nav-links a.activo {
-      font-weight: 500;
-    }
-
-    .nav-btn {
-      padding: 7px 16px;
-      background: var(--azul);
-      color: #fff !important;
-      border-radius: var(--radio);
-      font-size: 13px;
-      font-weight: 500 !important;
-      text-decoration: none;
-      transition: background 0.15s;
-      flex-shrink: 0;
-    }
-
-    .nav-btn:hover {
-      background: var(--azul-hover) !important;
-      color: #fff !important;
-    }
-
-    /* Menú hamburguesa (móvil) */
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      color: var(--texto);
-    }
-
-    /* ── Hero ───────────────────────────────────────── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: calc(var(--nav-h) + 4rem) 2rem 4rem;
-      max-width: var(--contenedor);
-      margin: 0 auto;
-    }
-
-    .hero-etiqueta {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--azul);
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-titulo {
-      font-size: clamp(2.4rem, 6vw, 4.5rem);
-      font-weight: 600;
-      line-height: 1.08;
-      letter-spacing: -0.02em;
-      color: var(--texto);
-      max-width: 780px;
-    }
-
-    .hero-titulo span {
-      color: var(--azul);
-    }
-
-    .hero-subtitulo {
-      margin-top: 1.5rem;
-      font-size: 1.05rem;
-      color: var(--texto-muted);
-      max-width: 520px;
-      line-height: 1.65;
-    }
-
-    .hero-acciones {
-      margin-top: 2.5rem;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primario {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      background: var(--azul);
-      color: #fff;
-      border-radius: var(--radio);
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: background 0.15s, transform 0.1s;
-    }
-
-    .btn-primario:hover { background: var(--azul-hover); transform: translateY(-1px); }
-    .btn-primario:active { transform: translateY(0); }
-
-    .btn-secundario {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      border: 1px solid var(--borde);
-      color: var(--texto);
-      border-radius: var(--radio);
-      font-size: 14px;
-      font-weight: 400;
-      text-decoration: none;
-      transition: border-color 0.15s, background 0.15s;
-    }
-
-    .btn-secundario:hover { border-color: #bbb; background: var(--fondo-alt); }
-
-    .hero-stats {
-      margin-top: 4rem;
-      display: flex;
-      gap: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--borde);
-    }
-
-    .stat-item { display: flex; flex-direction: column; gap: 2px; }
-    .stat-num  { font-size: 1.5rem; font-weight: 600; color: var(--texto); }
-    .stat-lbl  { font-size: 11px; color: var(--texto-muted); letter-spacing: 0.05em; }
-
-    /* ── Sección genérica ───────────────────────────── */
-    .seccion {
-      padding: 5rem 2rem;
-      border-top: 1px solid var(--borde);
-    }
-
-    .seccion-alt { background: var(--fondo-alt); }
-
-    .contenedor {
-      max-width: var(--contenedor);
-      margin: 0 auto;
-    }
-
-    .seccion-cabecera {
-      display: flex;
-      align-items: baseline;
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-
-    .seccion-etiqueta {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--azul);
-      flex-shrink: 0;
-    }
-
-    .seccion-titulo {
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      color: var(--texto);
-    }
-
-    /* ── Cronograma (línea de tiempo horizontal) ────── */
-    .cronograma-scroll {
-      overflow-x: auto;
-      padding-bottom: 1rem;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .cronograma-linea {
-      display: flex;
-      align-items: flex-start;
-      gap: 0;
-      min-width: max-content;
-      padding: 1rem 0 1.5rem;
-      position: relative;
-    }
-
-    /* línea de fondo */
-    .cronograma-linea::before {
-      content: '';
-      position: absolute;
-      top: 28px;
-      left: 28px;
-      right: 28px;
-      height: 1px;
-      background: var(--borde);
-    }
-
-    .etapa {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      width: 160px;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .etapa-punto {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 2px solid var(--borde);
-      background: var(--fondo);
-      z-index: 1;
-      margin-top: 21px;
-      transition: border-color 0.2s;
-    }
-
-    .etapa.pasada .etapa-punto {
-      background: var(--azul);
-      border-color: var(--azul);
-    }
-
-    .etapa.actual .etapa-punto {
-      background: var(--azul);
-      border-color: var(--azul);
-      box-shadow: 0 0 0 4px var(--azul-claro);
-      width: 16px;
-      height: 16px;
-      margin-top: 20px;
-    }
-
-    .etapa-nombre {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--texto-muted);
-      text-align: center;
-      line-height: 1.3;
-    }
-
-    .etapa.pasada .etapa-nombre { color: var(--texto); }
-    .etapa.actual .etapa-nombre  { color: var(--azul); font-weight: 600; }
-
-    .etapa-fecha {
-      font-size: 11px;
-      color: var(--texto-muted);
-      text-align: center;
-      line-height: 1.3;
-    }
-
-    .etapa.actual .etapa-fecha { color: var(--azul); }
-
-    .etapa-badge {
-      font-size: 10px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 20px;
-      letter-spacing: 0.04em;
-    }
-
-    .badge-actual {
-      background: var(--azul-claro);
-      color: var(--azul);
-    }
-
-    /* ── Noticias ───────────────────────────────────── */
-    #noticias-cargando {
-      text-align: center;
-      color: var(--texto-muted);
-      font-size: 14px;
-      padding: 2rem 0;
-    }
-
-    .noticias-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .noticia-card {
-      border: 1px solid var(--borde);
-      border-radius: 10px;
-      padding: 1.5rem;
-      background: var(--fondo);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    .noticia-card:hover {
-      border-color: #bbb;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-    }
-
-    .noticia-fecha {
-      font-size: 11px;
-      color: var(--texto-muted);
-      letter-spacing: 0.04em;
-    }
-
-    .noticia-titulo {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--texto);
-      line-height: 1.35;
-    }
-
-    .noticia-resumen {
-      font-size: 13px;
-      color: var(--texto-muted);
-      line-height: 1.6;
-      flex: 1;
-    }
-
-    .noticia-link {
-      font-size: 13px;
-      color: var(--azul);
-      text-decoration: none;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .noticia-link:hover { text-decoration: underline; }
-
-    /* ── Descargas ──────────────────────────────────── */
-    #descargas-cargando {
-      text-align: center;
-      color: var(--texto-muted);
-      font-size: 14px;
-      padding: 2rem 0;
-    }
-
-    .descargas-lista {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .descarga-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 18px;
-      border: 1px solid var(--borde);
-      border-radius: var(--radio);
-      background: var(--fondo);
-      text-decoration: none;
-      color: var(--texto);
-      transition: border-color 0.15s, background 0.15s;
-    }
-
-    .descarga-item:hover {
-      border-color: #bbb;
-      background: var(--fondo-alt);
-    }
-
-    .descarga-icono {
-      width: 36px;
-      height: 36px;
-      border-radius: 6px;
-      background: var(--azul-claro);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .descarga-icono svg {
-      width: 18px;
-      height: 18px;
-      stroke: var(--azul);
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .descarga-nombre { font-size: 14px; font-weight: 500; flex: 1; }
-    .descarga-tipo   { font-size: 11px; color: var(--texto-muted); letter-spacing: 0.04em; }
-
-    .descarga-dl {
-      font-size: 12px;
-      color: var(--azul);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    /* ── Footer ─────────────────────────────────────── */
-    footer {
-      border-top: 1px solid var(--borde);
-      padding: 2rem;
-      text-align: center;
-      font-size: 12px;
-      color: var(--texto-muted);
-    }
-
-    /* ── Estado vacío / error ───────────────────────── */
-    .estado-vacio {
-      text-align: center;
-      padding: 3rem 0;
-      color: var(--texto-muted);
-      font-size: 14px;
-    }
-
-    /* ── Responsive ─────────────────────────────────── */
-    @media (max-width: 680px) {
-      .nav-links { display: none; flex-direction: column; position: absolute; top: var(--nav-h); left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--borde); padding: 1rem; gap: 4px; }
-      .nav-links.abierto { display: flex; }
-      .nav-links a { padding: 10px 14px; }
-      .nav-toggle { display: block; }
-      .nav-btn { display: none; }
-
-      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
-      .hero-acciones { flex-direction: column; }
-      .btn-primario, .btn-secundario { justify-content: center; }
-      .seccion-cabecera { flex-direction: column; gap: 4px; }
-    }
-  </style>
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
 
-  <!-- ── Navegación ──────────────────────────────── -->
+  <!-- ══════════════════════════════════════════════
+       NAVEGACIÓN
+  ══════════════════════════════════════════════ -->
   <nav aria-label="Navegación principal">
     <div class="nav-inner">
-      <a href="index.html" class="nav-marca" aria-label="Inicio">
-        <div class="nav-escudo" aria-hidden="true">
-          <!-- Ícono hoja (Ciencias Biológicas) -->
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3C7.6 19.6 7 17.3 7 15c0-5.5 4.5-10 10-10-.5-.6-1-1.1-1.6-1.5C14.1 2.5 13.1 2 12 2z"/><path d="M17 5c-5.5 0-10 4.5-10 10 0 2.3.8 4.5 2.1 6.2C10.7 22.4 12.3 23 14 23c5.5 0 10-4.5 10-10 0-1.7-.5-3.3-1.2-4.7C21.3 6.4 19.3 5 17 5z"/></svg>
+
+      <!-- Marca -->
+      <a href="index.html" class="nav-marca" aria-label="Inicio – Sistema Electoral FCB">
+        <div class="nav-logo-wrap">
+          <img src="images/F_biologia_logo.png" alt="Logo Facultad de Ciencias Biológicas" />
         </div>
         <div class="nav-nombre">
           Centro Federado FCB
-          <small>UNSAAC · Proceso Electoral</small>
+          <small>UNSAAC · Proceso Electoral 2026</small>
         </div>
       </a>
 
+      <!-- Menú hamburguesa (móvil) -->
       <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="7"  x2="21" y2="7"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="17" x2="21" y2="17"/>
         </svg>
       </button>
 
+      <!-- Links -->
       <ul class="nav-links" id="nav-links" role="list">
-        <li><a href="#cronograma" class="activo">Cronograma</a></li>
-        <li><a href="#noticias">Noticias</a></li>
-        <li><a href="#descargas">Descargas</a></li>
+        <li><a href="#inicio"      class="activo">Inicio</a></li>
+        <li><a href="#cronograma">Cronograma</a></li>
+        <li><a href="descargas.html">Descargas</a></li>
+        <li><a href="inscripcion.html">Inscripción</a></li>
+        <li>
+          <div class="nav-sep" aria-hidden="true"></div>
+        </li>
+        <li><a href="login.html" class="nav-login">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          Iniciar sesión
+        </a></li>
+        <li><a href="inscripcion.html" class="nav-cta">
+          Inscribir lista
+        </a></li>
       </ul>
 
-      <a href="inscripcion.html" class="nav-btn">Inscribir lista</a>
     </div>
   </nav>
 
-  <!-- ── Hero ────────────────────────────────────── -->
-  <main>
+
+  <main id="inicio">
+
+    <!-- ══════════════════════════════════════════════
+         HERO
+    ══════════════════════════════════════════════ -->
     <section class="hero" aria-labelledby="hero-titulo">
-      <p class="hero-etiqueta" aria-hidden="true">Comité Electoral · Proceso 2025</p>
-      <h1 class="hero-titulo" id="hero-titulo">
-        Elecciones del<br/>
-        <span>Centro Federado</span><br/>
-        Ciencias Biológicas
-      </h1>
-      <p class="hero-subtitulo">
-        Portal oficial de información del proceso electoral.
-        Consulta el cronograma, descarga los formatos e inscribe
-        tu lista de candidatos.
-      </p>
-      <div class="hero-acciones">
-        <a href="inscripcion.html" class="btn-primario">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Inscribir lista
-        </a>
-        <a href="#cronograma" class="btn-secundario">
-          Ver cronograma
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
+      <div class="hero-inner contenedor">
 
-      <div class="hero-stats" id="hero-stats" aria-label="Estadísticas del proceso">
-        <div class="stat-item">
-          <span class="stat-num" id="stat-listas">—</span>
-          <span class="stat-lbl">Listas inscritas</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" id="stat-aptas">—</span>
-          <span class="stat-lbl">Listas aptas</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" id="stat-integrantes">—</span>
-          <span class="stat-lbl">Candidatos registrados</span>
-        </div>
-      </div>
-    </section>
+        <!-- Columna izquierda: texto -->
+        <div class="hero-content">
 
-    <!-- ── Cronograma ───────────────────────────── -->
-    <section class="seccion" id="cronograma" aria-labelledby="cronograma-titulo">
+          <div class="hero-eyebrow" aria-label="Estado: Proceso en curso">
+            <span aria-hidden="true"></span>
+            Proceso Electoral 2026 · En curso
+          </div>
+
+          <h1 class="hero-titulo" id="hero-titulo">
+            Sistema Electoral<br/>
+            <em>Centro Federado</em><br/>
+            de Biología
+          </h1>
+
+          <p class="hero-desc">
+            Portal oficial de la Comisión Electoral de la Facultad de Ciencias Biológicas – UNSAAC.
+            Aquí puedes consultar el cronograma, inscribir tu lista de candidatos y descargar los formatos oficiales del proceso.
+          </p>
+
+          <div class="hero-acciones">
+            <a href="inscripcion.html" class="btn-primario">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Inscribir lista
+            </a>
+            <a href="#cronograma" class="btn-secundario">
+              Ver cronograma
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </div>
+
+        </div><!-- /hero-content -->
+
+        <!-- Columna derecha: tarjeta de estado -->
+        <div class="hero-card" aria-label="Estado actual del proceso electoral">
+
+          <div class="hero-card-header">
+            <span>Estado del proceso</span>
+            <span class="badge-proceso" id="badge-estado">En curso</span>
+          </div>
+
+          <div class="hero-card-body">
+
+            <!-- Estadísticas -->
+            <div class="stat-row" aria-label="Estadísticas">
+              <div class="stat-box">
+                <span class="num" id="stat-listas">—</span>
+                <span class="lbl">Listas inscritas</span>
+              </div>
+              <div class="stat-box">
+                <span class="num" id="stat-aptas">—</span>
+                <span class="lbl">Listas aptas</span>
+              </div>
+              <div class="stat-box">
+                <span class="num" id="stat-candidatos">—</span>
+                <span class="lbl">Candidatos</span>
+              </div>
+            </div>
+
+            <!-- Etapa actual -->
+            <div class="etapa-actual-box">
+              <span class="etapa-tag">Etapa en curso</span>
+              <span class="etapa-nombre" id="etapa-nombre-hero">Ampliación de inscripciones</span>
+              <span class="etapa-fecha" id="etapa-fecha-hero">1 – 7 de julio, 2026</span>
+            </div>
+
+          </div>
+        </div><!-- /hero-card -->
+
+      </div>
+    </section><!-- /hero -->
+
+
+    <!-- ══════════════════════════════════════════════
+         CRONOGRAMA
+    ══════════════════════════════════════════════ -->
+    <section class="seccion seccion-alt" id="cronograma" aria-labelledby="cronograma-titulo">
       <div class="contenedor">
+
         <div class="seccion-cabecera">
-          <span class="seccion-etiqueta" aria-hidden="true">Cronograma</span>
-          <h2 class="seccion-titulo" id="cronograma-titulo">Etapas del proceso</h2>
+          <span class="etiqueta-seccion">Cronograma</span>
+          <h2 class="titulo-seccion" id="cronograma-titulo">Etapas del proceso</h2>
+          <p class="desc-seccion">Seguimiento en tiempo real de cada fase del proceso electoral. Las etapas completadas y la etapa en curso se resaltan automáticamente.</p>
         </div>
+
         <div class="cronograma-scroll" role="region" aria-label="Línea de tiempo del proceso electoral">
-          <div class="cronograma-linea" id="cronograma-contenido">
-            <!-- Se carga desde la API o se muestra estático como fallback -->
+          <div class="cronograma-linea" id="cronograma-contenido" role="list">
+            <!-- Generado por JS -->
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ── Noticias ─────────────────────────────── -->
-    <section class="seccion seccion-alt" id="noticias" aria-labelledby="noticias-titulo">
-      <div class="contenedor">
-        <div class="seccion-cabecera">
-          <span class="seccion-etiqueta" aria-hidden="true">Noticias</span>
-          <h2 class="seccion-titulo" id="noticias-titulo">Comunicados del comité</h2>
-        </div>
-        <div id="noticias-contenido">
-          <p id="noticias-cargando" aria-live="polite">Cargando comunicados…</p>
-        </div>
       </div>
-    </section>
+    </section><!-- /cronograma -->
 
-    <!-- ── Descargas ────────────────────────────── -->
-    <section class="seccion" id="descargas" aria-labelledby="descargas-titulo">
+
+    <!-- ══════════════════════════════════════════════
+         ACCESOS RÁPIDOS
+    ══════════════════════════════════════════════ -->
+    <section class="seccion" id="accesos" aria-labelledby="accesos-titulo">
       <div class="contenedor">
+
         <div class="seccion-cabecera">
-          <span class="seccion-etiqueta" aria-hidden="true">Descargas</span>
-          <h2 class="seccion-titulo" id="descargas-titulo">Formatos y reglamento</h2>
+          <span class="etiqueta-seccion">Módulos</span>
+          <h2 class="titulo-seccion" id="accesos-titulo">Accesos rápidos</h2>
+          <p class="desc-seccion">Navega directamente a cada módulo del sistema electoral.</p>
         </div>
-        <div id="descargas-contenido">
-          <p id="descargas-cargando" aria-live="polite">Cargando archivos…</p>
+
+        <div class="accesos-grid">
+
+          <!-- Inscripción -->
+          <a href="inscripcion.html" class="acceso-card" aria-label="Ir a inscripción de listas">
+            <div class="acceso-icono azul">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            </div>
+            <div class="acceso-titulo">Inscripción de listas</div>
+            <p class="acceso-desc">Registra tu lista de candidatos. Completa el formulario y adjunta la documentación requerida.</p>
+            <span class="acceso-flecha">Ir al módulo →</span>
+          </a>
+
+          <!-- Descargas -->
+          <a href="descargas.html" class="acceso-card" aria-label="Ir a descargas de formatos">
+            <div class="acceso-icono verde">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+            <div class="acceso-titulo">Descargas y formatos</div>
+            <p class="acceso-desc">Descarga el reglamento, formatos de inscripción, padrón de adherentes y declaraciones juradas.</p>
+            <span class="acceso-flecha">Ver archivos →</span>
+          </a>
+
+          <!-- Cronograma -->
+          <a href="#cronograma" class="acceso-card" aria-label="Ver cronograma electoral">
+            <div class="acceso-icono azul">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="acceso-titulo">Cronograma electoral</div>
+            <p class="acceso-desc">Consulta las fechas de cada etapa: inscripciones, tachas, debates, votación y proclamación.</p>
+            <span class="acceso-flecha">Ver cronograma →</span>
+          </a>
+
+          <!-- Login -->
+          <a href="login.html" class="acceso-card" aria-label="Iniciar sesión en el sistema">
+            <div class="acceso-icono verde">
+              <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            </div>
+            <div class="acceso-titulo">Iniciar sesión</div>
+            <p class="acceso-desc">Accede al panel de administración del Comité Electoral para gestionar el proceso.</p>
+            <span class="acceso-flecha">Ingresar →</span>
+          </a>
+
         </div>
+
       </div>
-    </section>
+    </section><!-- /accesos -->
+
+
+    <!-- ══════════════════════════════════════════════
+         COMUNICADOS
+    ══════════════════════════════════════════════ -->
+    <section class="seccion seccion-alt" id="comunicados" aria-labelledby="comunicados-titulo">
+      <div class="contenedor">
+
+        <div class="seccion-cabecera">
+          <span class="etiqueta-seccion">Comunicados</span>
+          <h2 class="titulo-seccion" id="comunicados-titulo">Avisos del Comité Electoral</h2>
+          <p class="desc-seccion">Comunicados oficiales, resoluciones y avisos publicados durante el proceso electoral.</p>
+        </div>
+
+        <div class="comunicados-wrap">
+
+          <!-- Lista de comunicados -->
+          <div class="comunicados-lista" id="comunicados-lista" aria-live="polite">
+
+            <!-- Comunicado 1 -->
+            <article class="comunicado-item">
+              <div class="comunicado-fecha-col" aria-hidden="true">
+                <span class="comunicado-dia">22</span>
+                <span class="comunicado-mes">Jun</span>
+              </div>
+              <div class="comunicado-cuerpo">
+                <span class="comunicado-tipo">Comunicado oficial</span>
+                <div class="comunicado-titulo">Lanzamiento del proceso electoral 2026</div>
+                <p class="comunicado-resumen">El Comité Electoral da inicio oficial al proceso electoral para la elección de la nueva Junta Directiva del Centro Federado de Biología.</p>
+              </div>
+            </article>
+
+            <!-- Comunicado 2 -->
+            <article class="comunicado-item">
+              <div class="comunicado-fecha-col" aria-hidden="true">
+                <span class="comunicado-dia">23</span>
+                <span class="comunicado-mes">Jun</span>
+              </div>
+              <div class="comunicado-cuerpo">
+                <span class="comunicado-tipo">Inscripciones</span>
+                <div class="comunicado-titulo">Apertura del período de inscripción de listas</div>
+                <p class="comunicado-resumen">Se abre el período de inscripción de listas de candidatos. Los interesados deben adquirir el paquete electoral y presentar la documentación requerida.</p>
+              </div>
+            </article>
+
+            <!-- Comunicado 3 -->
+            <article class="comunicado-item">
+              <div class="comunicado-fecha-col" aria-hidden="true">
+                <span class="comunicado-dia">01</span>
+                <span class="comunicado-mes">Jul</span>
+              </div>
+              <div class="comunicado-cuerpo">
+                <span class="comunicado-tipo">Aviso · Plazo ampliado</span>
+                <div class="comunicado-titulo">Ampliación del período de inscripciones hasta el 7 de julio</div>
+                <p class="comunicado-resumen">El Comité Electoral comunica la ampliación del plazo de inscripción de listas hasta el 7 de julio de 2026. Se invita a todos los grupos interesados a inscribirse.</p>
+              </div>
+            </article>
+
+            <!-- Estado vacío (se oculta si hay comunicados) -->
+            <!-- <p class="estado-vacio">No hay comunicados disponibles aún.</p> -->
+
+          </div><!-- /comunicados-lista -->
+
+          <!-- Tablón de imágenes -->
+          <aside class="tablon" aria-label="Tablón de avisos visuales">
+
+            <div class="tablon-header">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l4-4 4 4 4-4 4 4"/><path d="M3 15l4-4 4 4 4-4 4 4"/></svg>
+              <span>Tablón de avisos</span>
+            </div>
+
+            <div class="tablon-body">
+              <div class="tablon-img-placeholder" role="img" aria-label="Espacio para imagen o afiche">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Afiche / imagen<br/>próximamente</span>
+              </div>
+              <p class="tablon-pie">Los afiches y comunicados visuales del Comité Electoral serán publicados aquí.</p>
+            </div>
+
+          </aside>
+
+        </div>
+
+      </div>
+    </section><!-- /comunicados -->
+
+
+    <!-- ══════════════════════════════════════════════
+         INFORMACIÓN DEL PROCESO
+    ══════════════════════════════════════════════ -->
+    <section class="seccion" id="informacion" aria-labelledby="info-titulo">
+      <div class="contenedor">
+
+        <div class="seccion-cabecera">
+          <span class="etiqueta-seccion">El proceso</span>
+          <h2 class="titulo-seccion" id="info-titulo">¿Quién organiza y quién puede participar?</h2>
+        </div>
+
+        <div class="info-grid">
+
+          <div class="info-card">
+            <div class="info-num">01</div>
+            <div class="info-divider"></div>
+            <h3>Organiza el Comité Electoral</h3>
+            <p>El Comité Electoral es un órgano autónomo e independiente, elegido por los estudiantes matriculados de la Facultad de Ciencias Biológicas de la UNSAAC. Su función es organizar, supervisar y conducir todo el proceso electoral.</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-num">02</div>
+            <div class="info-divider"></div>
+            <h3>¿Quién puede votar?</h3>
+            <p>Todos los estudiantes matriculados en el semestre académico vigente (2026-I) de la Facultad de Ciencias Biológicas tienen derecho a sufragar. La participación es obligatoria; la inasistencia conlleva una multa establecida en el reglamento.</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-num">03</div>
+            <div class="info-divider"></div>
+            <h3>¿Quién puede inscribir una lista?</h3>
+            <p>Pueden inscribirse listas de gremios académicos, sociales, culturales, religiosos o políticos. Cada lista debe contar con el respaldo de 100 adherentes de la FCB, cumplir los requisitos de créditos y presentar la documentación completa.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- /informacion -->
+
+
+    <!-- ══════════════════════════════════════════════
+         CONTACTO
+    ══════════════════════════════════════════════ -->
+    <section class="seccion seccion-alt" id="contacto" aria-labelledby="contacto-titulo">
+      <div class="contenedor">
+
+        <div class="contacto-wrap">
+
+          <div class="contacto-intro">
+            <span class="etiqueta-seccion">Contacto</span>
+            <h2 class="titulo-seccion" id="contacto-titulo">Comisión Electoral</h2>
+            <p class="desc-seccion">
+              Para consultas sobre el proceso, requisitos de inscripción o cualquier duda relacionada con el reglamento, comunícate con el Comité Electoral.
+            </p>
+            <div class="contacto-nota">
+              <strong>Horario de atención:</strong> Lunes a viernes, 9:00 a.m. – 1:00 p.m. · Facultad de Ciencias Biológicas – UNSAAC.
+            </div>
+          </div>
+
+          <div class="contacto-datos">
+
+            <div class="contacto-item">
+              <div class="contacto-icono">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+              </div>
+              <div class="contacto-item-info">
+                <span class="contacto-label">Correo electrónico</span>
+                <span class="contacto-valor">comite.electoral.fcb@unsaac.edu.pe</span>
+              </div>
+            </div>
+
+            <div class="contacto-item">
+              <div class="contacto-icono">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="contacto-item-info">
+                <span class="contacto-label">Ubicación</span>
+                <span class="contacto-valor">Facultad de Ciencias Biológicas · UNSAAC, Cusco</span>
+              </div>
+            </div>
+
+            <div class="contacto-item">
+              <div class="contacto-icono">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.09 6.09l1.79-1.79a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>
+              </div>
+              <div class="contacto-item-info">
+                <span class="contacto-label">Teléfono / WhatsApp</span>
+                <span class="contacto-valor">Por definir</span>
+              </div>
+            </div>
+
+            <div class="contacto-item">
+              <div class="contacto-icono">
+                <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </div>
+              <div class="contacto-item-info">
+                <span class="contacto-label">Red social</span>
+                <span class="contacto-valor">Por definir</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- /contacto -->
+
   </main>
 
-  <!-- ── Footer ──────────────────────────────────── -->
-  <footer>
-    <p>Comité Electoral · Centro Federado de la Facultad de Ciencias Biológicas · UNSAAC &middot; <span id="anio"></span></p>
+
+  <!-- ══════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════ -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+
+      <div class="footer-marca">
+        <img src="images/F_biologia_logo.png" alt="" class="footer-logo" aria-hidden="true" />
+        <div class="footer-texto">
+          <span class="footer-nombre">Centro Federado de Biología</span>
+          <span class="footer-sub">Facultad de Ciencias Biológicas · UNSAAC</span>
+        </div>
+      </div>
+
+      <div class="footer-centro">
+        Comisión Electoral · Proceso Electoral <span id="anio-footer"></span><br/>
+        Universidad Nacional de San Antonio Abad del Cusco
+      </div>
+
+      <div class="footer-derecha">
+        Todos los derechos reservados<br/>
+        <a href="login.html">Acceso al panel</a> · <a href="descargas.html">Documentos</a>
+      </div>
+
+    </div>
   </footer>
 
-  <!-- ── Scripts ─────────────────────────────────── -->
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
+
+  <!-- ══════════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════════ -->
+
+  <!-- API client (carga real si existe, silencia si no) -->
   <script>
+    // Stub seguro en caso de que js/api.js no esté disponible
+    window.API = window.API || { get: () => Promise.reject('API no disponible') };
+  </script>
+  <script src="js/api.js" onerror="/* API stub ya cargado */"></script>
+  <script src="js/auth.js" onerror="/* auth.js no disponible */"></script>
 
-    // ── Config ───────────────────────────────────────
-    // Datos de fallback para cuando la API aún no esté conectada
-    const CRONOGRAMA_FALLBACK = [
+  <script>
+    /* ── Cronograma (datos de fallback) ──────────────── */
+    const CRONOGRAMA = [
+      { nombre: "Lanzamiento",              fecha: "22 Jun",        estado: "pasada" },
+      { nombre: "Inicio de\ninscripciones", fecha: "23 Jun",        estado: "pasada" },
+      { nombre: "Ampliación\nde inscripción",fecha: "1–7 Jul",      estado: "actual" },
+      { nombre: "Revisión de\ndocumentos",  fecha: "8–10 Jul",      estado: "futura" },
+      { nombre: "Listas\ninscritas",        fecha: "11 Jul",        estado: "futura" },
+      { nombre: "Tachas",                   fecha: "12–13 Jul",     estado: "futura" },
+      { nombre: "Recomposición",            fecha: "14 Jul",        estado: "futura" },
+      { nombre: "Listas\naptas",            fecha: "15 Jul",        estado: "futura" },
+      { nombre: "Sorteo de\nmesas",         fecha: "16 Jul",        estado: "futura" },
+      { nombre: "Campaña",                  fecha: "17 Jul\n5 Ago", estado: "futura" },
+      { nombre: "1.er\nDebate",             fecha: "24 Jul",        estado: "futura" },
+      { nombre: "2.º\nDebate",             fecha: "31 Jul",        estado: "futura" },
+      { nombre: "Silencio\nelectoral",      fecha: "6 Ago",         estado: "futura" },
+      { nombre: "Elecciones",              fecha: "7 Ago",          estado: "futura" },
+      { nombre: "Resultados",              fecha: "8 Ago",          estado: "futura" },
+    ];
 
-{
-  nombre:"Lanzamiento",
-  fecha:"22 Jun",
-  estado:"pasada"
-},
+    /* ── Render cronograma ───────────────────────────── */
+    function renderCronograma(etapas) {
+      const el = document.getElementById('cronograma-contenido');
+      el.innerHTML = etapas.map(e => `
+        <div class="etapa ${e.estado}" role="listitem">
+          <div class="etapa-punto" aria-hidden="true"></div>
+          <span class="etapa-nombre">${e.nombre.replace(/\n/g, '<br>')}</span>
+          <span class="etapa-fecha">${e.fecha.replace(/\n/g, '<br>')}</span>
+          ${e.estado === 'actual' ? '<span class="etapa-badge">En curso</span>' : ''}
+        </div>
+      `).join('');
+    }
 
-{
-  nombre:"Inicio de\ninscripciones",
-  fecha:"23 Jun",
-  estado:"pasada"
-},
+    async function cargarCronograma() {
+      try {
+        const data = await API.get('portal.cronograma');
+        renderCronograma((data && data.length) ? data : CRONOGRAMA);
+      } catch {
+        renderCronograma(CRONOGRAMA);
+      }
+    }
 
-{
-  nombre:"Ampliación\nde inscripción",
-  fecha:"1–7 Jul",
-  estado:"actual"
-},
+    /* ── Estadísticas del hero ───────────────────────── */
+    async function cargarStats() {
+      try {
+        const data = await API.get('dashboard');
+        document.getElementById('stat-listas').textContent    = data.total_listas ?? '—';
+        document.getElementById('stat-aptas').textContent     = data.estados?.APTA ?? '—';
+        document.getElementById('stat-candidatos').textContent = data.total_integrantes ?? '—';
+      } catch {
+        /* fallback: guiones ya están, no mostrar error */
+      }
+    }
 
-{
-  nombre:"Revisión de\ndocumentos",
-  fecha:"8–10 Jul",
-  estado:"futura"
-},
-
-{
-  nombre:"Listas\ninscritas",
-  fecha:"11 Jul",
-  estado:"futura"
-},
-
-{
-  nombre:"Tachas",
-  fecha:"12–13 Jul",
-  estado:"futura"
-},
-
-{
-  nombre:"Recomposición",
-  fecha:"14 Jul",
-  estado:"futura"
-},
-
-{
-  nombre:"Listas\naptas",
-  fecha:"15 Jul",
-  estado:"futura"
-},
-
-{
-  nombre:"Sorteo de\nmesas",
-  fecha:"16 Jul",
-  estado:"futura"
-},
-
-{
-  nombre:"Campaña",
-  fecha:"17 Jul\n5 Ago",
-  estado:"futura"
-},
-
-{
-  nombre:"1.er\nDebate",
-  fecha:"24 Jul",
-  estado:"futura"
-},
-
-{
-  nombre:"2.º\nDebate",
-  fecha:"31 Jul",
-  estado:"futura"
-},
-
-{
-  nombre:"Silencio\nelectoral",
-  fecha:"6 Ago",
-  estado:"futura"
-},
-
-{
-  nombre:"Elecciones",
-  fecha:"7 Ago",
-  estado:"futura"
-},
-
-{
-  nombre:"Resultados",
-  fecha:"8 Ago",
-  estado:"futura"
-}
-
-];
-
-    // ── Menú hamburguesa ─────────────────────────────
-    const toggle = document.getElementById('nav-toggle');
+    /* ── Menú hamburguesa ────────────────────────────── */
+    const toggle   = document.getElementById('nav-toggle');
     const navLinks = document.getElementById('nav-links');
 
     toggle.addEventListener('click', () => {
@@ -770,161 +536,38 @@
     navLinks.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
         navLinks.classList.remove('abierto');
-        toggle.setAttribute('aria-expanded', false);
+        toggle.setAttribute('aria-expanded', 'false');
       });
     });
 
-    // ── Nav activo según scroll ──────────────────────
-    const secciones = ['cronograma', 'noticias', 'descargas'];
-    const navAnchors = {};
-    secciones.forEach(id => {
-      navAnchors[id] = document.querySelector(`.nav-links a[href="#${id}"]`);
+    /* ── Nav activo por scroll ───────────────────────── */
+    const SEC_IDS = ['cronograma', 'accesos', 'comunicados', 'informacion', 'contacto'];
+    const navAs   = {};
+    SEC_IDS.forEach(id => {
+      navAs[id] = document.querySelector(`.nav-links a[href="#${id}"]`);
     });
 
-    const observer = new IntersectionObserver(entries => {
+    const secObs = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          Object.values(navAnchors).forEach(a => a && a.classList.remove('activo'));
-          const a = navAnchors[entry.target.id];
-          if (a) a.classList.add('activo');
+          Object.values(navAs).forEach(a => a && a.classList.remove('activo'));
+          if (navAs[entry.target.id]) navAs[entry.target.id].classList.add('activo');
         }
       });
     }, { rootMargin: '-40% 0px -55% 0px' });
 
-    secciones.forEach(id => {
+    SEC_IDS.forEach(id => {
       const el = document.getElementById(id);
-      if (el) observer.observe(el);
+      if (el) secObs.observe(el);
     });
 
-    // ── Año en el footer ─────────────────────────────
-    document.getElementById('anio').textContent = new Date().getFullYear();
+    /* ── Año en el footer ────────────────────────────── */
+    document.getElementById('anio-footer').textContent = new Date().getFullYear();
 
-    // ── Cronograma ───────────────────────────────────
-    function renderCronograma(etapas) {
-      const contenedor = document.getElementById('cronograma-contenido');
-      contenedor.innerHTML = etapas.map(e => `
-        <div class="etapa ${e.estado}" role="listitem">
-          <div class="etapa-punto" aria-hidden="true"></div>
-          <span class="etapa-nombre">${e.nombre.replace(/\n/g, '<br>')}</span>
-          <span class="etapa-fecha">${e.fecha}</span>
-          ${e.estado === 'actual' ? '<span class="etapa-badge badge-actual">En curso</span>' : ''}
-        </div>
-      `).join('');
-    }
-
-    async function cargarCronograma() {
-      try {
-        const data = await API.get('portal.cronograma');
-        if (data && data.length > 0) {
-          renderCronograma(data);
-        } else {
-          renderCronograma(CRONOGRAMA_FALLBACK);
-        }
-      } catch {
-        renderCronograma(CRONOGRAMA_FALLBACK);
-      }
-    }
-
-    // ── Noticias ─────────────────────────────────────
-    function formatearFecha(iso) {
-      if (!iso) return '';
-      try {
-        return new Date(iso).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
-      } catch { return iso; }
-    }
-
-    function renderNoticias(noticias) {
-      const contenedor = document.getElementById('noticias-contenido');
-      if (!noticias || noticias.length === 0) {
-        contenedor.innerHTML = '<p class="estado-vacio">No hay comunicados disponibles aún.</p>';
-        return;
-      }
-      contenedor.innerHTML = `<div class="noticias-grid">` +
-        noticias.map(n => `
-          <article class="noticia-card">
-            <time class="noticia-fecha" datetime="${n.fecha}">${formatearFecha(n.fecha)}</time>
-            <h3 class="noticia-titulo">${n.titulo}</h3>
-            <p class="noticia-resumen">${n.resumen || ''}</p>
-            ${n.url ? `<a href="${n.url}" class="noticia-link" target="_blank" rel="noopener">Leer más →</a>` : ''}
-          </article>
-        `).join('') +
-      `</div>`;
-    }
-
-    async function cargarNoticias() {
-      try {
-        const data = await API.get('portal.noticias');
-        renderNoticias(data);
-      } catch {
-        document.getElementById('noticias-contenido').innerHTML =
-          '<p class="estado-vacio">No se pudieron cargar los comunicados en este momento.</p>';
-      }
-    }
-
-    // ── Descargas ────────────────────────────────────
-    const ICONOS_DOC = {
-      'PDF': `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
-      'DOCX': `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>`,
-      'XLSX': `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>`,
-    };
-
-    const ICONO_DEFAULT = `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
-
-    function renderDescargas(archivos) {
-      const contenedor = document.getElementById('descargas-contenido');
-      if (!archivos || archivos.length === 0) {
-        contenedor.innerHTML = '<p class="estado-vacio">No hay archivos disponibles aún.</p>';
-        return;
-      }
-      contenedor.innerHTML = `<div class="descargas-lista">` +
-        archivos.map(a => {
-          const ext = (a.tipo || '').toUpperCase();
-          const icono = ICONOS_DOC[ext] || ICONO_DEFAULT;
-          return `
-            <a href="${a.url}" class="descarga-item" target="_blank" rel="noopener" aria-label="Descargar ${a.nombre}">
-              <div class="descarga-icono" aria-hidden="true">${icono}</div>
-              <div>
-                <div class="descarga-nombre">${a.nombre}</div>
-                <div class="descarga-tipo">${ext || 'Archivo'}</div>
-              </div>
-              <span class="descarga-dl" aria-hidden="true">
-                Descargar
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </span>
-            </a>
-          `;
-        }).join('') +
-      `</div>`;
-    }
-
-    async function cargarDescargas() {
-      try {
-        const data = await API.get('portal.descargas');
-        renderDescargas(data);
-      } catch {
-        document.getElementById('descargas-contenido').innerHTML =
-          '<p class="estado-vacio">No se pudieron cargar los archivos en este momento.</p>';
-      }
-    }
-
-    // ── Dashboard stats ──────────────────────────────
-    async function cargarStats() {
-      try {
-        const data = await API.get('dashboard');
-        document.getElementById('stat-listas').textContent = data.total_listas ?? '—';
-        document.getElementById('stat-aptas').textContent   = data.estados?.APTA ?? '—';
-        document.getElementById('stat-integrantes').textContent = data.total_integrantes ?? '—';
-      } catch {
-        // Si falla, los guiones ya están; no mostrar error al usuario
-      }
-    }
-
-    // ── Inicializar ──────────────────────────────────
+    /* ── Inicializar ─────────────────────────────────── */
     cargarCronograma();
-    cargarNoticias();
-    cargarDescargas();
     cargarStats();
-
   </script>
+
 </body>
 </html>
