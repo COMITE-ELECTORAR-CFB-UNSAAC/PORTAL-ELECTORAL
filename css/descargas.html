@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descargas · Sistema Electoral CFB UNSAAC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="descargas.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-marca">
+      <div class="nav-logo-wrap"><img src="logo.png" alt="Logo CFB Biología"></div>
+      <div class="nav-nombre">Centro Federado<small>Biología · UNSAAC</small></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="index.html#cronograma">Cronograma</a></li>
+      <li><a href="descargas.html" class="activo">Descargas</a></li>
+      <li><a href="index.html#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-sep"></div>
+    <a href="#" class="nav-login">Iniciar sesión</a>
+    <a href="#" class="nav-cta">Votar ahora</a>
+    <button class="nav-toggle" aria-label="Abrir menú">☰</button>
+  </div>
+</nav>
+
+<header class="descargas-hero">
+  <div class="contenedor">
+    <span class="etiqueta-seccion">Documentos oficiales</span>
+    <h1 class="titulo-seccion">Centro de descargas</h1>
+    <p class="desc-seccion">
+      Reglamentos, cronogramas, padrones y demás documentos oficiales
+      del proceso electoral, disponibles para su consulta y descarga.
+    </p>
+  </div>
+</header>
+
+<section class="seccion">
+  <div class="contenedor">
+
+    <div class="descargas-toolbar">
+      <div class="descargas-filtros" id="filtros"></div>
+      <button class="btn-secundario" id="btn-recargar">
+        ⟳ Actualizar lista
+      </button>
+    </div>
+
+    <div id="estado-carga" class="descargas-estado">
+      <div class="spinner"></div>
+      <p>Cargando documentos…</p>
+    </div>
+
+    <div id="estado-error" class="descargas-estado" style="display:none;">
+      <p>No se pudo cargar la lista de documentos. Intenta nuevamente.</p>
+      <button class="btn-primario" id="btn-reintentar">Reintentar</button>
+    </div>
+
+    <div id="grid-documentos" class="accesos-grid" style="display:none;"></div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-marca">
+      <img src="logo.png" alt="" class="footer-logo">
+      <div class="footer-texto">
+        <span class="footer-nombre">Centro Federado de Biología</span>
+        <span class="footer-sub">Universidad Nacional de San Antonio Abad del Cusco</span>
+      </div>
+    </div>
+    <div class="footer-centro">Proceso Electoral 2026</div>
+    <div class="footer-derecha">
+      <a href="index.html#contacto">Contacto</a>
+    </div>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="descargas.js"></script>
+</body>
+</html>
