@@ -1,292 +1,319 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inscripción Electoral · Centro Federado de Biología · UNSAAC</title>
-  <link rel="stylesheet" href="css/inscripcion.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Inscripción de Listas — Elecciones CFB Biología UNSAAC</title>
+<link rel="stylesheet" href="css/inscripcion.css" />
 </head>
 <body>
 
-  <!-- =====================================================
-       CABECERA DEL FORMULARIO
-       Solo identifica el sistema. Sin logos ni nav.
-  ====================================================== -->
-  <header class="form-header">
-    <p class="form-header__institución">Centro Federado de Biología · UNSAAC</p>
-    <h1 class="form-header__titulo">Inscripción de Lista Electoral</h1>
-    <p class="form-header__semestre" id="header-semestre">Proceso electoral <!-- JS lo rellena --></p>
+  <!-- ============================================================
+       ENCABEZADO
+       ============================================================ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="marca">
+        <div class="marca-icono">CFB</div>
+        <div class="marca-texto">
+          <strong>Centro Federado de Biología</strong>
+          <span>UNSAAC · Proceso Electoral 2026</span>
+        </div>
+      </div>
+
+      <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menú">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <nav id="nav-links" class="nav-links">
+        <span class="nav-links-item">Inscripción de listas</span>
+      </nav>
+    </div>
   </header>
 
+  <!-- ============================================================
+       CONTENEDOR PRINCIPAL
+       ============================================================ -->
+  <main class="contenedor">
 
-  <!-- =====================================================
-       INDICADOR DE PASOS
-  ====================================================== -->
-  <nav class="pasos" aria-label="Progreso del formulario">
-    <button class="paso activo" id="tab-1" type="button" disabled>
-      <span class="paso__num">1</span>
-      <span class="paso__label">Lista e integrantes</span>
-    </button>
-    <span class="paso__separador" aria-hidden="true"></span>
-    <button class="paso" id="tab-2" type="button" disabled>
-      <span class="paso__num">2</span>
-      <span class="paso__label">Documentos</span>
-    </button>
-    <span class="paso__separador" aria-hidden="true"></span>
-    <button class="paso" id="tab-3" type="button" disabled>
-      <span class="paso__num">3</span>
-      <span class="paso__label">Confirmar y enviar</span>
-    </button>
-  </nav>
+    <div class="titulo-pagina">
+      <h1>Inscripción de lista electoral</h1>
+      <p>Completa los 3 pasos para inscribir tu lista ante el comité electoral del CFB.</p>
+    </div>
 
+    <!-- ── TABS DE PROGRESO ─────────────────────────────────── -->
+    <div class="pasos">
+      <button id="tab-1" class="paso activo" type="button" disabled>
+        <span class="paso-num">1</span>
+        <span class="paso-label">Lista e integrantes</span>
+      </button>
+      <button id="tab-2" class="paso" type="button" disabled>
+        <span class="paso-num">2</span>
+        <span class="paso-label">Documentos</span>
+      </button>
+      <button id="tab-3" class="paso" type="button" disabled>
+        <span class="paso-num">3</span>
+        <span class="paso-label">Confirmar y enviar</span>
+      </button>
+    </div>
 
-  <!-- =====================================================
-       ÁREA DE MENSAJES DE ERROR
-  ====================================================== -->
-  <div id="mensaje-error" class="mensaje-error" role="alert" aria-live="polite" hidden></div>
-  <div id="alerta-ok"     class="alerta-ok"     role="status"                   hidden></div>
+    <p id="nav-info" class="nav-info">Paso 1 de 3 — Lista e integrantes</p>
 
+    <!-- ── ALERTA DE ÉXITO (oculta hasta el envío) ─────────────── -->
+    <div id="alerta-ok" class="alerta-ok" style="display:none;"></div>
 
-  <!-- =====================================================
-       FORMULARIO PRINCIPAL
-  ====================================================== -->
-  <main class="form-wrap">
+    <!-- ============================================================
+         PASO 1 — LISTA E INTEGRANTES
+         ============================================================ -->
+    <section id="paso-1" class="paso-contenido">
 
-    <!-- ── PASO 1: DATOS DE LA LISTA E INTEGRANTES ──────── -->
-    <section id="paso-1" class="paso-contenido" aria-labelledby="titulo-paso-1">
-
-      <h2 class="paso-titulo" id="titulo-paso-1">Paso 1 — Lista e integrantes</h2>
-
-
-      <!-- ─ 1.1 Datos generales de la lista ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Datos de la lista</legend>
-
-        <div class="grid grid--2">
-          <div class="campo campo--wide">
-            <label class="campo__label" for="l-nombre">
-              Nombre de la lista <span class="req" aria-label="obligatorio">*</span>
-            </label>
-            <input class="campo__input" type="text" id="l-nombre" name="l-nombre"
-              placeholder="Ej. Lista Biorenovación" autocomplete="off" required />
-          </div>
-
+      <div class="tarjeta">
+        <h2 class="tarjeta-titulo">Datos de la lista</h2>
+        <div class="grid grid2">
           <div class="campo">
-            <label class="campo__label" for="l-color">
-              Color o símbolo representativo
-            </label>
-            <input class="campo__input" type="text" id="l-color" name="l-color"
-              placeholder="Ej. Verde, Azul y blanco…" autocomplete="off" />
+            <label class="lbl" for="l-nombre">Nombre de la lista <span class="req">*</span></label>
+            <input type="text" id="l-nombre" class="inp" placeholder="Ej. Renovación Biológica" />
+          </div>
+          <div class="campo">
+            <label class="lbl" for="l-color">Color distintivo</label>
+            <input type="text" id="l-color" class="inp" placeholder="Ej. Verde esmeralda" />
+            <p class="hint">Opcional. Ayuda a identificar tu lista en materiales de campaña.</p>
           </div>
         </div>
-      </fieldset>
+      </div>
 
-
-      <!-- ─ 1.2 Datos del gestor / personero ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Gestor / Personero general</legend>
-        <p class="fieldset__hint">
-          Persona acreditada por el presidente de la lista para realizar la inscripción ante el comité electoral.
-          Sus datos se registran junto con la lista.
-        </p>
-
-        <div class="grid grid--2">
+      <div class="tarjeta">
+        <h2 class="tarjeta-titulo">Gestor / Personero de lista</h2>
+        <div class="grid grid2">
           <div class="campo">
-            <label class="campo__label" for="g-nombres">
-              Nombres <span class="req" aria-label="obligatorio">*</span>
-            </label>
-            <input class="campo__input" type="text" id="g-nombres" name="g-nombres"
-              placeholder="Nombres completos" autocomplete="off" required />
+            <label class="lbl" for="g-nombres">Nombres <span class="req">*</span></label>
+            <input type="text" id="g-nombres" class="inp" placeholder="Nombres completos" />
           </div>
-
           <div class="campo">
-            <label class="campo__label" for="g-apellidos">
-              Apellidos <span class="req" aria-label="obligatorio">*</span>
-            </label>
-            <input class="campo__input" type="text" id="g-apellidos" name="g-apellidos"
-              placeholder="Apellidos completos" autocomplete="off" required />
+            <label class="lbl" for="g-apellidos">Apellidos <span class="req">*</span></label>
+            <input type="text" id="g-apellidos" class="inp" placeholder="Apellidos completos" />
           </div>
         </div>
-
-        <div class="grid grid--3">
+        <div class="grid grid2">
           <div class="campo">
-            <label class="campo__label" for="g-codigo">
-              Código universitario <span class="req" aria-label="obligatorio">*</span>
-            </label>
-            <input class="campo__input" type="text" id="g-codigo" name="g-codigo"
-              placeholder="Ej. 190012" autocomplete="off" required />
+            <label class="lbl" for="g-codigo">Código universitario <span class="req">*</span></label>
+            <input type="text" id="g-codigo" class="inp" placeholder="Ej. 190012" />
           </div>
-
           <div class="campo">
-            <label class="campo__label" for="g-email">
-              Correo electrónico <span class="req" aria-label="obligatorio">*</span>
-            </label>
-            <input class="campo__input" type="email" id="g-email" name="g-email"
-              placeholder="correo@unsaac.edu.pe" autocomplete="email" required />
-            <p class="campo__hint">Se enviará la confirmación a este correo.</p>
-          </div>
-
-          <div class="campo">
-            <label class="campo__label" for="g-tel">
-              Teléfono <span class="req" aria-label="obligatorio">*</span>
-            </label>
-            <input class="campo__input" type="tel" id="g-tel" name="g-tel"
-              placeholder="Ej. 984 123 456" autocomplete="tel" required />
+            <label class="lbl" for="g-tel">Teléfono <span class="req">*</span></label>
+            <input type="tel" id="g-tel" class="inp" placeholder="Ej. 984 123 456" />
           </div>
         </div>
-      </fieldset>
+        <div class="grid">
+          <div class="campo">
+            <label class="lbl" for="g-email">Correo electrónico <span class="req">*</span></label>
+            <input type="email" id="g-email" class="inp" placeholder="correo@ejemplo.com" />
+          </div>
+        </div>
+      </div>
 
+      <div class="tarjeta">
+        <h2 class="tarjeta-titulo">Candidato a la Presidencia</h2>
+        <div class="grid grid2">
+          <div class="campo">
+            <label class="lbl" for="p-nombres">Nombres <span class="req">*</span></label>
+            <input type="text" id="p-nombres" class="inp" placeholder="Nombres completos" />
+          </div>
+          <div class="campo">
+            <label class="lbl" for="p-apellidos">Apellidos <span class="req">*</span></label>
+            <input type="text" id="p-apellidos" class="inp" placeholder="Apellidos completos" />
+          </div>
+        </div>
+        <div class="grid grid2">
+          <div class="campo">
+            <label class="lbl" for="p-codigo">Código universitario <span class="req">*</span></label>
+            <input type="text" id="p-codigo" class="inp" placeholder="Ej. 190012" />
+          </div>
+          <div class="campo">
+            <label class="lbl" for="p-semestre">Semestre</label>
+            <select id="p-semestre" class="sel">
+              <option value="">—</option>
+              <option>I</option><option>II</option><option>III</option><option>IV</option>
+              <option>V</option><option>VI</option><option>VII</option><option>VIII</option>
+              <option>IX</option><option>X</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="campo">
+            <label class="lbl" for="p-creditos">Créditos aprobados</label>
+            <input type="number" id="p-creditos" class="inp" placeholder="Ej. 180" min="0" />
+            <p class="hint">Según el reglamento electoral vigente.</p>
+          </div>
+        </div>
+      </div>
 
-      <!-- ─ 1.3 Cargos directivos: Presidente y Vicepresidente ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Cargos directivos</legend>
+      <div class="tarjeta">
+        <div class="tarjeta-header-flex">
+          <h2 class="tarjeta-titulo">Secretarías <span class="contador" id="cnt-sec">0 secretarías</span></h2>
+          <button type="button" class="btn-agregar" onclick="agregarSecretaria()">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Agregar secretaría
+          </button>
+        </div>
+        <p class="hint">Las 7 secretarías establecidas por el reglamento se cargan automáticamente. Completa los datos de cada titular.</p>
+        <div id="lista-sec"></div>
+      </div>
 
-        <!-- Generado por JS desde CONFIG.cargosDirectivos -->
-        <div id="lista-directivos"></div>
-      </fieldset>
+      <div class="tarjeta">
+        <div class="tarjeta-header-flex">
+          <h2 class="tarjeta-titulo">Accesitarios <span class="contador" id="cnt-acc">0 accesitarios</span></h2>
+          <button type="button" class="btn-agregar" onclick="agregarAccesitario()">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Agregar accesitario
+          </button>
+        </div>
+        <p class="hint">Indica a qué secretaría reemplaza cada accesitario.</p>
+        <div id="lista-acc"></div>
+      </div>
 
+    </section>
 
-      <!-- ─ 1.4 Secretarías ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Secretarías</legend>
-        <p class="fieldset__hint">
-          7 secretarías predefinidas. Puedes editar el nombre si el reglamento lo permite.
-          Cada secretaría tiene 2 accesitarios.
-        </p>
+    <!-- ============================================================
+         PASO 2 — DOCUMENTOS
+         ============================================================ -->
+    <section id="paso-2" class="paso-contenido" style="display:none;">
 
-        <!-- Generado por JS desde CONFIG.secretarias -->
-        <div id="lista-secretarias"></div>
-      </fieldset>
+      <div class="tarjeta">
+        <h2 class="tarjeta-titulo">Documentos de la lista</h2>
 
-    </section><!-- /paso-1 -->
+        <div class="doc-fila">
+          <div>
+            <div class="doc-fila-nombre">Plan de trabajo <span class="req">*</span></div>
+            <div class="doc-fila-desc">Propuesta de gestión de la lista, formato PDF.</div>
+          </div>
+          <label class="upload-mini" for="f-plan">
+            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            Subir PDF
+            <input type="file" id="f-plan" accept=".pdf" onchange="marcarArchivo(this, 'ed-f-plan')" />
+          </label>
+          <span class="estado-archivo" id="ed-f-plan">—</span>
+        </div>
 
+        <div class="doc-fila">
+          <div>
+            <div class="doc-fila-nombre">Lista de adherentes <span class="req">*</span></div>
+            <div class="doc-fila-desc">Firmas de respaldo según el reglamento electoral.</div>
+          </div>
+          <label class="upload-mini" for="f-adh">
+            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            Subir PDF
+            <input type="file" id="f-adh" accept=".pdf" onchange="marcarArchivo(this, 'ed-f-adh')" />
+          </label>
+          <span class="estado-archivo" id="ed-f-adh">—</span>
+        </div>
 
-    <!-- ── PASO 2: DOCUMENTOS ───────────────────────────── -->
-    <section id="paso-2" class="paso-contenido" aria-labelledby="titulo-paso-2" hidden>
+        <div class="doc-fila">
+          <div>
+            <div class="doc-fila-nombre">Logo de la lista <span class="req">*</span></div>
+            <div class="doc-fila-desc">Imagen o PDF con el logo oficial de campaña.</div>
+          </div>
+          <label class="upload-mini" for="f-logo">
+            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            Subir PDF
+            <input type="file" id="f-logo" accept=".pdf" onchange="marcarArchivo(this, 'ed-f-logo')" />
+          </label>
+          <span class="estado-archivo" id="ed-f-logo">—</span>
+        </div>
 
-      <h2 class="paso-titulo" id="titulo-paso-2">Paso 2 — Documentos</h2>
+        <div class="doc-fila">
+          <div>
+            <div class="doc-fila-nombre">Declaración jurada de la lista <span class="req">*</span></div>
+            <div class="doc-fila-desc">Documento firmado por el gestor de la lista.</div>
+          </div>
+          <label class="upload-mini" for="f-dj">
+            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            Subir PDF
+            <input type="file" id="f-dj" accept=".pdf" onchange="marcarArchivo(this, 'ed-f-dj')" />
+          </label>
+          <span class="estado-archivo" id="ed-f-dj">—</span>
+        </div>
+      </div>
 
-
-      <!-- ─ 2.1 Documentos de la lista ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Documentos de la lista</legend>
-        <p class="fieldset__hint">
-          Archivos que se presentan una sola vez para toda la lista.
-        </p>
-
-        <!-- Generado por JS desde CONFIG.documentosLista -->
-        <div id="docs-lista" class="docs-grid"></div>
-      </fieldset>
-
-
-      <!-- ─ 2.2 Documentos por integrante ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Documentos por integrante</legend>
-        <p class="fieldset__hint">
-          Un PDF consolidado por persona: DNI + constancia de matrícula + declaración jurada.
-          Los integrantes provienen de los datos ingresados en el Paso 1.
-        </p>
-
-        <!-- Generado por JS al entrar al paso 2 -->
+      <div class="tarjeta">
+        <h2 class="tarjeta-titulo">Documentos por integrante</h2>
+        <p class="hint">Un PDF consolidado por persona: DNI + constancia de matrícula + declaración jurada individual.</p>
         <div id="docs-integrantes"></div>
-      </fieldset>
+      </div>
 
-    </section><!-- /paso-2 -->
+    </section>
 
+    <!-- ============================================================
+         PASO 3 — CONFIRMAR Y ENVIAR
+         ============================================================ -->
+    <section id="paso-3" class="paso-contenido" style="display:none;">
 
-    <!-- ── PASO 3: RESUMEN Y ENVÍO ───────────────────────── -->
-    <section id="paso-3" class="paso-contenido" aria-labelledby="titulo-paso-3" hidden>
+      <div class="tarjeta">
+        <h2 class="tarjeta-titulo">Resumen de la lista</h2>
+        <div class="resumen-grid">
+          <div class="resumen-item">
+            <span class="resumen-etiqueta">Nombre de la lista</span>
+            <span class="resumen-valor" id="r-nombre">—</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-etiqueta">Color</span>
+            <span class="resumen-valor" id="r-color">—</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-etiqueta">Gestor</span>
+            <span class="resumen-valor" id="r-gestor">—</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-etiqueta">Correo de contacto</span>
+            <span class="resumen-valor" id="r-email">—</span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-etiqueta">Total de integrantes</span>
+            <span class="resumen-valor" id="r-total">—</span>
+          </div>
+        </div>
+      </div>
 
-      <h2 class="paso-titulo" id="titulo-paso-3">Paso 3 — Confirmar y enviar</h2>
-      <p class="paso-intro">
-        Revisa que todo esté correcto antes de enviar. Una vez enviado, la inscripción
-        queda registrada y recibirás una confirmación por correo.
+      <div class="tarjeta">
+        <h2 class="tarjeta-titulo">Integrantes de la lista</h2>
+        <div id="r-integrantes"></div>
+      </div>
+
+      <div class="tarjeta">
+        <h2 class="tarjeta-titulo">Documentos de la lista</h2>
+        <div id="r-docs-lista" class="chips-wrap"></div>
+      </div>
+
+      <p class="texto-muted aviso-final">
+        Al enviar, confirmas que toda la información proporcionada es verídica y cumple con el reglamento electoral del CFB.
       </p>
 
+    </section>
 
-      <!-- ─ 3.1 Resumen de la lista ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Lista</legend>
+    <!-- ── MENSAJE DE ERROR (el JS lo puede rellenar/crear) ────── -->
+    <div id="mensaje-error" class="mensaje-error" style="display:none;"></div>
 
-        <dl class="resumen-dl">
-          <dt>Nombre</dt>
-          <dd id="r-nombre">—</dd>
-
-          <dt>Color / Símbolo</dt>
-          <dd id="r-color">—</dd>
-        </dl>
-      </fieldset>
-
-
-      <!-- ─ 3.2 Resumen del gestor ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Gestor</legend>
-
-        <dl class="resumen-dl">
-          <dt>Nombre completo</dt>
-          <dd id="r-gestor">—</dd>
-
-          <dt>Correo</dt>
-          <dd id="r-email">—</dd>
-        </dl>
-      </fieldset>
-
-
-      <!-- ─ 3.3 Resumen de integrantes ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">
-          Integrantes · <span id="r-total">—</span>
-        </legend>
-
-        <!-- Tabla generada por JS -->
-        <div id="r-integrantes"></div>
-      </fieldset>
-
-
-      <!-- ─ 3.4 Resumen de documentos ─ -->
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Documentos de la lista</legend>
-
-        <div id="r-docs-lista" class="chips-docs"></div>
-      </fieldset>
-
-    </section><!-- /paso-3 -->
-
-  </main><!-- /form-wrap -->
-
-
-  <!-- =====================================================
-       BARRA DE NAVEGACIÓN ENTRE PASOS
-       Fija en la parte inferior de la página.
-  ====================================================== -->
-  <nav class="form-nav" aria-label="Navegación entre pasos">
-    <span class="form-nav__info" id="nav-info">Paso 1 de 3 — Lista e integrantes</span>
-
-    <div class="form-nav__botones">
-      <button class="btn btn--secundario" id="btn-ant" type="button"
-        onclick="irPaso(-1)" hidden>
+    <!-- ── BARRA DE NAVEGACIÓN INFERIOR ─────────────────────────── -->
+    <div class="form-nav">
+      <button id="btn-ant" type="button" class="btn-secundario" style="display:none;" onclick="irPaso(-1)">
         ← Anterior
       </button>
-
-      <button class="btn btn--primario" id="btn-sig" type="button"
-        onclick="irPaso(1)">
+      <div class="form-nav-spacer"></div>
+      <button id="btn-sig" type="button" class="btn-primario" onclick="irPaso(1)">
         Siguiente →
       </button>
-
-      <button class="btn btn--enviar" id="btn-env" type="button"
-        onclick="enviar()" hidden>
+      <button id="btn-env" type="button" class="btn-primario btn-enviar" style="display:none;" onclick="enviar()">
         ✓ Enviar inscripción
       </button>
     </div>
-  </nav>
 
+  </main>
 
-  <!-- =====================================================
-       SCRIPTS
-       Primero la config, luego la lógica.
-  ====================================================== -->
+  <footer class="pie">
+    <p>Comité Electoral · Centro Federado de Biología · UNSAAC</p>
+  </footer>
+
   <script src="config/inscripcionConfig.js"></script>
   <script src="apis/inscripcion.js"></script>
-
 </body>
 </html>
