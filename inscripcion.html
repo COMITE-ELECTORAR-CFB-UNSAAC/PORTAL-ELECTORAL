@@ -1,319 +1,220 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Inscripción de Listas — Elecciones CFB Biología UNSAAC</title>
-<link rel="stylesheet" href="css/inscripcion.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscripción de Lista Electoral · Centro Federado de Biología UNSAAC</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Reutiliza la hoja de estilos del sitio principal -->
+<link rel="stylesheet" href="css/inscripcion.css">
+<!-- Estilos específicos del formulario de inscripción -->
+<link rel="stylesheet" href="inscripcion-estilos.css">
 </head>
 <body>
 
-  <!-- ============================================================
-       ENCABEZADO
-       ============================================================ -->
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="marca">
-        <div class="marca-icono">CFB</div>
-        <div class="marca-texto">
-          <strong>Centro Federado de Biología</strong>
-          <span>UNSAAC · Proceso Electoral 2026</span>
+<!-- =========================================================
+     NAV
+     ========================================================= -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-marca">
+      <div class="nav-logo-wrap nav-monograma">CFB</div>
+      <div class="nav-nombre">
+        Centro Federado de Biología
+        <small>UNSAAC · Proceso electoral</small>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="index.html#cronograma">Cronograma</a></li>
+      <li><a href="index.html#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-sep"></div>
+    <a href="index.html" class="nav-login">← Volver al inicio</a>
+    <button class="nav-toggle" aria-label="Abrir menú">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- =========================================================
+     ENCABEZADO
+     ========================================================= -->
+<header class="insc-header">
+  <div class="contenedor insc-header-inner">
+    <span class="etiqueta-seccion">Inscripción de listas</span>
+    <h1 class="titulo-seccion">Formulario de inscripción electoral</h1>
+    <p class="desc-seccion">
+      Completa los datos de tu lista, tu directiva, tus secretarías y adjunta
+      los documentos requeridos. Proceso <strong id="txt-semestre">—</strong>.
+    </p>
+  </div>
+</header>
+
+<main class="contenedor insc-main">
+
+  <!-- Barra de progreso por secciones -->
+  <nav class="insc-progreso" id="insc-progreso" aria-label="Progreso del formulario">
+    <a href="#seccion-lista">1. Lista</a>
+    <a href="#seccion-gestor">2. Gestor/a</a>
+    <a href="#seccion-documentos">3. Documentos</a>
+    <a href="#seccion-directiva">4. Directiva</a>
+    <a href="#seccion-secretarias">5. Secretarías</a>
+  </nav>
+
+  <form id="form-inscripcion" novalidate>
+
+    <!-- ============================================
+         1. DATOS DE LA LISTA
+         ============================================ -->
+    <section class="insc-card" id="seccion-lista">
+      <div class="insc-card-titulo">
+        <span class="insc-numero">01</span>
+        <div>
+          <h2>Datos de la lista</h2>
+          <p>Nombre y símbolo con el que se presenta la lista.</p>
         </div>
       </div>
 
-      <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menú">
-        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-
-      <nav id="nav-links" class="nav-links">
-        <span class="nav-links-item">Inscripción de listas</span>
-      </nav>
-    </div>
-  </header>
-
-  <!-- ============================================================
-       CONTENEDOR PRINCIPAL
-       ============================================================ -->
-  <main class="contenedor">
-
-    <div class="titulo-pagina">
-      <h1>Inscripción de lista electoral</h1>
-      <p>Completa los 3 pasos para inscribir tu lista ante el comité electoral del CFB.</p>
-    </div>
-
-    <!-- ── TABS DE PROGRESO ─────────────────────────────────── -->
-    <div class="pasos">
-      <button id="tab-1" class="paso activo" type="button" disabled>
-        <span class="paso-num">1</span>
-        <span class="paso-label">Lista e integrantes</span>
-      </button>
-      <button id="tab-2" class="paso" type="button" disabled>
-        <span class="paso-num">2</span>
-        <span class="paso-label">Documentos</span>
-      </button>
-      <button id="tab-3" class="paso" type="button" disabled>
-        <span class="paso-num">3</span>
-        <span class="paso-label">Confirmar y enviar</span>
-      </button>
-    </div>
-
-    <p id="nav-info" class="nav-info">Paso 1 de 3 — Lista e integrantes</p>
-
-    <!-- ── ALERTA DE ÉXITO (oculta hasta el envío) ─────────────── -->
-    <div id="alerta-ok" class="alerta-ok" style="display:none;"></div>
-
-    <!-- ============================================================
-         PASO 1 — LISTA E INTEGRANTES
-         ============================================================ -->
-    <section id="paso-1" class="paso-contenido">
-
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Datos de la lista</h2>
-        <div class="grid grid2">
-          <div class="campo">
-            <label class="lbl" for="l-nombre">Nombre de la lista <span class="req">*</span></label>
-            <input type="text" id="l-nombre" class="inp" placeholder="Ej. Renovación Biológica" />
-          </div>
-          <div class="campo">
-            <label class="lbl" for="l-color">Color distintivo</label>
-            <input type="text" id="l-color" class="inp" placeholder="Ej. Verde esmeralda" />
-            <p class="hint">Opcional. Ayuda a identificar tu lista en materiales de campaña.</p>
-          </div>
+      <div class="insc-fila fila-2">
+        <div class="campo">
+          <label for="lista-nombre">Nombre de la lista <span class="req">*</span></label>
+          <input type="text" id="lista-nombre" name="lista-nombre" placeholder="Ej. Biorenovación" required>
+        </div>
+        <div class="campo">
+          <label for="lista-color">Color / símbolo</label>
+          <input type="text" id="lista-color" name="lista-color" placeholder="Ej. Verde esmeralda">
         </div>
       </div>
-
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Gestor / Personero de lista</h2>
-        <div class="grid grid2">
-          <div class="campo">
-            <label class="lbl" for="g-nombres">Nombres <span class="req">*</span></label>
-            <input type="text" id="g-nombres" class="inp" placeholder="Nombres completos" />
-          </div>
-          <div class="campo">
-            <label class="lbl" for="g-apellidos">Apellidos <span class="req">*</span></label>
-            <input type="text" id="g-apellidos" class="inp" placeholder="Apellidos completos" />
-          </div>
-        </div>
-        <div class="grid grid2">
-          <div class="campo">
-            <label class="lbl" for="g-codigo">Código universitario <span class="req">*</span></label>
-            <input type="text" id="g-codigo" class="inp" placeholder="Ej. 190012" />
-          </div>
-          <div class="campo">
-            <label class="lbl" for="g-tel">Teléfono <span class="req">*</span></label>
-            <input type="tel" id="g-tel" class="inp" placeholder="Ej. 984 123 456" />
-          </div>
-        </div>
-        <div class="grid">
-          <div class="campo">
-            <label class="lbl" for="g-email">Correo electrónico <span class="req">*</span></label>
-            <input type="email" id="g-email" class="inp" placeholder="correo@ejemplo.com" />
-          </div>
-        </div>
-      </div>
-
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Candidato a la Presidencia</h2>
-        <div class="grid grid2">
-          <div class="campo">
-            <label class="lbl" for="p-nombres">Nombres <span class="req">*</span></label>
-            <input type="text" id="p-nombres" class="inp" placeholder="Nombres completos" />
-          </div>
-          <div class="campo">
-            <label class="lbl" for="p-apellidos">Apellidos <span class="req">*</span></label>
-            <input type="text" id="p-apellidos" class="inp" placeholder="Apellidos completos" />
-          </div>
-        </div>
-        <div class="grid grid2">
-          <div class="campo">
-            <label class="lbl" for="p-codigo">Código universitario <span class="req">*</span></label>
-            <input type="text" id="p-codigo" class="inp" placeholder="Ej. 190012" />
-          </div>
-          <div class="campo">
-            <label class="lbl" for="p-semestre">Semestre</label>
-            <select id="p-semestre" class="sel">
-              <option value="">—</option>
-              <option>I</option><option>II</option><option>III</option><option>IV</option>
-              <option>V</option><option>VI</option><option>VII</option><option>VIII</option>
-              <option>IX</option><option>X</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="campo">
-            <label class="lbl" for="p-creditos">Créditos aprobados</label>
-            <input type="number" id="p-creditos" class="inp" placeholder="Ej. 180" min="0" />
-            <p class="hint">Según el reglamento electoral vigente.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="tarjeta">
-        <div class="tarjeta-header-flex">
-          <h2 class="tarjeta-titulo">Secretarías <span class="contador" id="cnt-sec">0 secretarías</span></h2>
-          <button type="button" class="btn-agregar" onclick="agregarSecretaria()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Agregar secretaría
-          </button>
-        </div>
-        <p class="hint">Las 7 secretarías establecidas por el reglamento se cargan automáticamente. Completa los datos de cada titular.</p>
-        <div id="lista-sec"></div>
-      </div>
-
-      <div class="tarjeta">
-        <div class="tarjeta-header-flex">
-          <h2 class="tarjeta-titulo">Accesitarios <span class="contador" id="cnt-acc">0 accesitarios</span></h2>
-          <button type="button" class="btn-agregar" onclick="agregarAccesitario()">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Agregar accesitario
-          </button>
-        </div>
-        <p class="hint">Indica a qué secretaría reemplaza cada accesitario.</p>
-        <div id="lista-acc"></div>
-      </div>
-
     </section>
 
-    <!-- ============================================================
-         PASO 2 — DOCUMENTOS
-         ============================================================ -->
-    <section id="paso-2" class="paso-contenido" style="display:none;">
-
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Documentos de la lista</h2>
-
-        <div class="doc-fila">
-          <div>
-            <div class="doc-fila-nombre">Plan de trabajo <span class="req">*</span></div>
-            <div class="doc-fila-desc">Propuesta de gestión de la lista, formato PDF.</div>
-          </div>
-          <label class="upload-mini" for="f-plan">
-            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-            Subir PDF
-            <input type="file" id="f-plan" accept=".pdf" onchange="marcarArchivo(this, 'ed-f-plan')" />
-          </label>
-          <span class="estado-archivo" id="ed-f-plan">—</span>
-        </div>
-
-        <div class="doc-fila">
-          <div>
-            <div class="doc-fila-nombre">Lista de adherentes <span class="req">*</span></div>
-            <div class="doc-fila-desc">Firmas de respaldo según el reglamento electoral.</div>
-          </div>
-          <label class="upload-mini" for="f-adh">
-            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-            Subir PDF
-            <input type="file" id="f-adh" accept=".pdf" onchange="marcarArchivo(this, 'ed-f-adh')" />
-          </label>
-          <span class="estado-archivo" id="ed-f-adh">—</span>
-        </div>
-
-        <div class="doc-fila">
-          <div>
-            <div class="doc-fila-nombre">Logo de la lista <span class="req">*</span></div>
-            <div class="doc-fila-desc">Imagen o PDF con el logo oficial de campaña.</div>
-          </div>
-          <label class="upload-mini" for="f-logo">
-            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-            Subir PDF
-            <input type="file" id="f-logo" accept=".pdf" onchange="marcarArchivo(this, 'ed-f-logo')" />
-          </label>
-          <span class="estado-archivo" id="ed-f-logo">—</span>
-        </div>
-
-        <div class="doc-fila">
-          <div>
-            <div class="doc-fila-nombre">Declaración jurada de la lista <span class="req">*</span></div>
-            <div class="doc-fila-desc">Documento firmado por el gestor de la lista.</div>
-          </div>
-          <label class="upload-mini" for="f-dj">
-            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-            Subir PDF
-            <input type="file" id="f-dj" accept=".pdf" onchange="marcarArchivo(this, 'ed-f-dj')" />
-          </label>
-          <span class="estado-archivo" id="ed-f-dj">—</span>
+    <!-- ============================================
+         2. DATOS DEL GESTOR
+         ============================================ -->
+    <section class="insc-card" id="seccion-gestor">
+      <div class="insc-card-titulo">
+        <span class="insc-numero">02</span>
+        <div>
+          <h2>Datos del gestor/a</h2>
+          <p>Persona de contacto responsable de la inscripción.</p>
         </div>
       </div>
 
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Documentos por integrante</h2>
-        <p class="hint">Un PDF consolidado por persona: DNI + constancia de matrícula + declaración jurada individual.</p>
-        <div id="docs-integrantes"></div>
+      <div class="insc-fila fila-2">
+        <div class="campo">
+          <label for="gestor-nombres">Nombres <span class="req">*</span></label>
+          <input type="text" id="gestor-nombres" required>
+        </div>
+        <div class="campo">
+          <label for="gestor-apellidos">Apellidos <span class="req">*</span></label>
+          <input type="text" id="gestor-apellidos" required>
+        </div>
       </div>
-
+      <div class="insc-fila fila-3">
+        <div class="campo">
+          <label for="gestor-codigo">Código universitario</label>
+          <input type="text" id="gestor-codigo" placeholder="Opcional">
+        </div>
+        <div class="campo">
+          <label for="gestor-correo">Correo electrónico <span class="req">*</span></label>
+          <input type="email" id="gestor-correo" required>
+        </div>
+        <div class="campo">
+          <label for="gestor-telefono">Teléfono <span class="req">*</span></label>
+          <input type="tel" id="gestor-telefono" required>
+        </div>
+      </div>
     </section>
 
-    <!-- ============================================================
-         PASO 3 — CONFIRMAR Y ENVIAR
-         ============================================================ -->
-    <section id="paso-3" class="paso-contenido" style="display:none;">
-
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Resumen de la lista</h2>
-        <div class="resumen-grid">
-          <div class="resumen-item">
-            <span class="resumen-etiqueta">Nombre de la lista</span>
-            <span class="resumen-valor" id="r-nombre">—</span>
-          </div>
-          <div class="resumen-item">
-            <span class="resumen-etiqueta">Color</span>
-            <span class="resumen-valor" id="r-color">—</span>
-          </div>
-          <div class="resumen-item">
-            <span class="resumen-etiqueta">Gestor</span>
-            <span class="resumen-valor" id="r-gestor">—</span>
-          </div>
-          <div class="resumen-item">
-            <span class="resumen-etiqueta">Correo de contacto</span>
-            <span class="resumen-valor" id="r-email">—</span>
-          </div>
-          <div class="resumen-item">
-            <span class="resumen-etiqueta">Total de integrantes</span>
-            <span class="resumen-valor" id="r-total">—</span>
-          </div>
+    <!-- ============================================
+         3. DOCUMENTOS DE LA LISTA
+         ============================================ -->
+    <section class="insc-card" id="seccion-documentos">
+      <div class="insc-card-titulo">
+        <span class="insc-numero">03</span>
+        <div>
+          <h2>Documentos de la lista</h2>
+          <p>Cuatro documentos obligatorios, en formato PDF o imagen según corresponda.</p>
         </div>
       </div>
 
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Integrantes de la lista</h2>
-        <div id="r-integrantes"></div>
+      <div class="insc-fila fila-2" id="contenedor-documentos-lista">
+        <!-- Generado por inscripcion.js -->
       </div>
-
-      <div class="tarjeta">
-        <h2 class="tarjeta-titulo">Documentos de la lista</h2>
-        <div id="r-docs-lista" class="chips-wrap"></div>
-      </div>
-
-      <p class="texto-muted aviso-final">
-        Al enviar, confirmas que toda la información proporcionada es verídica y cumple con el reglamento electoral del CFB.
-      </p>
-
     </section>
 
-    <!-- ── MENSAJE DE ERROR (el JS lo puede rellenar/crear) ────── -->
-    <div id="mensaje-error" class="mensaje-error" style="display:none;"></div>
+    <!-- ============================================
+         4. DIRECTIVA (Presidente / Vicepresidente)
+         ============================================ -->
+    <section class="insc-card" id="seccion-directiva">
+      <div class="insc-card-titulo">
+        <span class="insc-numero">04</span>
+        <div>
+          <h2>Directiva</h2>
+          <p>Presidencia y vicepresidencia de la lista.</p>
+        </div>
+      </div>
 
-    <!-- ── BARRA DE NAVEGACIÓN INFERIOR ─────────────────────────── -->
-    <div class="form-nav">
-      <button id="btn-ant" type="button" class="btn-secundario" style="display:none;" onclick="irPaso(-1)">
-        ← Anterior
+      <div id="contenedor-directiva" class="insc-integrantes-grid">
+        <!-- Generado por inscripcion.js -->
+      </div>
+    </section>
+
+    <!-- ============================================
+         5. SECRETARÍAS
+         ============================================ -->
+    <section class="insc-card" id="seccion-secretarias">
+      <div class="insc-card-titulo">
+        <span class="insc-numero">05</span>
+        <div>
+          <h2>Secretarías</h2>
+          <p>Cada secretaría requiere un/a titular y dos accesitarios/as.</p>
+        </div>
+      </div>
+
+      <div id="contenedor-secretarias">
+        <!-- Generado por inscripcion.js: un <details> por secretaría -->
+      </div>
+    </section>
+
+    <!-- ============================================
+         ENVÍO
+         ============================================ -->
+    <section class="insc-envio">
+      <div id="mensaje-estado" class="insc-mensaje" role="status" aria-live="polite"></div>
+      <button type="submit" id="btn-enviar" class="btn-primario btn-enviar">
+        <span id="btn-enviar-texto">Enviar inscripción</span>
+        <span id="btn-enviar-spinner" class="spinner" hidden></span>
       </button>
-      <div class="form-nav-spacer"></div>
-      <button id="btn-sig" type="button" class="btn-primario" onclick="irPaso(1)">
-        Siguiente →
-      </button>
-      <button id="btn-env" type="button" class="btn-primario btn-enviar" style="display:none;" onclick="enviar()">
-        ✓ Enviar inscripción
-      </button>
+    </section>
+
+  </form>
+</main>
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-marca">
+      <div class="footer-texto">
+        <span class="footer-nombre">Centro Federado de Biología</span>
+        <span class="footer-sub">UNSAAC · Junta Electoral Federativa</span>
+      </div>
     </div>
+    <div class="footer-centro">
+      Proceso electoral <span id="txt-semestre-footer">—</span>
+    </div>
+    <div class="footer-derecha">
+      <a href="index.html">Volver al inicio</a>
+    </div>
+  </div>
+</footer>
 
-  </main>
-
-  <footer class="pie">
-    <p>Comité Electoral · Centro Federado de Biología · UNSAAC</p>
-  </footer>
-
-  <script src="config/inscripcionConfig.js"></script>
-  <script src="apis/inscripcion.js"></script>
+<script src="config/inscripcionConfig.js"></script>
+<script src="js/inscripcion.js"></script>
 </body>
 </html>
