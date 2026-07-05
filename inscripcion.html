@@ -5,216 +5,955 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscripción de Lista Electoral · Centro Federado de Biología UNSAAC</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
 
-<!-- Reutiliza la hoja de estilos del sitio principal -->
-<link rel="stylesheet" href="css/inscripcion.css">
-<!-- Estilos específicos del formulario de inscripción -->
-<link rel="stylesheet" href="inscripcion-estilos.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, sans-serif; }
+
+  .app-wrap { display: flex; gap: 0; min-height: 100vh; background: #F7FAFF; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px; min-width: 240px; background: #fff;
+    border-right: 1px solid #DCE7F5; padding: 24px 0;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .sidebar-header { padding: 0 20px 20px; border-bottom: 1px solid #DCE7F5; margin-bottom: 16px; }
+  .sidebar-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .sidebar-logo img { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+  .sidebar-title { font-size: 11px; font-weight: 600; color: #1E4FA8; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.3; }
+  .sidebar-sub { font-size: 11px; color: #8592A6; margin-top: 2px; }
+  .sidebar-section-label { font-size: 10px; color: #8592A6; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; padding: 0 20px 8px; }
+  .sidebar-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 20px; font-size: 13px; color: #3F4A5E; cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; }
+  .sidebar-item:hover { background: #F7FAFF; }
+  .sidebar-item.active { background: #EAF1FC; border-left-color: #1E4FA8; color: #1E4FA8; font-weight: 500; }
+  .sidebar-item-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #C2D2E8; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sidebar-item-check.done { background: #1E4FA8; border-color: #1E4FA8; }
+  .sidebar-item-check.done i { font-size: 10px; color: #fff; }
+  .sidebar-badge { font-size: 10px; color: #8592A6; background: #EAF1FC; padding: 2px 7px; border-radius: 10px; }
+  .sidebar-badge.warn { background: #FFF3E0; color: #B45309; }
+
+  /* MAIN */
+  .main { flex: 1; padding: 32px 40px; max-width: 780px; }
+
+  /* PROGRESS BAR */
+  .progress-card { background: #fff; border: 1px solid #DCE7F5; border-radius: 10px; padding: 18px 24px; margin-bottom: 28px; }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .progress-label { font-size: 12px; font-weight: 600; color: #1E4FA8; letter-spacing: 0.05em; text-transform: uppercase; }
+  .progress-pct { font-size: 22px; font-weight: 600; color: #1E4FA8; }
+  .progress-bar-wrap { height: 7px; background: #E1EAF7; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+  .progress-bar-fill { height: 100%; background: #1E4FA8; border-radius: 4px; transition: width 0.4s ease; }
+  .progress-docs { font-size: 12px; color: #5B6B85; }
+  .progress-docs span { font-weight: 600; color: #1E4FA8; }
+
+  /* SECTION */
+  .section { margin-bottom: 20px; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: #fff; border: 1px solid #DCE7F5; border-radius: 10px; cursor: pointer; transition: border-color 0.15s; }
+  .section-header:hover { border-color: #C2D2E8; }
+  .section-header.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: 1px solid #EAF1FC; }
+  .section-header-left { display: flex; align-items: center; gap: 14px; }
+  .section-num { width: 28px; height: 28px; border-radius: 50%; background: #EAF1FC; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #1E4FA8; flex-shrink: 0; }
+  .section-num.done { background: #1E4FA8; color: #fff; }
+  .section-title { font-size: 14px; font-weight: 600; color: #1E293B; }
+  .section-meta { font-size: 12px; color: #8592A6; margin-top: 2px; }
+  .section-meta.ok { color: #1E4FA8; }
+  .section-header-right { display: flex; align-items: center; gap: 12px; }
+  .btn-edit { font-size: 12px; font-weight: 500; color: #1E4FA8; background: #EAF1FC; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
+  .btn-edit:hover { background: #D9E6FA; }
+  .chevron { font-size: 14px; color: #8592A6; transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+
+  .section-body { background: #fff; border: 1px solid #DCE7F5; border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; padding: 24px; display: none; }
+  .section-body.open { display: block; }
+
+  /* FORM GRID */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 12px; font-weight: 600; color: #3F4A5E; letter-spacing: 0.02em; text-transform: uppercase; }
+  .form-group input, .form-group select { height: 38px; border: 1px solid #D6E2F2; border-radius: 7px; padding: 0 12px; font-size: 14px; color: #1E293B; background: #F8FAFE; outline: none; transition: border-color 0.15s; font-family: inherit; }
+  .form-group input:focus, .form-group select:focus { border-color: #1E4FA8; background: #fff; }
+  .form-group input.invalido, .form-group select.invalido { border-color: #C0362C; background: #FDF1F0; }
+  .form-note { font-size: 12px; color: #5B6B85; background: #F7FAFF; border: 1px solid #DCE7F5; border-radius: 7px; padding: 12px 14px; margin-bottom: 20px; line-height: 1.6; }
+  .form-note strong { color: #1E293B; }
+
+  .sub-label { font-size: 11px; font-weight: 700; color: #8592A6; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+
+  /* DOCUMENT CARD (un solo documento por persona / por documento general) */
+  .doc-list { display: flex; flex-direction: column; gap: 10px; }
+  .doc-card { border: 1px solid #DCE7F5; border-radius: 8px; padding: 14px 16px; background: #F8FAFE; display: flex; align-items: center; gap: 14px; }
+  .doc-card.loaded { background: #EEF5FF; border-color: #A9C9F2; }
+  .doc-icon { width: 36px; height: 36px; border-radius: 7px; background: #EAF1FC; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .doc-icon i { font-size: 18px; color: #5B6B85; }
+  .doc-card.loaded .doc-icon { background: #DCEAFC; }
+  .doc-card.loaded .doc-icon i { color: #1E4FA8; }
+  .doc-info { flex: 1; min-width: 0; }
+  .doc-name { font-size: 13px; font-weight: 600; color: #1E293B; }
+  .doc-desc { font-size: 11px; color: #8592A6; margin-top: 2px; }
+  .doc-file { font-size: 11px; color: #1E4FA8; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .doc-status { font-size: 11px; color: #A6B3C6; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .doc-status.loaded { color: #1E4FA8; }
+  .doc-status i { font-size: 13px; }
+  .doc-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+  .btn-upload { font-size: 11px; font-weight: 600; color: #1E4FA8; background: #fff; border: 1px solid #A9C9F2; padding: 5px 12px; border-radius: 6px; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+  .btn-upload:hover { background: #EAF1FC; }
+  .btn-replace { font-size: 10px; color: #8592A6; background: none; border: none; cursor: pointer; padding: 0; }
+  .btn-replace:hover { color: #3F4A5E; }
+  input[type="file"].hidden-file { display: none; }
+
+  /* SECRETARIAS */
+  .secretaria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sec-card { border: 1px solid #DCE7F5; border-radius: 9px; padding: 16px; background: #F8FAFE; cursor: pointer; transition: border-color 0.15s; }
+  .sec-card:hover { border-color: #C2D2E8; }
+  .sec-card.done { background: #EEF5FF; border-color: #A9C9F2; }
+  .sec-card-title { font-size: 13px; font-weight: 600; color: #1E293B; margin-bottom: 4px; }
+  .sec-card-nota { font-size: 10.5px; color: #8592A6; margin-bottom: 8px; line-height: 1.4; }
+  .sec-card-stats { display: flex; flex-direction: column; gap: 3px; }
+  .sec-stat { font-size: 11px; color: #8592A6; display: flex; align-items: center; gap: 5px; }
+  .sec-stat i { font-size: 12px; }
+  .sec-stat.ok { color: #1E4FA8; }
+  .sec-card-btn { font-size: 11px; font-weight: 600; color: #1E4FA8; margin-top: 10px; cursor: pointer; }
+
+  /* PERSONA CARD */
+  .persona-card { border: 1px solid #DCE7F5; border-radius: 9px; overflow: hidden; margin-bottom: 16px; }
+  .persona-card-header { padding: 14px 18px; background: #F7FAFF; display: flex; justify-content: space-between; align-items: center; }
+  .persona-card-role { font-size: 11px; font-weight: 700; color: #1E4FA8; letter-spacing: 0.06em; text-transform: uppercase; }
+  .persona-card-body { padding: 20px; background: #fff; }
+
+  /* BOTTOM ACTIONS */
+  .section-footer { margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px; }
+  .btn-secondary { font-size: 13px; color: #3F4A5E; background: #EAF1FC; border: none; padding: 9px 20px; border-radius: 7px; cursor: pointer; font-weight: 500; transition: background 0.15s; }
+  .btn-secondary:hover { background: #D9E6FA; }
+  .btn-primary { font-size: 13px; color: #fff; background: #1E4FA8; border: none; padding: 9px 20px; border-radius: 7px; cursor: pointer; font-weight: 600; transition: background 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary:hover { background: #173C82; }
+  .btn-primary:disabled { background: #A6B3C6; cursor: not-allowed; }
+
+  .spinner-mini { width: 13px; height: 13px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; display: inline-block; animation: girar 0.7s linear infinite; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  /* RESUMEN FINAL */
+  .review-card { border: 1px solid #DCE7F5; border-radius: 9px; background: #fff; overflow: hidden; }
+  .review-item { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; border-bottom: 1px solid #EAF1FC; }
+  .review-item:last-child { border-bottom: none; }
+  .review-item-left { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #1E293B; }
+  .review-item-left i { font-size: 16px; }
+  .review-item-left i.ok { color: #1E4FA8; }
+  .review-item-left i.warn { color: #B45309; }
+  .review-missing { font-size: 11px; color: #B45309; }
+
+  .envio-mensaje { margin-top: 16px; font-size: 13px; line-height: 1.6; padding: 0; border-radius: 7px; }
+  .envio-mensaje:empty { display: none; }
+  .envio-mensaje.exito { padding: 14px 16px; background: #E6F4EE; color: #1E6B4A; border: 1px solid #B7DECB; font-weight: 500; }
+  .envio-mensaje.error { padding: 14px 16px; background: #FDF1F0; color: #B3372F; border: 1px solid #F3C7C2; font-weight: 500; }
+
+  /* MODAL SEC */
+  .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+  .modal-backdrop.open { display: flex; }
+  .modal { background: #fff; border-radius: 12px; width: 560px; max-height: 85vh; overflow-y: auto; }
+  .modal-header { padding: 20px 24px; border-bottom: 1px solid #DCE7F5; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .modal-title { font-size: 15px; font-weight: 700; color: #1E293B; }
+  .modal-subtitle { font-size: 11.5px; color: #8592A6; margin-top: 3px; }
+  .modal-close { background: none; border: none; font-size: 20px; color: #8592A6; cursor: pointer; padding: 0; flex-shrink: 0; }
+  .modal-body { padding: 24px; }
+
+  /* TABS DE ROL dentro del modal de secretaría */
+  .rol-tabs { display: flex; gap: 6px; margin-bottom: 20px; border-bottom: 1px solid #EAF1FC; padding-bottom: 0; }
+  .rol-tab { font-size: 12px; font-weight: 600; color: #8592A6; background: none; border: none; padding: 9px 4px; cursor: pointer; position: relative; margin-right: 14px; }
+  .rol-tab.active { color: #1E4FA8; }
+  .rol-tab.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: #1E4FA8; border-radius: 2px; }
+  .rol-tab-check { display: inline-flex; width: 15px; height: 15px; border-radius: 50%; border: 1.5px solid #C2D2E8; align-items: center; justify-content: center; margin-right: 5px; vertical-align: middle; }
+  .rol-tab-check.done { background: #1E4FA8; border-color: #1E4FA8; }
+  .rol-tab-check.done i { font-size: 8px; color: #fff; }
+
+  /* TABLET */
+  @media (max-width: 1024px) { .main { padding: 28px 24px; max-width: 100%; } }
+
+  /* MOBILE / TABLET CHICA */
+  @media (max-width: 680px) {
+    .app-wrap { flex-direction: column; }
+    .sidebar { width: 100%; min-width: 0; height: auto; position: relative; border-right: none; border-bottom: 1px solid #DCE7F5; padding: 16px 0; display: flex; flex-direction: column; }
+    .sidebar-header { padding: 0 16px 16px; }
+    .sidebar-section-label { padding: 0 16px 8px; }
+    .sidebar-item { padding: 10px 16px; }
+    .main { padding: 16px; }
+    .progress-card { padding: 16px 18px; margin-bottom: 20px; }
+    .section-header { padding: 14px 16px; }
+    .section-body { padding: 18px 16px; }
+    .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    .secretaria-grid { grid-template-columns: 1fr; }
+    .persona-card-body { padding: 16px; }
+    .doc-card { flex-wrap: wrap; }
+    .doc-actions { align-items: flex-start; flex-direction: row; }
+    .section-footer { flex-wrap: wrap; }
+    .section-footer .btn-primary, .section-footer .btn-secondary { flex: 1; text-align: center; justify-content: center; }
+    .modal { width: 100%; max-height: 90vh; }
+    .modal-body { padding: 18px; }
+    .rol-tabs { flex-wrap: wrap; }
+  }
+
+  @media (max-width: 400px) {
+    .main { padding: 12px; }
+    .progress-pct { font-size: 18px; }
+    .section-title { font-size: 13px; }
+  }
+</style>
 </head>
 <body>
 
-<!-- =========================================================
-     NAV
-     ========================================================= -->
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-marca">
-      <div class="nav-logo-wrap nav-monograma">CFB</div>
-      <div class="nav-nombre">
-        Centro Federado de Biología
-        <small>UNSAAC · Proceso electoral</small>
+<div class="app-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="logo.png" alt="Logo Centro Federado de Biología">
+        <span class="sidebar-title">Sistema Electoral</span>
       </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="index.html">Inicio</a></li>
-      <li><a href="index.html#cronograma">Cronograma</a></li>
-      <li><a href="index.html#contacto">Contacto</a></li>
-    </ul>
-    <div class="nav-sep"></div>
-    <a href="index.html" class="nav-login">← Volver al inicio</a>
-    <button class="nav-toggle" aria-label="Abrir menú">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-  </div>
-</nav>
+      <div class="sidebar-sub" id="sidebar-sub">Inscripción de Lista</div>
+    </div>
 
-<!-- =========================================================
-     ENCABEZADO
-     ========================================================= -->
-<header class="insc-header">
-  <div class="contenedor insc-header-inner">
-    <span class="etiqueta-seccion">Inscripción de listas</span>
-    <h1 class="titulo-seccion">Formulario de inscripción electoral</h1>
-    <p class="desc-seccion">
-      Completa los datos de tu lista, tu directiva, tus secretarías y adjunta
-      los documentos requeridos. Proceso <strong id="txt-semestre">—</strong>.
-    </p>
-  </div>
-</header>
+    <div class="sidebar-section-label">Estado del expediente</div>
 
-<main class="contenedor insc-main">
+    <div class="sidebar-item active" data-sec="0" onclick="jumpTo(0)">
+      <span>Datos generales</span>
+      <div class="sidebar-item-check" id="sb-check-0"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="1" onclick="jumpTo(1)">
+      <span id="sb-label-pres">Presidente/a</span>
+      <div class="sidebar-item-check" id="sb-check-1"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="2" onclick="jumpTo(2)">
+      <span id="sb-label-vp">Vicepresidente/a</span>
+      <div class="sidebar-item-check" id="sb-check-2"><i class="ti ti-check"></i></div>
+    </div>
+    <div class="sidebar-item" data-sec="3" onclick="jumpTo(3)">
+      <span>Secretarías</span>
+      <div class="sidebar-badge warn" id="sb-badge-sec">0 / 0</div>
+    </div>
+    <div class="sidebar-item" data-sec="4" onclick="jumpTo(4)">
+      <span>Docs. generales</span>
+      <div class="sidebar-badge" id="sb-badge-docs">0 / 4</div>
+    </div>
+    <div class="sidebar-item" data-sec="5" onclick="jumpTo(5)">
+      <span>Revisión y envío</span>
+      <div class="sidebar-item-check" id="sb-check-5"><i class="ti ti-check"></i></div>
+    </div>
+  </aside>
 
-  <!-- Barra de progreso por secciones -->
-  <nav class="insc-progreso" id="insc-progreso" aria-label="Progreso del formulario">
-    <a href="#seccion-lista">1. Lista</a>
-    <a href="#seccion-gestor">2. Gestor/a</a>
-    <a href="#seccion-documentos">3. Documentos</a>
-    <a href="#seccion-directiva">4. Directiva</a>
-    <a href="#seccion-secretarias">5. Secretarías</a>
-  </nav>
+  <!-- MAIN CONTENT -->
+  <main class="main">
 
-  <form id="form-inscripcion" novalidate>
+    <!-- PROGRESS -->
+    <div class="progress-card">
+      <div class="progress-top">
+        <span class="progress-label">Registro de lista</span>
+        <span class="progress-pct" id="pct-label">0%</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="pct-bar" style="width:0%"></div>
+      </div>
+      <div class="progress-docs">Documentos cargados: <span id="docs-count">0 / 0</span></div>
+    </div>
 
-    <!-- ============================================
-         1. DATOS DE LA LISTA
-         ============================================ -->
-    <section class="insc-card" id="seccion-lista">
-      <div class="insc-card-titulo">
-        <span class="insc-numero">01</span>
-        <div>
-          <h2>Datos de la lista</h2>
-          <p>Nombre y símbolo con el que se presenta la lista.</p>
+    <!-- S0: DATOS GENERALES -->
+    <div class="section" id="sec-0">
+      <div class="section-header" onclick="toggleSec(0)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-0">1</div>
+          <div>
+            <div class="section-title">Datos generales de la lista</div>
+            <div class="section-meta" id="meta-0">Nombre de la lista y gestor/a responsable</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(0)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-0"></i>
         </div>
       </div>
-
-      <div class="insc-fila fila-2">
-        <div class="campo">
-          <label for="lista-nombre">Nombre de la lista <span class="req">*</span></label>
-          <input type="text" id="lista-nombre" name="lista-nombre" placeholder="Ej. Biorenovación" required>
+      <div class="section-body open" id="body-0">
+        <div class="form-note">
+          <strong>Gestor/a responsable:</strong> será el único punto de contacto oficial durante todo el proceso de inscripción, y responsable de la veracidad de lo presentado.
         </div>
-        <div class="campo">
-          <label for="lista-color">Color / símbolo</label>
-          <input type="text" id="lista-color" name="lista-color" placeholder="Ej. Verde esmeralda">
+        <div class="form-grid" style="margin-bottom:16px">
+          <div class="form-group" style="grid-column: span 2">
+            <label for="lista_nombre">Nombre de la lista</label>
+            <input type="text" id="lista_nombre" placeholder="Ej. Biorenovación" oninput="updateProgress()">
+          </div>
+          <div class="form-group" style="grid-column: span 2">
+            <label for="lista_color">Color / símbolo</label>
+            <input type="text" id="lista_color" placeholder="Ej. Verde esmeralda" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_nombres">Nombres del gestor/a</label>
+            <input type="text" id="gestor_nombres" placeholder="Nombres" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_apellidos">Apellidos del gestor/a</label>
+            <input type="text" id="gestor_apellidos" placeholder="Apellidos" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_codigo">Código universitario</label>
+            <input type="text" id="gestor_codigo" placeholder="Opcional" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_correo">Correo electrónico</label>
+            <input type="email" id="gestor_correo" placeholder="correo@unsaac.edu.pe" oninput="updateProgress()">
+          </div>
+          <div class="form-group">
+            <label for="gestor_telefono">Teléfono</label>
+            <input type="text" id="gestor_telefono" placeholder="9XX XXX XXX" oninput="updateProgress()">
+          </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ============================================
-         2. DATOS DEL GESTOR
-         ============================================ -->
-    <section class="insc-card" id="seccion-gestor">
-      <div class="insc-card-titulo">
-        <span class="insc-numero">02</span>
-        <div>
-          <h2>Datos del gestor/a</h2>
-          <p>Persona de contacto responsable de la inscripción.</p>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(0)">Guardar y continuar</button>
         </div>
-      </div>
-
-      <div class="insc-fila fila-2">
-        <div class="campo">
-          <label for="gestor-nombres">Nombres <span class="req">*</span></label>
-          <input type="text" id="gestor-nombres" required>
-        </div>
-        <div class="campo">
-          <label for="gestor-apellidos">Apellidos <span class="req">*</span></label>
-          <input type="text" id="gestor-apellidos" required>
-        </div>
-      </div>
-      <div class="insc-fila fila-3">
-        <div class="campo">
-          <label for="gestor-codigo">Código universitario</label>
-          <input type="text" id="gestor-codigo" placeholder="Opcional">
-        </div>
-        <div class="campo">
-          <label for="gestor-correo">Correo electrónico <span class="req">*</span></label>
-          <input type="email" id="gestor-correo" required>
-        </div>
-        <div class="campo">
-          <label for="gestor-telefono">Teléfono <span class="req">*</span></label>
-          <input type="tel" id="gestor-telefono" required>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================
-         3. DOCUMENTOS DE LA LISTA
-         ============================================ -->
-    <section class="insc-card" id="seccion-documentos">
-      <div class="insc-card-titulo">
-        <span class="insc-numero">03</span>
-        <div>
-          <h2>Documentos de la lista</h2>
-          <p>Cuatro documentos obligatorios, en formato PDF o imagen según corresponda.</p>
-        </div>
-      </div>
-
-      <div class="insc-fila fila-2" id="contenedor-documentos-lista">
-        <!-- Generado por inscripcion.js -->
-      </div>
-    </section>
-
-    <!-- ============================================
-         4. DIRECTIVA (Presidente / Vicepresidente)
-         ============================================ -->
-    <section class="insc-card" id="seccion-directiva">
-      <div class="insc-card-titulo">
-        <span class="insc-numero">04</span>
-        <div>
-          <h2>Directiva</h2>
-          <p>Presidencia y vicepresidencia de la lista.</p>
-        </div>
-      </div>
-
-      <div id="contenedor-directiva" class="insc-integrantes-grid">
-        <!-- Generado por inscripcion.js -->
-      </div>
-    </section>
-
-    <!-- ============================================
-         5. SECRETARÍAS
-         ============================================ -->
-    <section class="insc-card" id="seccion-secretarias">
-      <div class="insc-card-titulo">
-        <span class="insc-numero">05</span>
-        <div>
-          <h2>Secretarías</h2>
-          <p>Cada secretaría requiere un/a titular y dos accesitarios/as.</p>
-        </div>
-      </div>
-
-      <div id="contenedor-secretarias">
-        <!-- Generado por inscripcion.js: un <details> por secretaría -->
-      </div>
-    </section>
-
-    <!-- ============================================
-         ENVÍO
-         ============================================ -->
-    <section class="insc-envio">
-      <div id="mensaje-estado" class="insc-mensaje" role="status" aria-live="polite"></div>
-      <button type="submit" id="btn-enviar" class="btn-primario btn-enviar">
-        <span id="btn-enviar-texto">Enviar inscripción</span>
-        <span id="btn-enviar-spinner" class="spinner" hidden></span>
-      </button>
-    </section>
-
-  </form>
-</main>
-
-<!-- =========================================================
-     FOOTER
-     ========================================================= -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-marca">
-      <div class="footer-texto">
-        <span class="footer-nombre">Centro Federado de Biología</span>
-        <span class="footer-sub">UNSAAC · Junta Electoral Federativa</span>
       </div>
     </div>
-    <div class="footer-centro">
-      Proceso electoral <span id="txt-semestre-footer">—</span>
-    </div>
-    <div class="footer-derecha">
-      <a href="index.html">Volver al inicio</a>
-    </div>
-  </div>
-</footer>
 
-<script src="config/inscripcionConfig.js"></script>
-<script src="js/inscripcion.js"></script>
+    <!-- S1: PRESIDENTE -->
+    <div class="section" id="sec-1">
+      <div class="section-header" onclick="toggleSec(1)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-1">2</div>
+          <div>
+            <div class="section-title" id="titulo-pres">Presidente/a</div>
+            <div class="section-meta" id="meta-1">Datos personales y documento</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(1)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-1"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-1">
+        <div class="persona-card">
+          <div class="persona-card-header">
+            <span class="persona-card-role" id="rol-pres">Presidente/a de lista</span>
+          </div>
+          <div class="persona-card-body" id="body-persona-pres"></div>
+        </div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(1)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: VICEPRESIDENTE -->
+    <div class="section" id="sec-2">
+      <div class="section-header" onclick="toggleSec(2)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-2">3</div>
+          <div>
+            <div class="section-title" id="titulo-vp">Vicepresidente/a</div>
+            <div class="section-meta" id="meta-2">Datos personales y documento</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(2)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-2"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-2">
+        <div class="persona-card">
+          <div class="persona-card-header">
+            <span class="persona-card-role" id="rol-vp">Vicepresidente/a de lista</span>
+          </div>
+          <div class="persona-card-body" id="body-persona-vp"></div>
+        </div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(2)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3: SECRETARÍAS -->
+    <div class="section" id="sec-3">
+      <div class="section-header" onclick="toggleSec(3)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-3">4</div>
+          <div>
+            <div class="section-title">Secretarías</div>
+            <div class="section-meta" id="meta-3">por completar</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <i class="ti ti-chevron-down chevron" id="chev-3"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-3">
+        <div class="form-note">Cada secretaría necesita un/a <strong>titular</strong> y dos <strong>accesitarios/as</strong>, cada uno con su propio documento.</div>
+        <div class="secretaria-grid" id="sec-grid"></div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(3)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4: DOCS GENERALES -->
+    <div class="section" id="sec-4">
+      <div class="section-header" onclick="toggleSec(4)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-4">5</div>
+          <div>
+            <div class="section-title">Documentos generales de la lista</div>
+            <div class="section-meta" id="meta-4">Documentos que pertenecen a la lista en su conjunto</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <button class="btn-edit" onclick="event.stopPropagation(); toggleSec(4)">Editar</button>
+          <i class="ti ti-chevron-down chevron" id="chev-4"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-4">
+        <div class="doc-list" id="docs-general"></div>
+        <div class="section-footer">
+          <button class="btn-primary" onclick="completeSec(4)">Guardar y continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5: REVISIÓN Y ENVÍO -->
+    <div class="section" id="sec-5">
+      <div class="section-header" onclick="toggleSec(5)">
+        <div class="section-header-left">
+          <div class="section-num" id="num-5">6</div>
+          <div>
+            <div class="section-title">Revisión y envío del expediente</div>
+            <div class="section-meta" id="meta-5">Verificar antes de enviar</div>
+          </div>
+        </div>
+        <div class="section-header-right">
+          <i class="ti ti-chevron-down chevron" id="chev-5"></i>
+        </div>
+      </div>
+      <div class="section-body" id="body-5">
+        <div class="form-note" style="margin-bottom:20px">
+          Revisa cada sección antes de enviar. Una vez enviado el expediente, cualquier corrección deberá coordinarse directamente con la Junta Electoral Federativa.
+        </div>
+        <div class="review-card" id="review-list"></div>
+        <div class="section-footer" style="margin-top:20px">
+          <button class="btn-secondary" onclick="jumpTo(0)">Revisar expediente</button>
+          <button class="btn-primary" id="btn-enviar" disabled onclick="enviarExpediente()">
+            <span id="btn-enviar-texto">Enviar expediente</span>
+          </button>
+        </div>
+        <div class="envio-mensaje" id="envio-mensaje"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL SECRETARÍA -->
+<div class="modal-backdrop" id="modal-sec">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-sec-title">Secretaría</div>
+        <div class="modal-subtitle" id="modal-sec-subtitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body" id="modal-sec-body"></div>
+  </div>
+</div>
+
+<!-- CONFIG del proceso (cargos, secretarías, semestres, endpoint) -->
+<script src="inscripcionConfig.js"></script>
+
+<script>
+/* =========================================================
+   Un solo documento PDF por integrante (presidente,
+   vicepresidente y cada rol de cada secretaría).
+   ========================================================= */
+const DOC_PERSONA = {
+  id: 'archivo',
+  name: 'Documento del integrante',
+  desc: 'PDF con los datos y firma según el formato de la comisión electoral',
+  icon: 'ti-file-text',
+};
+
+/* Documentos generales de la lista — deben coincidir EXACTO
+   con las claves que espera Code.gs: planTrabajo, adherentes, logo, dj */
+const DOCS_GENERAL = [
+  { id: 'planTrabajo', name: 'Plan de trabajo',      desc: 'Documento PDF con el plan de gestión propuesto', icon: 'ti-clipboard-list', accept: '.pdf' },
+  { id: 'adherentes',  name: 'Lista de adherentes',  desc: 'Padrón firmado de estudiantes adherentes',       icon: 'ti-users',          accept: '.pdf' },
+  { id: 'logo',        name: 'Logo de la lista',     desc: 'Imagen PNG, JPG o SVG',                          icon: 'ti-photo',          accept: '.png,.jpg,.jpeg,.svg' },
+  { id: 'dj',          name: 'Declaración jurada',   desc: 'Declaración jurada firmada de la lista',         icon: 'ti-file-certificate', accept: '.pdf' },
+];
+
+const ROLES_SECRETARIA = [
+  { clave: 'titular', label: 'Titular' },
+  { clave: 'acc1',    label: 'Accesitario 1' },
+  { clave: 'acc2',    label: 'Accesitario 2' },
+];
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+let state = {
+  archivos: {},                       // clave -> File
+  secDataDone: CONFIG.secretarias.map(() => false),
+  personas: {                          // datos de texto por persona
+    pres: {}, vp: {},
+  },
+  secModalActivo: null,
+  secTabActivo: 'titular',
+};
+CONFIG.secretarias.forEach((_, i) => {
+  state.personas['sec' + i] = { titular: {}, acc1: {}, acc2: {} };
+});
+
+/* =========================================================
+   HELPERS DE RENDER
+   ========================================================= */
+function opcionesSemestre(valorActual) {
+  return `<option value="">—</option>` + CONFIG.semestres
+    .map(s => `<option value="${s}" ${s === valorActual ? 'selected' : ''}>${s}</option>`)
+    .join('');
+}
+
+function makeDocCard(docObj, key, accept) {
+  const isLoaded = !!state.archivos[key];
+  const nombreArchivo = isLoaded ? state.archivos[key].name : '';
+  return `
+    <div class="doc-card ${isLoaded ? 'loaded' : ''}" id="dc-${key}">
+      <div class="doc-icon"><i class="ti ${docObj.icon}" aria-hidden="true"></i></div>
+      <div class="doc-info">
+        <div class="doc-name">${docObj.name}</div>
+        <div class="doc-desc">${docObj.desc}</div>
+        ${isLoaded ? `<div class="doc-file"><i class="ti ti-paperclip" style="font-size:11px"></i> ${nombreArchivo}</div>` : ''}
+      </div>
+      <div class="doc-actions">
+        <span class="doc-status ${isLoaded ? 'loaded' : ''}">
+          ${isLoaded ? '<i class="ti ti-circle-check"></i> Cargado' : '<i class="ti ti-clock"></i> Pendiente'}
+        </span>
+        <input type="file" class="hidden-file" id="file-${key}" data-key="${key}" accept="${accept || '.pdf'}" onchange="handleFile(this)">
+        ${isLoaded
+          ? `<button class="btn-replace" onclick="document.getElementById('file-${key}').click()">Reemplazar</button>`
+          : `<button class="btn-upload" onclick="document.getElementById('file-${key}').click()">Seleccionar archivo</button>`}
+      </div>
+    </div>`;
+}
+
+function personaCampos(prefix, datos) {
+  return `
+    <div class="form-grid" style="margin-bottom:20px">
+      <div class="form-group">
+        <label>Nombres</label>
+        <input type="text" value="${datos.nombres || ''}" placeholder="Nombres" oninput="setPersonaCampo('${prefix}','nombres',this.value)">
+      </div>
+      <div class="form-group">
+        <label>Apellidos</label>
+        <input type="text" value="${datos.apellidos || ''}" placeholder="Apellidos" oninput="setPersonaCampo('${prefix}','apellidos',this.value)">
+      </div>
+      <div class="form-group">
+        <label>Código universitario</label>
+        <input type="text" value="${datos.codigo || ''}" placeholder="Ej. 20200123" oninput="setPersonaCampo('${prefix}','codigo',this.value)">
+      </div>
+      <div class="form-group">
+        <label>Semestre</label>
+        <select onchange="setPersonaCampo('${prefix}','semestre',this.value)">${opcionesSemestre(datos.semestre)}</select>
+      </div>
+      <div class="form-group" style="grid-column: span 2">
+        <label>Créditos aprobados</label>
+        <input type="number" min="0" step="1" value="${datos.creditos || ''}" oninput="setPersonaCampo('${prefix}','creditos',this.value)">
+      </div>
+    </div>
+    <div class="sub-label">Documento</div>
+    <div class="doc-list">${makeDocCard(DOC_PERSONA, prefix + '_archivo', '.pdf')}</div>
+  `;
+}
+
+function setPersonaCampo(prefix, campo, valor) {
+  if (prefix === 'pres' || prefix === 'vp') {
+    state.personas[prefix][campo] = valor;
+  } else {
+    // prefix tipo "sec0_titular"
+    const [secKey, rol] = prefix.split('_');
+    state.personas[secKey][rol][campo] = valor;
+  }
+  updateProgress();
+}
+
+/* =========================================================
+   RENDER: PRESIDENTE / VICEPRESIDENTE
+   ========================================================= */
+function renderDirectiva() {
+  const [presidente, vicepresidente] = CONFIG.cargos;
+
+  document.getElementById('titulo-pres').textContent = presidente.label;
+  document.getElementById('rol-pres').textContent = presidente.label + ' de lista';
+  document.getElementById('sb-label-pres').textContent = presidente.label;
+
+  document.getElementById('titulo-vp').textContent = vicepresidente.label;
+  document.getElementById('rol-vp').textContent = vicepresidente.label + ' de lista';
+  document.getElementById('sb-label-vp').textContent = vicepresidente.label;
+
+  document.getElementById('meta-1').textContent = `Datos personales y documento · ${presidente.nota}`;
+  document.getElementById('meta-2').textContent = `Datos personales y documento · ${vicepresidente.nota}`;
+
+  document.getElementById('body-persona-pres').innerHTML = personaCampos('pres', state.personas.pres);
+  document.getElementById('body-persona-vp').innerHTML = personaCampos('vp', state.personas.vp);
+}
+
+/* =========================================================
+   RENDER: GRID DE SECRETARÍAS
+   ========================================================= */
+function renderSecGrid() {
+  const grid = document.getElementById('sec-grid');
+  grid.innerHTML = CONFIG.secretarias.map((sec, i) => {
+    const done = state.secDataDone[i];
+    return `
+      <div class="sec-card ${done ? 'done' : ''}" id="sc-${i}" onclick="openSecModal(${i})">
+        <div class="sec-card-title">${sec.nombre}</div>
+        <div class="sec-card-nota">${sec.nota}</div>
+        <div class="sec-card-stats">
+          <div class="sec-stat ${done ? 'ok' : ''}"><i class="ti ${done ? 'ti-circle-check' : 'ti-circle'}"></i> ${done ? 'Datos completos' : 'Datos pendientes'}</div>
+          <div class="sec-stat"><i class="ti ti-file"></i> ${getSecDocCount(i)} / 3 documentos</div>
+        </div>
+        <div class="sec-card-btn">${done ? 'Ver / Editar' : 'Completar'} <i class="ti ti-arrow-right" style="font-size:11px"></i></div>
+      </div>`;
+  }).join('');
+  updateSecMeta();
+}
+
+function getSecDocCount(i) {
+  return ROLES_SECRETARIA.filter(r => !!state.archivos['sec' + i + '_' + r.clave + '_archivo']).length;
+}
+
+/* =========================================================
+   MODAL DE SECRETARÍA (con pestañas Titular / Accesitario 1 / 2)
+   ========================================================= */
+function openSecModal(i) {
+  state.secModalActivo = i;
+  state.secTabActivo = 'titular';
+  const sec = CONFIG.secretarias[i];
+  document.getElementById('modal-sec-title').textContent = sec.nombre;
+  document.getElementById('modal-sec-subtitle').textContent = sec.nota;
+  renderModalBody();
+  document.getElementById('modal-sec').classList.add('open');
+}
+
+function renderModalBody() {
+  const i = state.secModalActivo;
+  const secKey = 'sec' + i;
+
+  const tabs = ROLES_SECRETARIA.map(r => {
+    const rolCompleto = personaCompleta(state.personas[secKey][r.clave], secKey + '_' + r.clave);
+    return `
+      <button class="rol-tab ${state.secTabActivo === r.clave ? 'active' : ''}" onclick="cambiarTabModal('${r.clave}')">
+        <span class="rol-tab-check ${rolCompleto ? 'done' : ''}">${rolCompleto ? '<i class="ti ti-check"></i>' : ''}</span>${r.label}
+      </button>`;
+  }).join('');
+
+  const rolActivo = state.secTabActivo;
+  const prefix = secKey + '_' + rolActivo;
+
+  document.getElementById('modal-sec-body').innerHTML = `
+    <div class="rol-tabs">${tabs}</div>
+    ${personaCampos(prefix, state.personas[secKey][rolActivo])}
+    <div style="display:flex;justify-content:flex-end;margin-top:20px;gap:10px">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveSecModal(${i})">Guardar secretaría</button>
+    </div>`;
+}
+
+function cambiarTabModal(rol) {
+  state.secTabActivo = rol;
+  renderModalBody();
+}
+
+function personaCompleta(datos, archivoKey) {
+  return !!(datos && datos.nombres && datos.apellidos && datos.codigo && state.archivos[archivoKey + '_archivo']);
+}
+
+function saveSecModal(i) {
+  const secKey = 'sec' + i;
+  const todasCompletas = ROLES_SECRETARIA.every(r => personaCompleta(state.personas[secKey][r.clave], secKey + '_' + r.clave));
+  state.secDataDone[i] = todasCompletas;
+  closeModal();
+  renderSecGrid();
+  updateProgress();
+}
+
+function closeModal() {
+  document.getElementById('modal-sec').classList.remove('open');
+  state.secModalActivo = null;
+}
+
+/* =========================================================
+   ARCHIVOS
+   ========================================================= */
+function handleFile(input) {
+  const key = input.dataset.key;
+  const file = input.files[0];
+  if (!file) return;
+  state.archivos[key] = file;
+  refreshDocArea(key);
+  updateProgress();
+}
+
+function refreshDocArea(key) {
+  if (key.startsWith('pres_')) {
+    document.getElementById('body-persona-pres').innerHTML = personaCampos('pres', state.personas.pres);
+  } else if (key.startsWith('vp_')) {
+    document.getElementById('body-persona-vp').innerHTML = personaCampos('vp', state.personas.vp);
+  } else if (key.startsWith('general_')) {
+    renderDocsGeneral();
+  } else if (key.startsWith('sec')) {
+    // key: sec{i}_{rol}_archivo
+    if (state.secModalActivo !== null) renderModalBody();
+    renderSecGrid();
+  }
+}
+
+function renderDocsGeneral() {
+  document.getElementById('docs-general').innerHTML = DOCS_GENERAL
+    .map(d => makeDocCard(d, 'general_' + d.id, d.accept))
+    .join('');
+}
+
+/* =========================================================
+   PROGRESO
+   ========================================================= */
+function updateSecMeta() {
+  const done = state.secDataDone.filter(Boolean).length;
+  const total = CONFIG.secretarias.length;
+  document.getElementById('meta-3').textContent = `${done} de ${total} secretarías completas`;
+  document.getElementById('sb-badge-sec').textContent = `${done} / ${total}`;
+  document.getElementById('sb-badge-sec').className = 'sidebar-badge' + (done < total ? ' warn' : '');
+}
+
+function totalIntegrantesYDocs() {
+  // presidente + vicepresidente + (secretarias * 3 roles)
+  const totalIntegrantes = 2 + CONFIG.secretarias.length * ROLES_SECRETARIA.length;
+  const totalDocs = totalIntegrantes + DOCS_GENERAL.length;
+  return { totalIntegrantes, totalDocs };
+}
+
+function getSec0Done() {
+  const ids = ['lista_nombre', 'gestor_nombres', 'gestor_apellidos', 'gestor_correo', 'gestor_telefono'];
+  return ids.every(id => (document.getElementById(id) || { value: '' }).value.trim());
+}
+
+function getPersonaDone(prefix) {
+  const d = state.personas[prefix];
+  return personaCompleta(d, prefix);
+}
+
+function updateProgress() {
+  const { totalDocs } = totalIntegrantesYDocs();
+  const loaded = Object.keys(state.archivos).length;
+
+  const s0 = getSec0Done();
+  const s1 = getPersonaDone('pres');
+  const s2 = getPersonaDone('vp');
+  const s3done = state.secDataDone.filter(Boolean).length;
+  const s4done = DOCS_GENERAL.filter(d => !!state.archivos['general_' + d.id]).length;
+
+  const totalSteps = 3 + CONFIG.secretarias.length + DOCS_GENERAL.length;
+  const doneSteps = (s0 ? 1 : 0) + (s1 ? 1 : 0) + (s2 ? 1 : 0) + s3done + s4done;
+  const pct = Math.round((doneSteps / totalSteps) * 100);
+
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('pct-bar').style.width = pct + '%';
+  document.getElementById('docs-count').textContent = loaded + ' / ' + totalDocs;
+
+  document.getElementById('sb-badge-docs').textContent = `${s4done} / ${DOCS_GENERAL.length}`;
+  document.getElementById('sb-badge-docs').className = 'sidebar-badge' + (s4done < DOCS_GENERAL.length ? ' warn' : '');
+
+  updateSecMeta();
+  updateReview(s0, s1, s2, s3done, s4done);
+}
+
+function updateReview(s0, s1, s2, s3done, s4done) {
+  const [presidente, vicepresidente] = CONFIG.cargos;
+  const items = [
+    { label: 'Datos generales', ok: s0 },
+    { label: presidente.label, ok: s1 },
+    { label: vicepresidente.label, ok: s2 },
+    { label: `Secretarías (${s3done} / ${CONFIG.secretarias.length})`, ok: s3done === CONFIG.secretarias.length },
+    { label: `Documentos generales (${s4done} / ${DOCS_GENERAL.length})`, ok: s4done === DOCS_GENERAL.length },
+  ];
+
+  const allOk = items.every(it => it.ok);
+  document.getElementById('btn-enviar').disabled = !allOk;
+
+  const rl = document.getElementById('review-list');
+  rl.innerHTML = items.map(it => `
+    <div class="review-item">
+      <div class="review-item-left">
+        <i class="ti ${it.ok ? 'ti-circle-check ok' : 'ti-circle-x warn'}" aria-hidden="true"></i>
+        ${it.label}
+      </div>
+      ${!it.ok ? '<span class="review-missing">Incompleto</span>' : ''}
+    </div>`).join('');
+}
+
+/* =========================================================
+   NAVEGACIÓN DE SECCIONES
+   ========================================================= */
+function toggleSec(i) {
+  const body = document.getElementById('body-' + i);
+  const chev = document.getElementById('chev-' + i);
+  const hdr = document.querySelector('#sec-' + i + ' .section-header');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+  hdr.classList.toggle('open', !isOpen);
+}
+
+function completeSec(i) {
+  document.getElementById('num-' + i).classList.add('done');
+  document.getElementById('num-' + i).innerHTML = '<i class="ti ti-check" style="font-size:13px"></i>';
+  const sbCheck = document.getElementById('sb-check-' + i);
+  if (sbCheck) sbCheck.classList.add('done');
+  toggleSec(i);
+  if (i < 5) toggleSec(i + 1);
+  updateProgress();
+  document.querySelectorAll('.sidebar-item').forEach((el, idx) => el.classList.toggle('active', idx === i + 1));
+}
+
+function jumpTo(i) {
+  const body = document.getElementById('body-' + i);
+  if (!body.classList.contains('open')) toggleSec(i);
+  document.getElementById('sec-' + i).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.sidebar-item').forEach((el, idx) => el.classList.toggle('active', idx === i));
+}
+
+/* =========================================================
+   ARCHIVO → BASE64
+   ========================================================= */
+function archivoABase64(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) { resolve(null); return; }
+    const reader = new FileReader();
+    reader.onload = () => resolve({ nombre: file.name, base64: reader.result.split(',')[1], mimeType: file.type || 'application/octet-stream' });
+    reader.onerror = () => reject(new Error(`No se pudo leer el archivo "${file.name}".`));
+    reader.readAsDataURL(file);
+  });
+}
+
+/* =========================================================
+   ARMADO DEL JSON Y ENVÍO A Code.gs
+   ========================================================= */
+async function construirDatos() {
+  const datos = {
+    lista: {
+      nombre: document.getElementById('lista_nombre').value.trim(),
+      color: document.getElementById('lista_color').value.trim(),
+    },
+    gestor: {
+      nombres: document.getElementById('gestor_nombres').value.trim(),
+      apellidos: document.getElementById('gestor_apellidos').value.trim(),
+      codigo: document.getElementById('gestor_codigo').value.trim(),
+      correo: document.getElementById('gestor_correo').value.trim(),
+      telefono: document.getElementById('gestor_telefono').value.trim(),
+    },
+    documentosLista: {},
+    integrantes: [],
+  };
+
+  for (const doc of DOCS_GENERAL) {
+    datos.documentosLista[doc.id] = await archivoABase64(state.archivos['general_' + doc.id]);
+  }
+
+  const [presidente, vicepresidente] = CONFIG.cargos;
+  datos.integrantes.push(await construirIntegrantePlano(presidente.label, 'pres'));
+  datos.integrantes.push(await construirIntegrantePlano(vicepresidente.label, 'vp'));
+
+  for (let i = 0; i < CONFIG.secretarias.length; i++) {
+    const sec = CONFIG.secretarias[i];
+    for (const rol of ROLES_SECRETARIA) {
+      const prefix = 'sec' + i + '_' + rol.clave;
+      const cargoLabel = `${sec.nombre} - ${rol.label}`;
+      datos.integrantes.push(await construirIntegranteSecretaria(cargoLabel, 'sec' + i, rol.clave, prefix));
+    }
+  }
+
+  return datos;
+}
+
+async function construirIntegrantePlano(cargoLabel, prefix) {
+  const d = state.personas[prefix] || {};
+  return {
+    cargo: cargoLabel,
+    nombres: d.nombres || '',
+    apellidos: d.apellidos || '',
+    codigo: d.codigo || '',
+    semestre: d.semestre || '',
+    creditos: d.creditos || '',
+    archivo: await archivoABase64(state.archivos[prefix + '_archivo']),
+  };
+}
+
+async function construirIntegranteSecretaria(cargoLabel, secKey, rolClave, prefix) {
+  const d = state.personas[secKey][rolClave] || {};
+  return {
+    cargo: cargoLabel,
+    nombres: d.nombres || '',
+    apellidos: d.apellidos || '',
+    codigo: d.codigo || '',
+    semestre: d.semestre || '',
+    creditos: d.creditos || '',
+    archivo: await archivoABase64(state.archivos[prefix + '_archivo']),
+  };
+}
+
+async function enviarExpediente() {
+  const btn = document.getElementById('btn-enviar');
+  const texto = document.getElementById('btn-enviar-texto');
+  const mensaje = document.getElementById('envio-mensaje');
+
+  btn.disabled = true;
+  mensaje.className = 'envio-mensaje';
+  mensaje.textContent = '';
+  texto.innerHTML = '<span class="spinner-mini"></span> Preparando archivos…';
+
+  try {
+    const datos = await construirDatos();
+
+    texto.innerHTML = '<span class="spinner-mini"></span> Enviando expediente…';
+
+    const respuesta = await fetch(CONFIG.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // evita preflight en Apps Script
+      body: JSON.stringify(datos),
+    });
+
+    const resultado = await respuesta.json();
+
+    if (resultado.exito) {
+      mensaje.className = 'envio-mensaje exito';
+      mensaje.textContent = `${resultado.mensaje} Tu número de registro es ${resultado.idLista}. Guárdalo para cualquier consulta.`;
+      texto.textContent = 'Expediente enviado';
+    } else {
+      mensaje.className = 'envio-mensaje error';
+      mensaje.textContent = resultado.mensaje || 'No se pudo registrar el expediente.';
+      texto.textContent = 'Enviar expediente';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    mensaje.className = 'envio-mensaje error';
+    mensaje.textContent = 'No se pudo conectar con el servidor. Verifica tu conexión e inténtalo nuevamente.';
+    texto.textContent = 'Enviar expediente';
+    btn.disabled = false;
+  }
+}
+
+/* =========================================================
+   INICIALIZACIÓN
+   ========================================================= */
+document.getElementById('sidebar-sub').textContent = `Proceso ${CONFIG.proceso.semestre}`;
+renderDirectiva();
+renderSecGrid();
+renderDocsGeneral();
+updateProgress();
+document.getElementById('chev-0').classList.add('open');
+document.querySelector('#sec-0 .section-header').classList.add('open');
+</script>
 </body>
 </html>
