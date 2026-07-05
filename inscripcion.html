@@ -1,6 +1,598 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscripción de Lista · Centro Federado de Biología · UNSAAC</title>
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/inscripcion.css" />
+</head>
+<body>
+
+
+<!-- =============================================================
+     NAVEGACIÓN
+     ============================================================= -->
+<nav>
+  <div class="nav-inner">
+
+    <!-- Logo: reemplaza el SVG por <img src="logo.png" alt="Logo"> si tienes imagen -->
+    <a class="nav-marca" href="index.html">
+      <div class="nav-logo-wrap">
+        <svg viewBox="0 0 38 38" fill="none" width="38" height="38">
+          <circle cx="19" cy="19" r="18" fill="#EAF1FB" stroke="#D9E2EE" stroke-width="1"/>
+          <circle cx="19" cy="19" r="6" fill="#2563A8" opacity=".8"/>
+          <ellipse cx="19" cy="19" rx="13" ry="5" stroke="#2E7D5E" stroke-width="1.5" fill="none"/>
+          <ellipse cx="19" cy="19" rx="5"  ry="13" stroke="#2E7D5E" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="nav-nombre">
+        Centro Federado de Biología
+        <small>UNSAAC · Proceso Electoral 2025</small>
+      </div>
+    </a>
+
+    <!-- Links -->
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="index.html#cronograma">Cronograma</a></li>
+      <li><a href="index.html#comunicados">Comunicados</a></li>
+    </ul>
+
+    <div class="nav-sep"></div>
+    <a class="nav-cta" href="inscripcion.html">Inscribir lista</a>
+
+    <!-- Botón hamburguesa (solo móvil) -->
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="6"  x2="19" y2="6"/>
+        <line x1="3" y1="11" x2="19" y2="11"/>
+        <line x1="3" y1="16" x2="19" y2="16"/>
+      </svg>
+    </button>
+
+  </div>
+</nav>
+
+
+<!-- =============================================================
+     CONTENIDO PRINCIPAL
+     ============================================================= -->
+<main class="pagina">
+<div class="pagina-inner">
+
+
+  <!-- Cabecera -->
+  <div class="pag-header">
+    <span class="etiqueta-seccion">Proceso Electoral 2025</span>
+    <h1 class="titulo-seccion">Inscripción de Lista</h1>
+    <p class="desc-seccion">
+      Completa los tres pasos. El gestor sube todos los documentos.
+      Al enviar, los datos quedarán en Google Sheets y los archivos
+      en Google Drive.
+    </p>
+  </div>
+
+
+  <!-- Barra de pasos -->
+  <div class="pasos">
+    <div class="paso activo" id="tab-1">
+      <div class="paso-num"><span>1</span></div>
+      <span class="paso-lbl">Lista e integrantes</span>
+    </div>
+    <div class="paso-sep"></div>
+    <div class="paso" id="tab-2">
+      <div class="paso-num"><span>2</span></div>
+      <span class="paso-lbl">Documentos</span>
+    </div>
+    <div class="paso-sep"></div>
+    <div class="paso" id="tab-3">
+      <div class="paso-num"><span>3</span></div>
+      <span class="paso-lbl">Confirmar y enviar</span>
+    </div>
+  </div>
+
+
+  <!-- ===========================================================
+       PASO 1 · LISTA E INTEGRANTES
+       =========================================================== -->
+  <div id="paso-1">
+
+
+    <!-- ── Datos generales de la lista ── -->
+    <div class="card">
+      <div class="card-head">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 12h6M9 16h6M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/>
+        </svg>
+        <span class="card-head-titulo">Datos de la lista</span>
+      </div>
+      <div class="card-body">
+        <div class="grid">
+
+          <div class="grid grid2">
+            <div class="campo">
+              <label class="lbl" for="l-nombre">
+                Nombre de la lista <span class="req">*</span>
+              </label>
+              <input type="text" class="inp" id="l-nombre"
+                placeholder="Ej. Lista Biorenovación" />
+            </div>
+            <div class="campo">
+              <label class="lbl" for="l-color">
+                Color o símbolo <span class="opc">(opcional)</span>
+              </label>
+              <input type="text" class="inp" id="l-color"
+                placeholder="Ej. Verde, Fénix…" />
+            </div>
+          </div>
+
+          <!-- Gestor de la inscripción -->
+          <div class="campo">
+            <label class="lbl">
+              Gestor / responsable de la inscripción <span class="req">*</span>
+            </label>
+            <div class="grid grid3">
+              <input type="text" class="inp" id="g-nombres"
+                placeholder="Nombres" />
+              <input type="text" class="inp" id="g-apellidos"
+                placeholder="Apellidos" />
+              <input type="text" class="inp" id="g-codigo"
+                placeholder="Código universitario" maxlength="10" />
+            </div>
+          </div>
+
+          <div class="grid grid2">
+            <div class="campo">
+              <label class="lbl" for="g-email">
+                Correo del gestor <span class="req">*</span>
+              </label>
+              <input type="email" class="inp" id="g-email"
+                placeholder="correo@unsaac.edu.pe" />
+            </div>
+            <div class="campo">
+              <label class="lbl" for="g-tel">
+                Teléfono / WhatsApp <span class="req">*</span>
+              </label>
+              <input type="tel" class="inp" id="g-tel"
+                placeholder="9XX XXX XXX" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── Candidato a Presidencia ── -->
+    <div class="card">
+      <div class="card-head">
+        <svg viewBox="0 0 24 24">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <span class="card-head-titulo">Candidato a Presidencia</span>
+      </div>
+      <div class="card-body">
+
+        <div class="infobox">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <p>
+            <strong>Requisito de créditos:</strong> el candidato a presidencia
+            debe acreditar mínimo <strong>80 créditos aprobados</strong>.
+            Se registrará el número informado; la JEF verificará la constancia.
+          </p>
+        </div>
+
+        <div class="miembro-bloque">
+          <div class="miembro-head">
+            <span class="miembro-cargo">Presidencia</span>
+          </div>
+          <div class="miembro-body">
+            <div class="grid">
+              <div class="grid grid2">
+                <div class="campo">
+                  <label class="lbl" for="p-nombres">
+                    Nombres <span class="req">*</span>
+                  </label>
+                  <input type="text" class="inp" id="p-nombres"
+                    placeholder="Nombres completos" />
+                </div>
+                <div class="campo">
+                  <label class="lbl" for="p-apellidos">
+                    Apellidos <span class="req">*</span>
+                  </label>
+                  <input type="text" class="inp" id="p-apellidos"
+                    placeholder="Apellidos completos" />
+                </div>
+              </div>
+              <div class="grid grid3">
+                <div class="campo">
+                  <label class="lbl" for="p-codigo">
+                    Código <span class="req">*</span>
+                  </label>
+                  <input type="text" class="inp" id="p-codigo"
+                    placeholder="190012" />
+                </div>
+                <div class="campo">
+                  <label class="lbl" for="p-semestre">Semestre</label>
+                  <select class="sel" id="p-semestre">
+                    <option value="">—</option>
+                    <option>I</option>   <option>II</option>
+                    <option>III</option> <option>IV</option>
+                    <option>V</option>   <option>VI</option>
+                    <option>VII</option> <option>VIII</option>
+                    <option>IX</option>  <option>X</option>
+                  </select>
+                </div>
+                <div class="campo">
+                  <label class="lbl" for="p-creditos">
+                    Créditos aprobados <span class="req">*</span>
+                  </label>
+                  <input type="number" class="inp" id="p-creditos"
+                    placeholder="Ej. 95" min="0" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ── Secretarías ── -->
+    <div class="card">
+      <div class="card-head">
+        <svg viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span class="card-head-titulo">Secretarías</span>
+        <span class="card-head-sub" id="cnt-sec">0 secretarías</span>
+      </div>
+      <div class="card-body">
+
+        <div class="infobox">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <p>
+            La <strong>Secretaría de Economía</strong> requiere mínimo
+            <strong>60 créditos</strong>. El nombre de cada secretaría es
+            editable. La cantidad puede variar según la lista.
+          </p>
+        </div>
+
+        <!-- Los bloques de secretarías se insertan aquí por JS -->
+        <div id="lista-sec"></div>
+
+        <button class="btn-add" id="btn-agregar-sec">
+          <svg viewBox="0 0 24 24">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Agregar secretaría
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- ── Accesitarios ── -->
+    <div class="card">
+      <div class="card-head">
+        <svg viewBox="0 0 24 24">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <line x1="19" y1="8"  x2="19" y2="14"/>
+          <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
+        <span class="card-head-titulo">Accesitarios</span>
+        <span class="card-head-sub" id="cnt-acc">0 accesitarios</span>
+      </div>
+      <div class="card-body">
+
+        <p class="hint">
+          Cada accesitario indica a qué secretaría reemplazaría.
+          La cantidad puede variar.
+        </p>
+
+        <!-- Los bloques de accesitarios se insertan aquí por JS -->
+        <div id="lista-acc"></div>
+
+        <button class="btn-add" id="btn-agregar-acc">
+          <svg viewBox="0 0 24 24">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Agregar accesitario
+        </button>
+
+      </div>
+    </div>
+
+
+  </div><!-- /paso-1 -->
+
+
+  <!-- ===========================================================
+       PASO 2 · DOCUMENTOS
+       =========================================================== -->
+  <div id="paso-2" class="paso-oculto">
+
+
+    <!-- ── Documentos generales de la lista ── -->
+    <div class="card">
+      <div class="card-head">
+        <svg viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <span class="card-head-titulo">Documentos de la lista</span>
+      </div>
+      <div class="card-body">
+
+        <p class="hint">
+          El gestor sube todos los documentos generales en este paso.
+          Se aceptan PDF (máx. 10 MB) e imagen PNG/JPG para el logo.
+        </p>
+
+        <!-- Plan de trabajo -->
+        <div class="doc-fila">
+          <div>
+            <div class="doc-fila-nombre">Plan de trabajo</div>
+            <div class="doc-fila-desc">Propuestas y ejes de gestión · Máx. 10 páginas · PDF</div>
+          </div>
+          <label class="upload-mini" for="f-plan">
+            <svg viewBox="0 0 24 24">
+              <polyline points="16 16 12 12 8 16"/>
+              <line x1="12" y1="12" x2="12" y2="21"/>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+            </svg>
+            Subir PDF
+            <input type="file" id="f-plan" accept=".pdf" />
+          </label>
+          <span class="estado-archivo" id="e-plan">—</span>
+        </div>
+
+        <!-- Lista de adherentes -->
+        <div class="doc-fila">
+          <div>
+            <div class="doc-fila-nombre">Lista de adherentes</div>
+            <div class="doc-fila-desc">Firmas de apoyo · PDF</div>
+          </div>
+          <label class="upload-mini" for="f-adh">
+            <svg viewBox="0 0 24 24">
+              <polyline points="16 16 12 12 8 16"/>
+              <line x1="12" y1="12" x2="12" y2="21"/>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+            </svg>
+            Subir PDF
+            <input type="file" id="f-adh" accept=".pdf" />
+          </label>
+          <span class="estado-archivo" id="e-adh">—</span>
+        </div>
+
+        <!-- Logo -->
+        <div class="doc-fila">
+          <div>
+            <div class="doc-fila-nombre">Logo de la lista</div>
+            <div class="doc-fila-desc">PNG o JPG · fondo transparente o blanco</div>
+          </div>
+          <label class="upload-mini" for="f-logo">
+            <svg viewBox="0 0 24 24">
+              <polyline points="16 16 12 12 8 16"/>
+              <line x1="12" y1="12" x2="12" y2="21"/>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+            </svg>
+            Subir imagen
+            <input type="file" id="f-logo" accept=".png,.jpg,.jpeg" />
+          </label>
+          <span class="estado-archivo" id="e-logo">—</span>
+        </div>
+
+        <!-- Declaración jurada -->
+        <div class="doc-fila">
+          <div>
+            <div class="doc-fila-nombre">Declaración jurada de la lista</div>
+            <div class="doc-fila-desc">Firmada por todos los integrantes · PDF</div>
+          </div>
+          <label class="upload-mini" for="f-dj">
+            <svg viewBox="0 0 24 24">
+              <polyline points="16 16 12 12 8 16"/>
+              <line x1="12" y1="12" x2="12" y2="21"/>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+            </svg>
+            Subir PDF
+            <input type="file" id="f-dj" accept=".pdf" />
+          </label>
+          <span class="estado-archivo" id="e-dj">—</span>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ── Documento por integrante ── -->
+    <div class="card">
+      <div class="card-head">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg>
+        <span class="card-head-titulo">Documento por integrante</span>
+      </div>
+      <div class="card-body">
+
+        <div class="infobox">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <p>
+            Cada integrante requiere <strong>un único PDF</strong> que reúna:
+            fotocopia de DNI, constancia de matrícula y declaración jurada individual.
+            Prepara ese PDF antes de continuar.
+          </p>
+        </div>
+
+        <!-- Los bloques por integrante se generan aquí por JS al llegar al paso 2 -->
+        <div id="docs-integrantes"></div>
+
+      </div>
+    </div>
+
+
+  </div><!-- /paso-2 -->
+
+
+  <!-- ===========================================================
+       PASO 3 · CONFIRMAR Y ENVIAR
+       =========================================================== -->
+  <div id="paso-3" class="paso-oculto">
+
+
+    <!-- ── Resumen ── -->
+    <div class="card">
+      <div class="card-head">
+        <svg viewBox="0 0 24 24">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span class="card-head-titulo">Resumen de inscripción</span>
+      </div>
+      <div class="card-body">
+
+        <div class="resumen-bloque">
+          <span class="resumen-etiqueta">Lista</span>
+          <table class="resumen-tabla">
+            <tr><td>Nombre</td>            <td id="r-nombre">—</td></tr>
+            <tr><td>Color / símbolo</td>   <td id="r-color">—</td></tr>
+            <tr><td>Gestor</td>            <td id="r-gestor">—</td></tr>
+            <tr><td>Correo</td>            <td id="r-email">—</td></tr>
+            <tr><td>Total integrantes</td> <td id="r-total">—</td></tr>
+          </table>
+        </div>
+
+        <div class="resumen-bloque">
+          <span class="resumen-etiqueta">Integrantes</span>
+          <!-- Generado por JS -->
+          <div id="r-integrantes"></div>
+        </div>
+
+        <div class="resumen-bloque">
+          <span class="resumen-etiqueta">Documentos de la lista</span>
+          <!-- Chips generados por JS -->
+          <div id="r-docs-lista" class="chips-wrap"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Nota informativa -->
+    <div class="infobox">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p>
+        Al enviar, los documentos se guardarán en <strong>Google Drive</strong>
+        dentro de una carpeta con el nombre de la lista. Los links quedarán
+        registrados en <strong>Google Sheets</strong>. Recibirás un correo
+        de confirmación con tu ID de inscripción.
+      </p>
+    </div>
+
+    <!-- Pantalla de éxito (oculta hasta que se envíe) -->
+    <div class="alerta-ok" id="alerta-ok"></div>
+
+
+  </div><!-- /paso-3 -->
+
+
+  <!-- Barra de navegación entre pasos -->
+  <div class="form-nav">
+    <span class="form-nav-info" id="nav-info">Paso 1 de 3 — Lista e integrantes</span>
+    <div class="form-nav-acc">
+      <button class="btn-secundario" id="btn-ant">← Anterior</button>
+      <button class="btn-primario"   id="btn-sig">Siguiente →</button>
+      <button class="btn-primario btn-enviar" id="btn-env">✓ Enviar inscripción</button>
+    </div>
+  </div>
+
+
+</div>
+</main>
+
+
+<!-- =============================================================
+     FOOTER
+     ============================================================= -->
+<footer>
+  <div class="footer-inner">
+
+    <!-- Logo: reemplaza el SVG por <img src="logo.png"> si tienes imagen -->
+    <div class="footer-marca">
+      <svg class="footer-logo" viewBox="0 0 38 38" fill="none">
+        <circle cx="19" cy="19" r="18"
+          fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+        <circle cx="19" cy="19" r="6" fill="rgba(255,255,255,.6)"/>
+        <ellipse cx="19" cy="19" rx="13" ry="5"
+          stroke="rgba(255,255,255,.4)" stroke-width="1.5" fill="none"/>
+        <ellipse cx="19" cy="19" rx="5"  ry="13"
+          stroke="rgba(255,255,255,.4)" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="footer-texto">
+        <span class="footer-nombre">Centro Federado de Biología</span>
+        <span class="footer-sub">UNSAAC · Cusco, Perú</span>
+      </div>
+    </div>
+
+    <div class="footer-centro">
+      Sistema de Inscripción Electoral 2025<br>
+      Datos tratados de forma confidencial.
+    </div>
+
+    <div class="footer-derecha">
+      <a href="#">Reglamento Electoral</a><br>
+      <a href="#">Contactar a la JEF</a>
+    </div>
+
+  </div>
+</footer>
+
+
+<!-- =============================================================
+     SCRIPTS
+     El orden importa: config primero, luego la lógica.
+     ============================================================= -->
+<script src="config.js"></script>
+<script src="inscripcion.js"></script>
+
+
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscripción de Lista Electoral — CFB</title>
