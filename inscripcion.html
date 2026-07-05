@@ -461,7 +461,56 @@
 </div>
 
 <!-- CONFIG del proceso (cargos, secretarías, semestres, endpoint) -->
-<script src="config/inscripcionConfig.js"></script>
+<script>
+/* =========================================================
+   SISTEMA DE INSCRIPCIÓN ELECTORAL
+   Centro Federado de Biología · UNSAAC
+   CONFIG — embebido directamente en el HTML para que no
+   dependa de un archivo externo (config/inscripcionConfig.js).
+   ========================================================= */
+const CONFIG = {
+
+  /* Se muestra en el sidebar: "Proceso 2026-I" */
+  proceso: {
+    semestre: "2026-I", // <-- cambia esto cada proceso electoral
+  },
+
+  /* ── ENDPOINT DE APPS SCRIPT ───────────────────────────
+     Pega aquí la URL que te da Google al publicar Code.gs
+     como aplicación web (termina en /exec).
+     ───────────────────────────────────────────────────── */
+  endpoint: "https://script.google.com/macros/s/PEGA_AQUI_TU_ID_DE_IMPLEMENTACION/exec",
+
+  /* ── CARGOS DIRECTIVOS (Presidencia / Vicepresidencia) ── */
+  cargos: [
+    { label: "Presidente/a",     nota: "responsable directo de la lista" },
+    { label: "Vicepresidente/a", nota: "reemplaza al presidente/a en su ausencia" },
+  ],
+
+  /* ── SECRETARÍAS (7) ────────────────────────────────────
+     Cada una requiere 1 titular + 2 accesitarios, cada
+     uno con su propio documento (se gestiona en el modal).
+     ───────────────────────────────────────────────────── */
+  secretarias: [
+    { nombre: "Secretaría de Asuntos Académicos",              nota: "1 titular + 2 accesitarios/as" },
+    { nombre: "Secretaría de Economía y Finanzas",              nota: "1 titular + 2 accesitarios/as" },
+    { nombre: "Secretaría de Comunicación y Publicidad",        nota: "1 titular + 2 accesitarios/as" },
+    { nombre: "Secretaría de Asistencia y Proyección Social",   nota: "1 titular + 2 accesitarios/as" },
+    { nombre: "Secretaría de Deporte, Cultura y Recreación",    nota: "1 titular + 2 accesitarios/as" },
+    { nombre: "Secretaría de Actas y Archivos",                 nota: "1 titular + 2 accesitarios/as" },
+    { nombre: "Secretaría de Defensoría del Estudiante",        nota: "1 titular + 2 accesitarios/as" },
+  ],
+
+  /* ── SEMESTRES DISPONIBLES ──────────────────────────────
+     Usados en los <select> de presidencia, secretarías
+     y accesitarios.
+     ───────────────────────────────────────────────────── */
+  semestres: [
+    "I", "II", "III", "IV", "V",
+    "VI", "VII", "VIII", "IX", "X",
+  ],
+};
+</script>
 
 <script>
 /* =========================================================
