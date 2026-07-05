@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscripción Electoral · Centro Federado de Biología · UNSAAC</title>
+  <link rel="stylesheet" href="css/inscripcion.css" />
+</head>
+<body>
+
+  <!-- =====================================================
+       CABECERA DEL FORMULARIO
+       Solo identifica el sistema. Sin logos ni nav.
+  ====================================================== -->
+  <header class="form-header">
+    <p class="form-header__institución">Centro Federado de Biología · UNSAAC</p>
+    <h1 class="form-header__titulo">Inscripción de Lista Electoral</h1>
+    <p class="form-header__semestre" id="header-semestre">Proceso electoral <!-- JS lo rellena --></p>
+  </header>
+
+
+  <!-- =====================================================
+       INDICADOR DE PASOS
+  ====================================================== -->
+  <nav class="pasos" aria-label="Progreso del formulario">
+    <button class="paso activo" id="tab-1" type="button" disabled>
+      <span class="paso__num">1</span>
+      <span class="paso__label">Lista e integrantes</span>
+    </button>
+    <span class="paso__separador" aria-hidden="true"></span>
+    <button class="paso" id="tab-2" type="button" disabled>
+      <span class="paso__num">2</span>
+      <span class="paso__label">Documentos</span>
+    </button>
+    <span class="paso__separador" aria-hidden="true"></span>
+    <button class="paso" id="tab-3" type="button" disabled>
+      <span class="paso__num">3</span>
+      <span class="paso__label">Confirmar y enviar</span>
+    </button>
+  </nav>
+
+
+  <!-- =====================================================
+       ÁREA DE MENSAJES DE ERROR
+  ====================================================== -->
+  <div id="mensaje-error" class="mensaje-error" role="alert" aria-live="polite" hidden></div>
+  <div id="alerta-ok"     class="alerta-ok"     role="status"                   hidden></div>
+
+
+  <!-- =====================================================
+       FORMULARIO PRINCIPAL
+  ====================================================== -->
+  <main class="form-wrap">
+
+    <!-- ── PASO 1: DATOS DE LA LISTA E INTEGRANTES ──────── -->
+    <section id="paso-1" class="paso-contenido" aria-labelledby="titulo-paso-1">
+
+      <h2 class="paso-titulo" id="titulo-paso-1">Paso 1 — Lista e integrantes</h2>
+
+
+      <!-- ─ 1.1 Datos generales de la lista ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Datos de la lista</legend>
+
+        <div class="grid grid--2">
+          <div class="campo campo--wide">
+            <label class="campo__label" for="l-nombre">
+              Nombre de la lista <span class="req" aria-label="obligatorio">*</span>
+            </label>
+            <input class="campo__input" type="text" id="l-nombre" name="l-nombre"
+              placeholder="Ej. Lista Biorenovación" autocomplete="off" required />
+          </div>
+
+          <div class="campo">
+            <label class="campo__label" for="l-color">
+              Color o símbolo representativo
+            </label>
+            <input class="campo__input" type="text" id="l-color" name="l-color"
+              placeholder="Ej. Verde, Azul y blanco…" autocomplete="off" />
+          </div>
+        </div>
+      </fieldset>
+
+
+      <!-- ─ 1.2 Datos del gestor / personero ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Gestor / Personero general</legend>
+        <p class="fieldset__hint">
+          Persona acreditada por el presidente de la lista para realizar la inscripción ante el comité electoral.
+          Sus datos se registran junto con la lista.
+        </p>
+
+        <div class="grid grid--2">
+          <div class="campo">
+            <label class="campo__label" for="g-nombres">
+              Nombres <span class="req" aria-label="obligatorio">*</span>
+            </label>
+            <input class="campo__input" type="text" id="g-nombres" name="g-nombres"
+              placeholder="Nombres completos" autocomplete="off" required />
+          </div>
+
+          <div class="campo">
+            <label class="campo__label" for="g-apellidos">
+              Apellidos <span class="req" aria-label="obligatorio">*</span>
+            </label>
+            <input class="campo__input" type="text" id="g-apellidos" name="g-apellidos"
+              placeholder="Apellidos completos" autocomplete="off" required />
+          </div>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="campo">
+            <label class="campo__label" for="g-codigo">
+              Código universitario <span class="req" aria-label="obligatorio">*</span>
+            </label>
+            <input class="campo__input" type="text" id="g-codigo" name="g-codigo"
+              placeholder="Ej. 190012" autocomplete="off" required />
+          </div>
+
+          <div class="campo">
+            <label class="campo__label" for="g-email">
+              Correo electrónico <span class="req" aria-label="obligatorio">*</span>
+            </label>
+            <input class="campo__input" type="email" id="g-email" name="g-email"
+              placeholder="correo@unsaac.edu.pe" autocomplete="email" required />
+            <p class="campo__hint">Se enviará la confirmación a este correo.</p>
+          </div>
+
+          <div class="campo">
+            <label class="campo__label" for="g-tel">
+              Teléfono <span class="req" aria-label="obligatorio">*</span>
+            </label>
+            <input class="campo__input" type="tel" id="g-tel" name="g-tel"
+              placeholder="Ej. 984 123 456" autocomplete="tel" required />
+          </div>
+        </div>
+      </fieldset>
+
+
+      <!-- ─ 1.3 Cargos directivos: Presidente y Vicepresidente ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Cargos directivos</legend>
+
+        <!-- Generado por JS desde CONFIG.cargosDirectivos -->
+        <div id="lista-directivos"></div>
+      </fieldset>
+
+
+      <!-- ─ 1.4 Secretarías ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Secretarías</legend>
+        <p class="fieldset__hint">
+          7 secretarías predefinidas. Puedes editar el nombre si el reglamento lo permite.
+          Cada secretaría tiene 2 accesitarios.
+        </p>
+
+        <!-- Generado por JS desde CONFIG.secretarias -->
+        <div id="lista-secretarias"></div>
+      </fieldset>
+
+    </section><!-- /paso-1 -->
+
+
+    <!-- ── PASO 2: DOCUMENTOS ───────────────────────────── -->
+    <section id="paso-2" class="paso-contenido" aria-labelledby="titulo-paso-2" hidden>
+
+      <h2 class="paso-titulo" id="titulo-paso-2">Paso 2 — Documentos</h2>
+
+
+      <!-- ─ 2.1 Documentos de la lista ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Documentos de la lista</legend>
+        <p class="fieldset__hint">
+          Archivos que se presentan una sola vez para toda la lista.
+        </p>
+
+        <!-- Generado por JS desde CONFIG.documentosLista -->
+        <div id="docs-lista" class="docs-grid"></div>
+      </fieldset>
+
+
+      <!-- ─ 2.2 Documentos por integrante ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Documentos por integrante</legend>
+        <p class="fieldset__hint">
+          Un PDF consolidado por persona: DNI + constancia de matrícula + declaración jurada.
+          Los integrantes provienen de los datos ingresados en el Paso 1.
+        </p>
+
+        <!-- Generado por JS al entrar al paso 2 -->
+        <div id="docs-integrantes"></div>
+      </fieldset>
+
+    </section><!-- /paso-2 -->
+
+
+    <!-- ── PASO 3: RESUMEN Y ENVÍO ───────────────────────── -->
+    <section id="paso-3" class="paso-contenido" aria-labelledby="titulo-paso-3" hidden>
+
+      <h2 class="paso-titulo" id="titulo-paso-3">Paso 3 — Confirmar y enviar</h2>
+      <p class="paso-intro">
+        Revisa que todo esté correcto antes de enviar. Una vez enviado, la inscripción
+        queda registrada y recibirás una confirmación por correo.
+      </p>
+
+
+      <!-- ─ 3.1 Resumen de la lista ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Lista</legend>
+
+        <dl class="resumen-dl">
+          <dt>Nombre</dt>
+          <dd id="r-nombre">—</dd>
+
+          <dt>Color / Símbolo</dt>
+          <dd id="r-color">—</dd>
+        </dl>
+      </fieldset>
+
+
+      <!-- ─ 3.2 Resumen del gestor ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Gestor</legend>
+
+        <dl class="resumen-dl">
+          <dt>Nombre completo</dt>
+          <dd id="r-gestor">—</dd>
+
+          <dt>Correo</dt>
+          <dd id="r-email">—</dd>
+        </dl>
+      </fieldset>
+
+
+      <!-- ─ 3.3 Resumen de integrantes ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">
+          Integrantes · <span id="r-total">—</span>
+        </legend>
+
+        <!-- Tabla generada por JS -->
+        <div id="r-integrantes"></div>
+      </fieldset>
+
+
+      <!-- ─ 3.4 Resumen de documentos ─ -->
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Documentos de la lista</legend>
+
+        <div id="r-docs-lista" class="chips-docs"></div>
+      </fieldset>
+
+    </section><!-- /paso-3 -->
+
+  </main><!-- /form-wrap -->
+
+
+  <!-- =====================================================
+       BARRA DE NAVEGACIÓN ENTRE PASOS
+       Fija en la parte inferior de la página.
+  ====================================================== -->
+  <nav class="form-nav" aria-label="Navegación entre pasos">
+    <span class="form-nav__info" id="nav-info">Paso 1 de 3 — Lista e integrantes</span>
+
+    <div class="form-nav__botones">
+      <button class="btn btn--secundario" id="btn-ant" type="button"
+        onclick="irPaso(-1)" hidden>
+        ← Anterior
+      </button>
+
+      <button class="btn btn--primario" id="btn-sig" type="button"
+        onclick="irPaso(1)">
+        Siguiente →
+      </button>
+
+      <button class="btn btn--enviar" id="btn-env" type="button"
+        onclick="enviar()" hidden>
+        ✓ Enviar inscripción
+      </button>
+    </div>
+  </nav>
+
+
+  <!-- =====================================================
+       SCRIPTS
+       Primero la config, luego la lógica.
+  ====================================================== -->
+  <script src="config/inscripcionConfig.js"></script>
+  <script src="apis/inscripcion.js"></script>
+
+</body>
+</html>
