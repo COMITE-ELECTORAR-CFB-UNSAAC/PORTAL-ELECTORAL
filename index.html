@@ -155,23 +155,53 @@
     <!-- ══════════════════════════════════════════════
          CRONOGRAMA
     ══════════════════════════════════════════════ -->
-    <section class="seccion seccion-alt" id="cronograma" aria-labelledby="cronograma-titulo">
-      <div class="contenedor">
+    <pre class=mermaid>
+      gantt
+    title Cronograma Electoral 2026 (Reestructurado)
+    dateFormat YYYY-MM-DD
+    axisFormat %d/%m
 
-        <div class="seccion-cabecera">
-          <span class="etiqueta-seccion">Cronograma</span>
-          <h2 class="titulo-seccion" id="cronograma-titulo">Etapas del proceso</h2>
-          <p class="desc-seccion">Seguimiento en tiempo real de cada fase del proceso electoral. Las etapas completadas y la etapa en curso se resaltan automáticamente.</p>
-        </div>
+    section Inicio
+    Lanzamiento del cronograma y reglamento :milestone, m1, 2026-06-22, 1d
 
-        <div class="cronograma-scroll" role="region" aria-label="Línea de tiempo del proceso electoral">
-          <div class="cronograma-linea" id="cronograma-contenido" role="list">
-            <!-- Generado por JS -->
-          </div>
-        </div>
+    section Inscripción de listas
+    Inicio de inscripciones :a1, 2026-06-23, 1d
+    Periodo regular de inscripción :a2, 2026-06-23, 2026-07-05
+    Ampliación de inscripción :a3, 2026-07-05, 2026-07-13
+    Cierre de inscripción :milestone, a4, 2026-07-13, 
 
-      </div>
-    </section><!-- /cronograma -->
+    section Revisión y listas
+    Revisión de documentos :a5, 2026-07-14, 2026-07-16
+    Publicación de listas inscritas :milestone, a6, 2026-07-16, 1d
+
+    section Tachas e impugnaciones (pre-electoral)
+    Presentación de tachas :a7, 2026-07-17, 1d
+    Resolución de tachas :a8, 2026-07-18, 1d
+    Recomposición de listas :a9, 2026-07-18, 1d
+    Publicación de listas aptas :milestone, a10, 2026-07-18, 1d
+
+    section Organización electoral
+    Sorteo de miembros de mesa :milestone, a11, 2026-07-19, 1d
+
+    section Campaña y debates
+    Campaña electoral :a13, 2026-07-20, 2026-08-05
+    Primer debate :milestone, a14, 2026-07-24, 1d
+    Segundo debate :milestone, a15, 2026-07-31, 1d
+    Cierre de campaña :milestone, a16, 2026-08-05, 1d
+    Silencio electoral :a17, 2026-08-06, 1d
+
+    section Elecciones
+    Día de elecciones :crit, a18, 2026-08-07, 1d
+
+    section Resultados e impugnaciones
+    Resultados preliminares :milestone, a19, 2026-08-07, 1d
+    Impugnaciones express :a20, 2026-08-07, 2026-08-07
+    Resolución de impugnaciones :a21, 2026-08-08, 1d
+
+    section Resultados finales
+    Publicación de resultados oficiales :milestone, a22, 2026-08-08, 1d
+    Proclamación de lista ganadora :milestone, a23, 2026-08-08, 1d
+    </pre>
 
 
     <!-- ══════════════════════════════════════════════
