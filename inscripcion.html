@@ -198,6 +198,19 @@
     .progress-pct { font-size: 18px; }
     .section-title { font-size: 13px; }
   }
+
+  /* ===== PANEL DE PRUEBA (temporal — quitar antes de producción) ===== */
+  .test-panel { border: 2px dashed #B45309; background: #FFF8ED; border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; }
+  .test-panel-title { font-size: 12px; font-weight: 700; color: #B45309; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .test-panel-desc { font-size: 12px; color: #7A4E14; margin-bottom: 14px; line-height: 1.5; }
+  .test-panel-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .test-panel input[type="file"] { font-size: 12px; }
+  .btn-test { font-size: 12.5px; font-weight: 600; color: #fff; background: #B45309; border: none; padding: 9px 16px; border-radius: 7px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-test:hover { background: #94420A; }
+  .btn-test:disabled { background: #D7B892; cursor: not-allowed; }
+  .test-panel-msg { margin-top: 12px; font-size: 12.5px; line-height: 1.5; }
+  .test-panel-msg.exito { color: #1E6B4A; }
+  .test-panel-msg.error { color: #B3372F; }
 </style>
 </head>
 <body>
@@ -256,6 +269,32 @@
       </div>
       <div class="progress-docs">Documentos cargados: <span id="docs-count">0 / 0</span></div>
     </div>
+
+    <!-- ============ INICIO BLOQUE DE PRUEBA ============
+         Panel temporal solo para probar que la subida de
+         documentos y el envío al Apps Script funcionan.
+         Para desactivarlo: envuelve TODO este bloque
+         (desde este comentario hasta "FIN BLOQUE DE PRUEBA")
+         entre <!-- y --> , o simplemente bórralo.
+         ================================================== -->
+    <div class="test-panel" id="test-panel">
+      <div class="test-panel-title"><i class="ti ti-flask"></i> Panel de prueba (temporal)</div>
+      <div class="test-panel-desc">
+        Selecciona un solo archivo de prueba. Al presionar el botón, ese archivo se copiará
+        en todos los espacios donde se debe subir un documento (presidencia, vicepresidencia,
+        las 7 secretarías y los documentos generales), se completarán los campos de texto
+        vacíos con datos ficticios, y se enviará el expediente de prueba al Apps Script para
+        verificar que todo llega correctamente a Sheets y Drive.
+      </div>
+      <div class="test-panel-row">
+        <input type="file" id="test_archivo_input" accept=".pdf,.png,.jpg,.jpeg,.svg">
+        <button class="btn-test" id="btn-test-enviar" onclick="enviarPruebaDocumentos()">
+          <i class="ti ti-send"></i> <span id="btn-test-texto">Rellenar y enviar prueba</span>
+        </button>
+      </div>
+      <div class="test-panel-msg" id="test-panel-msg"></div>
+    </div>
+    <!-- ============ FIN BLOQUE DE PRUEBA ============ -->
 
     <!-- S0: DATOS GENERALES -->
     <div class="section" id="sec-0">
@@ -443,6 +482,47 @@
       </div>
     </div>
 
+    <!--
+    ZONA DE PRUEBAS (solo administrador/desarrollador)
+    ────────────────────────────────────────────────────
+    Descomenta este bloque SOLO mientras verificas que el
+    endpoint de Apps Script está funcionando (subida a Drive,
+    respuesta JSON, etc). El botón envía un archivito de texto
+    de prueba, marcado con "prueba: true", que Code.gs sube a
+    una carpeta aparte ("_pruebas_conexion") SIN tocar la hoja
+    de cálculo ni enviar correos.
+    Vuelve a comentarlo antes de publicar el formulario para
+    que nadie pueda usarlo para "enviar en masa" ni generar
+    ruido en Drive.
+
+    <div class="section" id="sec-test">
+      <div class="section-header" style="cursor:default">
+        <div class="section-header-left">
+          <div class="section-num" style="background:#FFF3E0;color:#B45309">
+            <i class="ti ti-flask" style="font-size:14px"></i>
+          </div>
+          <div>
+            <div class="section-title">Zona de pruebas (solo administrador)</div>
+            <div class="section-meta">Verifica la conexión con Apps Script sin registrar nada en la hoja ni enviar correos</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-body open">
+        <div class="form-note">
+          Este botón envía un pequeño archivo de prueba directamente a <strong>CONFIG.endpoint</strong> para
+          confirmar que la subida a Google Drive funciona correctamente.
+        </div>
+        <div class="section-footer" style="justify-content:flex-start">
+          <button class="btn-primary" id="btn-test" onclick="enviarDocumentoPrueba()">
+            <i class="ti ti-flask" style="font-size:14px"></i>
+            <span id="btn-test-texto">Enviar documento de prueba</span>
+          </button>
+        </div>
+        <div class="envio-mensaje" id="test-mensaje"></div>
+      </div>
+    </div>
+    -->
+
   </main>
 </div>
 
@@ -479,7 +559,7 @@ const CONFIG = {
      Pega aquí la URL que te da Google al publicar Code.gs
      como aplicación web (termina en /exec).
      ───────────────────────────────────────────────────── */
-  endpoint: "https://script.google.com/macros/s/AKfycbzqHlOI24d7_fBd6VI6m-RWOYFn1tGChtUchR0ihQPWz1CH2As3CDfr5-o6Jlcsrmy2/exec",
+  endpoint: "https://script.google.com/macros/s/PEGA_AQUI_TU_ID_DE_IMPLEMENTACION/exec",
 
   /* ── CARGOS DIRECTIVOS (Presidencia / Vicepresidencia) ── */
   cargos: [
@@ -992,6 +1072,162 @@ async function enviarExpediente() {
     btn.disabled = false;
   }
 }
+
+/* =========================================================
+   PRUEBA DE CONEXIÓN (envía un documento de prueba)
+   Sirve para verificar que el endpoint de Apps Script
+   recibe correctamente los archivos y los sube a Drive,
+   SIN registrar nada en la hoja de cálculo ni enviar
+   correos. El botón que llama a esta función se mantiene
+   comentado en el HTML — descoméntalo solo mientras pruebas.
+   ========================================================= */
+async function enviarDocumentoPrueba() {
+  const btn = document.getElementById('btn-test');
+  const texto = document.getElementById('btn-test-texto');
+  const msg = document.getElementById('test-mensaje');
+  if (!btn || !texto || !msg) return; // el bloque de prueba está comentado/no existe en el DOM
+
+  btn.disabled = true;
+  msg.className = 'envio-mensaje';
+  msg.textContent = '';
+  texto.innerHTML = '<span class="spinner-mini"></span> Enviando documento de prueba…';
+
+  try {
+    // Generamos un archivo de texto pequeño en el momento, así no
+    // dependemos de que el usuario suba nada para probar la conexión.
+    const contenido = `Documento de prueba — Sistema de Inscripción CFB UNSAAC\nGenerado: ${new Date().toLocaleString()}`;
+    const base64 = btoa(unescape(encodeURIComponent(contenido)));
+
+    const payload = {
+      prueba: true,
+      archivo: {
+        nombre: `test-conexion-${Date.now()}.txt`,
+        base64: base64,
+        mimeType: 'text/plain',
+      },
+    };
+
+    const respuesta = await fetch(CONFIG.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // igual que enviarExpediente, evita preflight
+      body: JSON.stringify(payload),
+    });
+
+    const resultado = await respuesta.json();
+
+    if (resultado.exito) {
+      msg.className = 'envio-mensaje exito';
+      msg.textContent = `${resultado.mensaje}${resultado.linkArchivo ? ' Archivo: ' + resultado.linkArchivo : ''}`;
+      texto.textContent = 'Prueba enviada correctamente';
+    } else {
+      msg.className = 'envio-mensaje error';
+      msg.textContent = resultado.mensaje || 'La prueba de conexión falló.';
+      texto.textContent = 'Reintentar prueba';
+    }
+  } catch (err) {
+    msg.className = 'envio-mensaje error';
+    msg.textContent = 'No se pudo conectar con el servidor. Verifica CONFIG.endpoint y que la implementación de Apps Script esté publicada.';
+    texto.textContent = 'Reintentar prueba';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+/* =========================================================
+   INICIO BLOQUE DE PRUEBA
+   Rellena TODOS los espacios de documento con un único
+   archivo de prueba, completa los campos de texto que
+   falten con datos ficticios, y envía el expediente
+   usando la misma función real enviarExpediente().
+   Para desactivar esta función: borra este bloque completo,
+   desde "INICIO BLOQUE DE PRUEBA" hasta "FIN BLOQUE DE PRUEBA".
+   ========================================================= */
+function llenarTextoSiVacio(id, valor) {
+  const el = document.getElementById(id);
+  if (el && !el.value.trim()) el.value = valor;
+}
+
+function llenarPersonaDePrueba(prefix, nombres, apellidos, codigo) {
+  const destino = (prefix === 'pres' || prefix === 'vp')
+    ? state.personas[prefix]
+    : (() => { const [secKey, rol] = prefix.split('_'); return state.personas[secKey][rol]; })();
+
+  if (!destino.nombres)   destino.nombres = nombres;
+  if (!destino.apellidos) destino.apellidos = apellidos;
+  if (!destino.codigo)    destino.codigo = codigo;
+  if (!destino.semestre)  destino.semestre = CONFIG.semestres[0];
+  if (!destino.creditos)  destino.creditos = '20';
+}
+
+async function enviarPruebaDocumentos() {
+  const inputArchivo = document.getElementById('test_archivo_input');
+  const msg = document.getElementById('test-panel-msg');
+  const btn = document.getElementById('btn-test-enviar');
+  const texto = document.getElementById('btn-test-texto');
+
+  const archivoPrueba = inputArchivo.files[0];
+  if (!archivoPrueba) {
+    msg.className = 'test-panel-msg error';
+    msg.textContent = 'Primero selecciona un archivo de prueba.';
+    return;
+  }
+
+  btn.disabled = true;
+  texto.textContent = 'Rellenando formulario…';
+  msg.className = 'test-panel-msg';
+  msg.textContent = '';
+
+  // 1. Rellenar datos generales / gestor (solo si están vacíos)
+  llenarTextoSiVacio('lista_nombre', 'Lista de prueba');
+  llenarTextoSiVacio('lista_color', 'Azul de prueba');
+  llenarTextoSiVacio('gestor_nombres', 'Gestor');
+  llenarTextoSiVacio('gestor_apellidos', 'De Prueba');
+  llenarTextoSiVacio('gestor_codigo', '00000000');
+  llenarTextoSiVacio('gestor_correo', 'prueba@unsaac.edu.pe');
+  llenarTextoSiVacio('gestor_telefono', '999999999');
+
+  // 2. Rellenar datos de presidencia y vicepresidencia
+  llenarPersonaDePrueba('pres', 'Presidente', 'De Prueba', '00000001');
+  llenarPersonaDePrueba('vp', 'Vicepresidente', 'De Prueba', '00000002');
+  state.archivos['pres_archivo'] = archivoPrueba;
+  state.archivos['vp_archivo'] = archivoPrueba;
+
+  // 3. Rellenar datos y documento de cada secretaría (titular + 2 accesitarios)
+  CONFIG.secretarias.forEach((sec, i) => {
+    ROLES_SECRETARIA.forEach((rol, idx) => {
+      const prefix = 'sec' + i + '_' + rol.clave;
+      llenarPersonaDePrueba(prefix, rol.label, 'Sec' + i, '1' + i + idx);
+      state.archivos[prefix + '_archivo'] = archivoPrueba;
+    });
+    state.secDataDone[i] = true;
+  });
+
+  // 4. Rellenar los 4 documentos generales de la lista
+  DOCS_GENERAL.forEach(doc => {
+    state.archivos['general_' + doc.id] = archivoPrueba;
+  });
+
+  // 5. Volver a pintar todo con los datos ya cargados
+  renderDirectiva();
+  renderSecGrid();
+  renderDocsGeneral();
+  updateProgress();
+
+  // 6. Enviar de verdad, usando la misma función que usa el botón real
+  texto.textContent = 'Enviando expediente de prueba…';
+  await enviarExpediente();
+
+  const resultadoReal = document.getElementById('envio-mensaje').textContent;
+  const fueExito = document.getElementById('envio-mensaje').classList.contains('exito');
+  msg.className = 'test-panel-msg ' + (fueExito ? 'exito' : 'error');
+  msg.textContent = fueExito
+    ? '✔ Prueba enviada correctamente: ' + resultadoReal
+    : '✘ Falló la prueba: ' + resultadoReal;
+
+  btn.disabled = false;
+  texto.textContent = 'Rellenar y enviar prueba';
+}
+/* ========================= FIN BLOQUE DE PRUEBA ========================= */
 
 /* =========================================================
    INICIALIZACIÓN
