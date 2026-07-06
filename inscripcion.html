@@ -211,6 +211,28 @@
   .test-panel-msg { margin-top: 12px; font-size: 12.5px; line-height: 1.5; }
   .test-panel-msg.exito { color: #1E6B4A; }
   .test-panel-msg.error { color: #B3372F; }
+
+  /* ===== BARRA DE PROGRESO DE SUBIDA ===== */
+  .upload-progress-wrap { margin-top: 16px; display: none; }
+  .upload-progress-top { display: flex; justify-content: space-between; font-size: 12px; color: #1E4FA8; font-weight: 600; margin-bottom: 6px; }
+  .upload-progress-bar-bg { height: 8px; background: #E1EAF7; border-radius: 4px; overflow: hidden; }
+  .upload-progress-bar-fill { height: 100%; width: 0%; background: #1E4FA8; border-radius: 4px; transition: width 0.15s ease; }
+
+  /* ===== PANEL INFORMATIVO DE DOCUMENTOS ===== */
+  .info-panel { border: 1px solid #A9C9F2; background: #EEF5FF; border-radius: 10px; margin-bottom: 24px; overflow: hidden; }
+  .info-panel-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .info-panel-header-left { display: flex; align-items: center; gap: 10px; }
+  .info-panel-header-left i { font-size: 18px; color: #1E4FA8; }
+  .info-panel-title { font-size: 13px; font-weight: 700; color: #16345E; }
+  .info-panel-sub { font-size: 11.5px; color: #3F6494; margin-top: 2px; }
+  .info-panel-body { padding: 0 20px 20px; display: none; font-size: 13px; color: #1E293B; line-height: 1.6; }
+  .info-panel-body.open { display: block; }
+  .info-panel ul { margin: 8px 0 16px 18px; }
+  .info-panel li { margin-bottom: 4px; }
+  .info-panel h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: #1E4FA8; margin: 14px 0 6px; }
+  .info-panel h4:first-child { margin-top: 0; }
+  .btn-descargas { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fff; background: #1E4FA8; padding: 10px 18px; border-radius: 7px; text-decoration: none; margin-top: 8px; }
+  .btn-descargas:hover { background: #173C82; }
 </style>
 </head>
 <body>
@@ -257,6 +279,45 @@
 
   <!-- MAIN CONTENT -->
   <main class="main">
+
+    <!-- PANEL INFORMATIVO: qué documento debe traer cada persona -->
+    <div class="info-panel" id="info-panel">
+      <div class="info-panel-header" onclick="toggleInfoPanel()">
+        <div class="info-panel-header-left">
+          <i class="ti ti-info-circle"></i>
+          <div>
+            <div class="info-panel-title">¿Qué documentos necesito y qué deben contener?</div>
+            <div class="info-panel-sub">Léelo antes de empezar a llenar el formulario</div>
+          </div>
+        </div>
+        <i class="ti ti-chevron-down chevron" id="info-panel-chevron"></i>
+      </div>
+      <div class="info-panel-body" id="info-panel-body">
+
+        <h4>Documento de cada integrante (presidencia, vicepresidencia, titulares y accesitarios/as)</h4>
+        <p>Cada persona de la lista sube <strong>un solo PDF</strong> que debe incluir:</p>
+        <ul>
+          <li>Nombres y apellidos completos, tal como figuran en su documento de identidad.</li>
+          <li>Código universitario y semestre / créditos aprobados.</li>
+          <li>Firma de la persona (física escaneada o firma digital válida).</li>
+          <li>Declaración de aceptación del cargo al que postula dentro de la lista.</li>
+        </ul>
+
+        <h4>Documentos generales de la lista (uno solo, no por persona)</h4>
+        <ul>
+          <li><strong>Plan de trabajo:</strong> PDF con la propuesta de gestión de la lista.</li>
+          <li><strong>Lista de adherentes:</strong> PDF con el padrón firmado de estudiantes que respaldan la lista.</li>
+          <li><strong>Logo de la lista:</strong> imagen en PNG, JPG o SVG.</li>
+          <li><strong>Declaración jurada:</strong> PDF firmado por el/la gestor(a) responsable.</li>
+        </ul>
+
+        <h4>Formatos y plantillas oficiales</h4>
+        <p>Descarga las plantillas en blanco (declaración jurada, formato de plan de trabajo, ficha de datos, etc.) antes de armar tus documentos:</p>
+        <a class="btn-descargas" href="descargas.html" target="_blank" rel="noopener">
+          <i class="ti ti-download"></i> Ver formatos y descargar plantillas
+        </a>
+      </div>
+    </div>
 
     <!-- PROGRESS -->
     <div class="progress-card">
@@ -477,6 +538,15 @@
           <button class="btn-primary" id="btn-enviar" disabled onclick="enviarExpediente()">
             <span id="btn-enviar-texto">Enviar expediente</span>
           </button>
+        </div>
+        <div class="upload-progress-wrap" id="upload-progress-wrap">
+          <div class="upload-progress-top">
+            <span>Subiendo documentos…</span>
+            <span id="upload-progress-pct">0%</span>
+          </div>
+          <div class="upload-progress-bar-bg">
+            <div class="upload-progress-bar-fill" id="upload-progress-bar"></div>
+          </div>
         </div>
         <div class="envio-mensaje" id="envio-mensaje"></div>
       </div>
@@ -954,6 +1024,14 @@ function jumpTo(i) {
 }
 
 /* =========================================================
+   PANEL INFORMATIVO DE DOCUMENTOS
+   ========================================================= */
+function toggleInfoPanel() {
+  document.getElementById('info-panel-body').classList.toggle('open');
+  document.getElementById('info-panel-chevron').classList.toggle('open');
+}
+
+/* =========================================================
    ARCHIVO → BASE64
    ========================================================= */
 function archivoABase64(file) {
@@ -1032,10 +1110,55 @@ async function construirIntegranteSecretaria(cargoLabel, secKey, rolClave, prefi
   };
 }
 
+/* =========================================================
+   ENVÍO CON BARRA DE PROGRESO REAL
+   fetch() no informa el progreso de subida, así que usamos
+   XMLHttpRequest y su evento upload.onprogress para mostrar
+   el porcentaje real de bytes enviados al Apps Script.
+   ========================================================= */
+function enviarConProgreso(datos) {
+  return new Promise((resolve, reject) => {
+    const wrap = document.getElementById('upload-progress-wrap');
+    const pctLabel = document.getElementById('upload-progress-pct');
+    const bar = document.getElementById('upload-progress-bar');
+
+    wrap.style.display = 'block';
+    pctLabel.textContent = '0%';
+    bar.style.width = '0%';
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', CONFIG.endpoint, true);
+    xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8'); // evita preflight en Apps Script
+
+    xhr.upload.onprogress = (evt) => {
+      if (evt.lengthComputable) {
+        const pct = Math.round((evt.loaded / evt.total) * 100);
+        pctLabel.textContent = pct + '%';
+        bar.style.width = pct + '%';
+      }
+    };
+
+    xhr.onload = () => {
+      bar.style.width = '100%';
+      pctLabel.textContent = '100%';
+      try {
+        resolve(JSON.parse(xhr.responseText));
+      } catch (err) {
+        reject(new Error('Respuesta inválida del servidor.'));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error('No se pudo conectar con el servidor.'));
+
+    xhr.send(JSON.stringify(datos));
+  });
+}
+
 async function enviarExpediente() {
   const btn = document.getElementById('btn-enviar');
   const texto = document.getElementById('btn-enviar-texto');
   const mensaje = document.getElementById('envio-mensaje');
+  const wrap = document.getElementById('upload-progress-wrap');
 
   btn.disabled = true;
   mensaje.className = 'envio-mensaje';
@@ -1046,14 +1169,7 @@ async function enviarExpediente() {
     const datos = await construirDatos();
 
     texto.innerHTML = '<span class="spinner-mini"></span> Enviando expediente…';
-
-    const respuesta = await fetch(CONFIG.endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // evita preflight en Apps Script
-      body: JSON.stringify(datos),
-    });
-
-    const resultado = await respuesta.json();
+    const resultado = await enviarConProgreso(datos);
 
     if (resultado.exito) {
       mensaje.className = 'envio-mensaje exito';
@@ -1070,6 +1186,9 @@ async function enviarExpediente() {
     mensaje.textContent = 'No se pudo conectar con el servidor. Verifica tu conexión e inténtalo nuevamente.';
     texto.textContent = 'Enviar expediente';
     btn.disabled = false;
+  } finally {
+    // Ocultar la barra un momento después de terminar
+    setTimeout(() => { wrap.style.display = 'none'; }, 1500);
   }
 }
 
@@ -1239,6 +1358,7 @@ renderDocsGeneral();
 updateProgress();
 document.getElementById('chev-0').classList.add('open');
 document.querySelector('#sec-0 .section-header').classList.add('open');
+toggleInfoPanel(); // el panel informativo empieza abierto
 </script>
 </body>
 </html>
