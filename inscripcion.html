@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscripción de Lista Electoral · Centro Federado de Biología UNSAAC</title>
+<link rel="icon" type="image/png" href="images/F_biologia_logo.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
@@ -212,12 +213,6 @@
   .test-panel-msg.exito { color: #1E6B4A; }
   .test-panel-msg.error { color: #B3372F; }
 
-  /* ===== BARRA DE PROGRESO DE SUBIDA ===== */
-  .upload-progress-wrap { margin-top: 16px; display: none; }
-  .upload-progress-top { display: flex; justify-content: space-between; font-size: 12px; color: #1E4FA8; font-weight: 600; margin-bottom: 6px; }
-  .upload-progress-bar-bg { height: 8px; background: #E1EAF7; border-radius: 4px; overflow: hidden; }
-  .upload-progress-bar-fill { height: 100%; width: 0%; background: #1E4FA8; border-radius: 4px; transition: width 0.15s ease; }
-
   /* ===== PANEL INFORMATIVO DE DOCUMENTOS ===== */
   .info-panel { border: 1px solid #A9C9F2; background: #EEF5FF; border-radius: 10px; margin-bottom: 24px; overflow: hidden; }
   .info-panel-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
@@ -363,7 +358,7 @@
          documentos y el envío al Apps Script funcionan.
          Para desactivarlo: envuelve TODO este bloque
          (desde este comentario hasta "FIN BLOQUE DE PRUEBA")
-         entre <!-- y -->  <!-- o simplemente bórralo.
+         entre comentarios HTML, o simplemente bórralo.
          ================================================== -->
     
       <div class="test-panel" id="test-panel">
@@ -567,15 +562,6 @@
           <button class="btn-primary" id="btn-enviar" disabled onclick="enviarExpediente()">
             <span id="btn-enviar-texto">Enviar expediente</span>
           </button>
-        </div>
-        <div class="upload-progress-wrap" id="upload-progress-wrap">
-          <div class="upload-progress-top">
-            <span>Subiendo documentos…</span>
-            <span id="upload-progress-pct">0%</span>
-          </div>
-          <div class="upload-progress-bar-bg">
-            <div class="upload-progress-bar-fill" id="upload-progress-bar"></div>
-          </div>
         </div>
         <div class="envio-mensaje" id="envio-mensaje"></div>
       </div>
@@ -1140,57 +1126,47 @@ async function construirIntegranteSecretaria(cargoLabel, secKey, rolClave, prefi
 }
 
 /* =========================================================
-   BARRA DE PROGESO DE ENVIO:
-   se hiso correcciones a causa de que hace peticiones y genera conflicto
-   =========================================================*/
- function enviarConProgreso(datos) {
-  return new Promise((resolve, reject) => {
-    const wrap = document.getElementById('upload-progress-wrap');
-    const pctLabel = document.getElementById('upload-progress-pct');
-    const bar = document.getElementById('upload-progress-bar');
+   ENVÍO DEL EXPEDIENTE (fetch simple, sin barra de progreso)
+   ========================================================= */
+async function enviarExpediente() {
+  const btn = document.getElementById('btn-enviar');
+  const texto = document.getElementById('btn-enviar-texto');
+  const mensaje = document.getElementById('envio-mensaje');
 
-    wrap.style.display = 'block';
+  btn.disabled = true;
+  mensaje.className = 'envio-mensaje';
+  mensaje.textContent = '';
+  texto.innerHTML = '<span class="spinner-mini"></span> Preparando archivos…';
 
-    let progreso = 0;
-    pctLabel.textContent = "0%";
-    bar.style.width = "0%";
+  try {
+    const datos = await construirDatos();
 
-    // Simulación de carga
-    const intervalo = setInterval(() => {
-      if (progreso < 90) {
-        progreso += Math.floor(Math.random() * 5) + 1; // 1-5%
-        if (progreso > 90) progreso = 90;
+    texto.innerHTML = '<span class="spinner-mini"></span> Enviando expediente…';
 
-        pctLabel.textContent = progreso + "%";
-        bar.style.width = progreso + "%";
-      }
-    }, 200);
+    const respuesta = await fetch(CONFIG.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // evita preflight en Apps Script
+      body: JSON.stringify(datos),
+    });
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", CONFIG.endpoint, true);
-    xhr.setRequestHeader("Content-Type", "text/plain;charset=utf-8");
+    const resultado = await respuesta.json();
 
-    xhr.onload = () => {
-      clearInterval(intervalo);
-
-      progreso = 100;
-      bar.style.width = "100%";
-      pctLabel.textContent = "100%";
-
-      try {
-        resolve(JSON.parse(xhr.responseText));
-      } catch (e) {
-        reject(new Error("Respuesta inválida del servidor."));
-      }
-    };
-
-    xhr.onerror = () => {
-      clearInterval(intervalo);
-      reject(new Error("No se pudo conectar con el servidor."));
-    };
-
-    xhr.send(JSON.stringify(datos));
-  });
+    if (resultado.exito) {
+      mensaje.className = 'envio-mensaje exito';
+      mensaje.textContent = `${resultado.mensaje} Tu número de registro es ${resultado.idLista}. Guárdalo para cualquier consulta.`;
+      texto.textContent = 'Expediente enviado';
+    } else {
+      mensaje.className = 'envio-mensaje error';
+      mensaje.textContent = resultado.mensaje || 'No se pudo registrar el expediente.';
+      texto.textContent = 'Enviar expediente';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    mensaje.className = 'envio-mensaje error';
+    mensaje.textContent = 'No se pudo conectar con el servidor. Verifica tu conexión e inténtalo nuevamente.';
+    texto.textContent = 'Enviar expediente';
+    btn.disabled = false;
+  }
 }
 
 /* =========================================================
