@@ -1140,85 +1140,57 @@ async function construirIntegranteSecretaria(cargoLabel, secKey, rolClave, prefi
 }
 
 /* =========================================================
-   ENVÍO CON BARRA DE PROGRESO REAL
-   fetch() no informa el progreso de subida, así que usamos
-   XMLHttpRequest y su evento upload.onprogress para mostrar
-   el porcentaje real de bytes enviados al Apps Script.
-   ========================================================= */
-function enviarConProgreso(datos) {
+   BARRA DE PROGESO DE ENVIO:
+   se hiso correcciones a causa de que hace peticiones y genera conflicto
+   =========================================================*/
+ function enviarConProgreso(datos) {
   return new Promise((resolve, reject) => {
     const wrap = document.getElementById('upload-progress-wrap');
     const pctLabel = document.getElementById('upload-progress-pct');
     const bar = document.getElementById('upload-progress-bar');
 
     wrap.style.display = 'block';
-    pctLabel.textContent = '0%';
-    bar.style.width = '0%';
+
+    let progreso = 0;
+    pctLabel.textContent = "0%";
+    bar.style.width = "0%";
+
+    // Simulación de carga
+    const intervalo = setInterval(() => {
+      if (progreso < 90) {
+        progreso += Math.floor(Math.random() * 5) + 1; // 1-5%
+        if (progreso > 90) progreso = 90;
+
+        pctLabel.textContent = progreso + "%";
+        bar.style.width = progreso + "%";
+      }
+    }, 200);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', CONFIG.endpoint, true);
-    xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8'); // evita preflight en Apps Script
-
-    xhr.upload.onprogress = (evt) => {
-      if (evt.lengthComputable) {
-        const pct = Math.round((evt.loaded / evt.total) * 100);
-        pctLabel.textContent = pct + '%';
-        bar.style.width = pct + '%';
-      }
-    };
+    xhr.open("POST", CONFIG.endpoint, true);
+    xhr.setRequestHeader("Content-Type", "text/plain;charset=utf-8");
 
     xhr.onload = () => {
-      bar.style.width = '100%';
-      pctLabel.textContent = '100%';
+      clearInterval(intervalo);
+
+      progreso = 100;
+      bar.style.width = "100%";
+      pctLabel.textContent = "100%";
+
       try {
         resolve(JSON.parse(xhr.responseText));
-      } catch (err) {
-        reject(new Error('Respuesta inválida del servidor.'));
+      } catch (e) {
+        reject(new Error("Respuesta inválida del servidor."));
       }
     };
 
-    xhr.onerror = () => reject(new Error('No se pudo conectar con el servidor.'));
+    xhr.onerror = () => {
+      clearInterval(intervalo);
+      reject(new Error("No se pudo conectar con el servidor."));
+    };
 
     xhr.send(JSON.stringify(datos));
   });
-}
-
-async function enviarExpediente() {
-  const btn = document.getElementById('btn-enviar');
-  const texto = document.getElementById('btn-enviar-texto');
-  const mensaje = document.getElementById('envio-mensaje');
-  const wrap = document.getElementById('upload-progress-wrap');
-
-  btn.disabled = true;
-  mensaje.className = 'envio-mensaje';
-  mensaje.textContent = '';
-  texto.innerHTML = '<span class="spinner-mini"></span> Preparando archivos…';
-
-  try {
-    const datos = await construirDatos();
-
-    texto.innerHTML = '<span class="spinner-mini"></span> Enviando expediente…';
-    const resultado = await enviarConProgreso(datos);
-
-    if (resultado.exito) {
-      mensaje.className = 'envio-mensaje exito';
-      mensaje.textContent = `${resultado.mensaje} Tu número de registro es ${resultado.idLista}. Guárdalo para cualquier consulta.`;
-      texto.textContent = 'Expediente enviado';
-    } else {
-      mensaje.className = 'envio-mensaje error';
-      mensaje.textContent = resultado.mensaje || 'No se pudo registrar el expediente.';
-      texto.textContent = 'Enviar expediente';
-      btn.disabled = false;
-    }
-  } catch (err) {
-    mensaje.className = 'envio-mensaje error';
-    mensaje.textContent = 'No se pudo conectar con el servidor. Verifica tu conexión e inténtalo nuevamente.';
-    texto.textContent = 'Enviar expediente';
-    btn.disabled = false;
-  } finally {
-    // Ocultar la barra un momento después de terminar
-    setTimeout(() => { wrap.style.display = 'none'; }, 1500);
-  }
 }
 
 /* =========================================================
