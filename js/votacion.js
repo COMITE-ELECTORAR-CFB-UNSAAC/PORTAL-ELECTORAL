@@ -1,454 +1,260 @@
-/* ============================================================
-   Centro Federado de Biología UNSAAC - Votación 2026
-   Paleta: Azul institucional #1A3A6B, blanco #FFFFFF,
-           gris neutro #F5F7FA, acento #2563EB
-   ============================================================ */
+// ============================================================
+// Centro Federado de Biología UNSAAC - Votación 2026
+// Frontend: script.js
+// ============================================================
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+// URL del Web App de Google Apps Script desplegado
+const GAS_URL = "https://script.google.com/macros/s/TU_DEPLOYMENT_ID/exec";
+
+// Estado de la sesión en memoria (nunca se persiste en localStorage)
+const estado = {
+  correo:  null,
+  token:   null,
+  opcion:  null
+};
+
+// ============================================================
+// REFERENCIAS AL DOM
+// ============================================================
+
+const pantallas = {
+  acceso:        document.getElementById("pantalla-acceso"),
+  verificacion:  document.getElementById("pantalla-verificacion"),
+  cedula:        document.getElementById("pantalla-cedula"),
+  confirmacion:  document.getElementById("pantalla-confirmacion"),
+  recibo:        document.getElementById("pantalla-recibo")
+};
+
+const campoCorreo = document.getElementById("campo-correo");
+const campoCodigo = document.getElementById("campo-codigo");
+
+// ============================================================
+// NAVEGACIÓN ENTRE PANTALLAS
+// ============================================================
+
+function mostrarPantalla(nombre) {
+  Object.values(pantallas).forEach(p => p.classList.remove("activa"));
+  pantallas[nombre].classList.add("activa");
 }
 
-:root {
-  --azul-oscuro:  #1A3A6B;
-  --azul-medio:   #2563EB;
-  --azul-suave:   #EFF4FF;
-  --gris-fondo:   #F5F7FA;
-  --gris-borde:   #D1D9E6;
-  --gris-texto:   #6B7A99;
-  --negro-texto:  #1C2B4A;
-  --blanco:       #FFFFFF;
-  --rojo-error:   #C0392B;
-  --verde-ok:     #1A7F4B;
+// ============================================================
+// MENSAJES DE FEEDBACK
+// ============================================================
 
-  --radio:        8px;
-  --radio-lg:     12px;
-  --sombra:       0 2px 12px rgba(26,58,107,0.10);
-  --sombra-hover: 0 4px 20px rgba(37,99,235,0.18);
-
-  --fuente: 'Segoe UI', system-ui, -apple-system, sans-serif;
+function mostrarMensaje(id, texto, tipo) {
+  const el = document.getElementById(id);
+  el.textContent = texto;
+  el.className = "mensaje visible mensaje-" + tipo;
 }
 
-html, body {
-  height: 100%;
-  font-family: var(--fuente);
-  background: var(--gris-fondo);
-  color: var(--negro-texto);
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+function limpiarMensaje(id) {
+  const el = document.getElementById(id);
+  el.className = "mensaje";
+  el.textContent = "";
 }
 
-/* ---- ESTRUCTURA PRINCIPAL ---- */
-
-#app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-}
-
-.tarjeta {
-  background: var(--blanco);
-  border-radius: var(--radio-lg);
-  box-shadow: var(--sombra);
-  width: 100%;
-  max-width: 440px;
-  padding: 40px 36px;
-}
-
-/* ---- CABECERA ---- */
-
-.cabecera {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.cabecera img {
-  height: 72px;
-  width: auto;
-  margin-bottom: 16px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.cabecera h1 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--azul-oscuro);
-  letter-spacing: 0.01em;
-  line-height: 1.35;
-}
-
-.cabecera p {
-  font-size: 0.82rem;
-  color: var(--gris-texto);
-  margin-top: 4px;
-}
-
-/* ---- DIVISOR ---- */
-
-.divisor {
-  border: none;
-  border-top: 1px solid var(--gris-borde);
-  margin: 24px 0;
-}
-
-/* ---- ETIQUETAS Y CAMPOS ---- */
-
-.grupo {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--azul-oscuro);
-  margin-bottom: 6px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-input[type="email"],
-input[type="text"] {
-  width: 100%;
-  padding: 11px 14px;
-  border: 1.5px solid var(--gris-borde);
-  border-radius: var(--radio);
-  font-family: var(--fuente);
-  font-size: 0.97rem;
-  color: var(--negro-texto);
-  background: var(--blanco);
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-input[type="email"]:focus,
-input[type="text"]:focus {
-  border-color: var(--azul-medio);
-}
-
-input::placeholder {
-  color: #B0BAD0;
-}
-
-/* ---- BOTONES ---- */
-
-.btn {
-  display: block;
-  width: 100%;
-  padding: 12px 20px;
-  border: none;
-  border-radius: var(--radio);
-  font-family: var(--fuente);
-  font-size: 0.97rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-align: center;
-  transition: background 0.15s, box-shadow 0.15s, opacity 0.15s;
-  letter-spacing: 0.01em;
-}
-
-.btn-primario {
-  background: var(--azul-medio);
-  color: var(--blanco);
-}
-
-.btn-primario:hover:not(:disabled) {
-  background: var(--azul-oscuro);
-  box-shadow: var(--sombra-hover);
-}
-
-.btn-secundario {
-  background: transparent;
-  color: var(--azul-medio);
-  border: 1.5px solid var(--azul-medio);
-  margin-top: 10px;
-}
-
-.btn-secundario:hover:not(:disabled) {
-  background: var(--azul-suave);
-}
-
-.btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-/* ---- MENSAJES ---- */
-
-.mensaje {
-  font-size: 0.875rem;
-  padding: 11px 14px;
-  border-radius: var(--radio);
-  margin-top: 16px;
-  display: none;
-  line-height: 1.45;
-}
-
-.mensaje.visible {
-  display: block;
-}
-
-.mensaje-error {
-  background: #FDF2F2;
-  color: var(--rojo-error);
-  border: 1px solid #F5C6C6;
-}
-
-.mensaje-ok {
-  background: #F0FBF5;
-  color: var(--verde-ok);
-  border: 1px solid #B7E4CC;
-}
-
-.mensaje-info {
-  background: var(--azul-suave);
-  color: var(--azul-oscuro);
-  border: 1px solid #C3D5F7;
-}
-
-/* ---- PANTALLAS ---- */
-
-.pantalla {
-  display: none;
-}
-
-.pantalla.activa {
-  display: block;
-}
-
-/* ---- CÉDULA DE VOTACIÓN ---- */
-
-.titulo-seccion {
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--gris-texto);
-  margin-bottom: 14px;
-}
-
-.opciones-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.opcion-tarjeta {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  border: 2px solid var(--gris-borde);
-  border-radius: var(--radio);
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-  user-select: none;
-}
-
-.opcion-tarjeta:hover {
-  border-color: var(--azul-medio);
-  background: var(--azul-suave);
-}
-
-.opcion-tarjeta.seleccionada {
-  border-color: var(--azul-medio);
-  background: var(--azul-suave);
-}
-
-.opcion-tarjeta input[type="radio"] {
-  accent-color: var(--azul-medio);
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.opcion-imagen {
-  width: 56px;
-  height: 56px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid var(--gris-borde);
-  background: var(--gris-fondo);
-}
-
-.opcion-imagen-placeholder {
-  width: 56px;
-  height: 56px;
-  border-radius: 6px;
-  border: 1.5px dashed var(--gris-borde);
-  background: var(--gris-fondo);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.opcion-imagen-placeholder span {
-  font-size: 1.4rem;
-}
-
-.opcion-nombre {
-  font-weight: 600;
-  font-size: 0.97rem;
-  color: var(--negro-texto);
-}
-
-.opcion-sub {
-  font-size: 0.78rem;
-  color: var(--gris-texto);
-  margin-top: 2px;
-}
-
-/* ---- PANTALLA CONFIRMACIÓN ---- */
-
-.confirmacion-cuadro {
-  background: var(--azul-suave);
-  border: 1.5px solid #C3D5F7;
-  border-radius: var(--radio);
-  padding: 18px 20px;
-  margin-bottom: 24px;
-  text-align: center;
-}
-
-.confirmacion-cuadro .etiqueta-voto {
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--gris-texto);
-  margin-bottom: 6px;
-}
-
-.confirmacion-cuadro .valor-voto {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--azul-oscuro);
-}
-
-.advertencia {
-  font-size: 0.82rem;
-  color: var(--gris-texto);
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-/* ---- PANTALLA RECIBO ---- */
-
-.recibo-caja {
-  background: var(--gris-fondo);
-  border: 1.5px solid var(--gris-borde);
-  border-radius: var(--radio);
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.recibo-fila {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--gris-borde);
-  font-size: 0.875rem;
-  gap: 12px;
-}
-
-.recibo-fila:last-child {
-  border-bottom: none;
-}
-
-.recibo-clave {
-  color: var(--gris-texto);
-  font-weight: 600;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
-
-.recibo-valor {
-  color: var(--negro-texto);
-  font-weight: 500;
-  text-align: right;
-  word-break: break-all;
-  font-size: 0.82rem;
-}
-
-.recibo-valor.mono {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 0.78rem;
-  color: var(--azul-oscuro);
-}
-
-.mensaje-final {
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--verde-ok);
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.sub-final {
-  text-align: center;
-  font-size: 0.78rem;
-  color: var(--gris-texto);
-}
-
-/* ---- SPINNER ---- */
-
-.spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: girar 0.7s linear infinite;
-  vertical-align: middle;
-  margin-right: 6px;
-}
-
-.spinner-azul {
-  border-color: rgba(37,99,235,0.25);
-  border-top-color: var(--azul-medio);
-}
-
-@keyframes girar {
-  to { transform: rotate(360deg); }
-}
-
-/* ---- PIE ---- */
-
-.pie {
-  text-align: center;
-  font-size: 0.75rem;
-  color: var(--gris-texto);
-  margin-top: 24px;
-  line-height: 1.6;
-}
-
-/* ---- RESPONSIVE ---- */
-
-@media (max-width: 480px) {
-  .tarjeta {
-    padding: 28px 20px;
+// ============================================================
+// LLAMADAS AL BACKEND (Google Apps Script)
+// ============================================================
+
+async function llamarBackend(payload) {
+  const respuesta = await fetch(GAS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!respuesta.ok) {
+    throw new Error("Error de red: " + respuesta.status);
   }
 
-  .cabecera img {
-    height: 60px;
-  }
+  return respuesta.json();
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .spinner {
-    animation: none;
+// ============================================================
+// PANTALLA 1: Enviar código
+// ============================================================
+
+document.getElementById("btn-enviar-codigo").addEventListener("click", async () => {
+  const correo = campoCorreo.value.trim().toLowerCase();
+  limpiarMensaje("msg-acceso");
+
+  if (!correo) {
+    mostrarMensaje("msg-acceso", "Ingrese su correo institucional.", "error");
+    return;
   }
-}
+
+  if (!correo.endsWith("@unsaac.edu.pe")) {
+    mostrarMensaje("msg-acceso", "Solo se permiten correos @unsaac.edu.pe.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("btn-enviar-codigo");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Enviando...';
+
+  try {
+    const res = await llamarBackend({ accion: "solicitar_codigo", correo });
+
+    if (res.ok) {
+      estado.correo = correo;
+      document.getElementById("texto-correo-enviado").textContent =
+        "Ingrese el código enviado a " + correo;
+      campoCodigo.value = "";
+      mostrarPantalla("verificacion");
+    } else {
+      mostrarMensaje("msg-acceso", res.error || "No se pudo enviar el código.", "error");
+    }
+  } catch (_) {
+    mostrarMensaje("msg-acceso", "Error de conexión. Verifique su internet.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Enviar código de verificación";
+  }
+});
+
+// Permitir enviar con Enter
+campoCorreo.addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("btn-enviar-codigo").click();
+});
+
+// ============================================================
+// PANTALLA 2: Verificar código
+// ============================================================
+
+document.getElementById("btn-verificar").addEventListener("click", async () => {
+  const codigo = campoCodigo.value.trim();
+  limpiarMensaje("msg-verificacion");
+
+  if (!/^\d{6}$/.test(codigo)) {
+    mostrarMensaje("msg-verificacion", "El código debe tener exactamente 6 dígitos.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("btn-verificar");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Verificando...';
+
+  try {
+    const res = await llamarBackend({
+      accion: "verificar_codigo",
+      correo: estado.correo,
+      codigo
+    });
+
+    if (res.ok) {
+      estado.token = res.token;
+      mostrarPantalla("cedula");
+    } else {
+      mostrarMensaje("msg-verificacion", res.error || "Código incorrecto.", "error");
+    }
+  } catch (_) {
+    mostrarMensaje("msg-verificacion", "Error de conexión. Intente nuevamente.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Verificar código";
+  }
+});
+
+campoCodigo.addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("btn-verificar").click();
+});
+
+// Solo aceptar dígitos en el campo de código
+campoCodigo.addEventListener("input", () => {
+  campoCodigo.value = campoCodigo.value.replace(/\D/g, "").slice(0, 6);
+});
+
+document.getElementById("btn-volver-acceso").addEventListener("click", () => {
+  limpiarMensaje("msg-verificacion");
+  mostrarPantalla("acceso");
+});
+
+// ============================================================
+// PANTALLA 3: Cédula - selección de opción
+// ============================================================
+
+const radios = document.querySelectorAll('input[name="voto"]');
+const btnIrConfirmar = document.getElementById("btn-ir-confirmar");
+
+radios.forEach(radio => {
+  radio.addEventListener("change", () => {
+    // Resetear estilos de todas las tarjetas
+    document.querySelectorAll(".opcion-tarjeta").forEach(t => {
+      t.classList.remove("seleccionada");
+    });
+    // Marcar la tarjeta elegida
+    if (radio.checked) {
+      radio.closest(".opcion-tarjeta").classList.add("seleccionada");
+      estado.opcion = radio.value;
+      btnIrConfirmar.disabled = false;
+    }
+  });
+});
+
+document.getElementById("btn-ir-confirmar").addEventListener("click", () => {
+  if (!estado.opcion) {
+    mostrarMensaje("msg-cedula", "Seleccione una opción para continuar.", "error");
+    return;
+  }
+  limpiarMensaje("msg-cedula");
+
+  const etiqueta = estado.opcion === "BLANCO" ? "Voto en blanco" : estado.opcion;
+  document.getElementById("texto-confirmacion").textContent = etiqueta;
+
+  mostrarPantalla("confirmacion");
+});
+
+// ============================================================
+// PANTALLA 4: Confirmación y registro de voto
+// ============================================================
+
+document.getElementById("btn-volver-cedula").addEventListener("click", () => {
+  limpiarMensaje("msg-confirmacion");
+  mostrarPantalla("cedula");
+});
+
+document.getElementById("btn-confirmar-voto").addEventListener("click", async () => {
+  limpiarMensaje("msg-confirmacion");
+
+  const btn = document.getElementById("btn-confirmar-voto");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Registrando voto...';
+
+  try {
+    const res = await llamarBackend({
+      accion: "registrar_voto",
+      token:  estado.token,
+      opcion: estado.opcion
+    });
+
+    if (res.ok) {
+      // Mostrar recibo
+      const fecha = new Date(res.fecha).toLocaleString("es-PE", {
+        year:   "numeric",
+        month:  "long",
+        day:    "numeric",
+        hour:   "2-digit",
+        minute: "2-digit"
+      });
+
+      document.getElementById("recibo-fecha").textContent  = fecha;
+      document.getElementById("recibo-token").textContent  = res.tokenParticipacion;
+
+      // Limpiar estado de sesión tras votar
+      estado.token  = null;
+      estado.correo = null;
+      estado.opcion = null;
+
+      mostrarPantalla("recibo");
+    } else {
+      mostrarMensaje("msg-confirmacion", res.error || "No se pudo registrar el voto.", "error");
+      btn.disabled = false;
+      btn.textContent = "Confirmar voto";
+    }
+  } catch (_) {
+    mostrarMensaje("msg-confirmacion", "Error de conexión. No vuelva a hacer clic: verifique si su voto fue registrado.", "error");
+    btn.disabled = false;
+    btn.textContent = "Confirmar voto";
+  }
+});
