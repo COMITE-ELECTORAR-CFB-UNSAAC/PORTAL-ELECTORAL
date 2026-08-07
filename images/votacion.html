@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elecciones CFB 2026 — Facultad de Ciencias Biológicas · UNSAAC</title>
+  <link rel="icon" type="image/png" href="images/F_biologia_logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════
+       TOKENS DE DISEÑO
+    ═══════════════════════════════════════════════════ */
+    :root {
+      --primary:      #1a3a5c;   /* azul UNSAAC profundo */
+      --primary-dark: #0f2540;
+      --primary-mid:  #2a5080;
+      --accent:       #3a7cbf;   /* azul claro institucional */
+      --background:   #f4f6f9;
+      --surface:      #ffffff;
+      --surface-2:    #eef1f6;
+      --border:       #c8d4e0;
+      --text:         #1a2533;
+      --text-body:    #334155;
+      --muted:        #6b7d8f;
+      --success:      #1a6b3a;
+      --success-bg:   #e8f5ee;
+      --danger:       #b91c1c;
+      --danger-bg:    #fef2f2;
+      --warning:      #92400e;
+      --warning-bg:   #fffbeb;
+      --selected:     #1a3a5c;
+      --selected-bg:  #e8eef6;
+      --fold-line:    #c8d4e0;
+      --shadow-sm:    0 1px 3px rgba(26,58,92,.10);
+      --shadow-md:    0 4px 12px rgba(26,58,92,.13);
+      --shadow-lg:    0 8px 28px rgba(26,58,92,.18);
+      --radius:       8px;
+      --radius-lg:    14px;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    button {
+      cursor: pointer;
+      font-family: var(--font-body);
+      border: none;
+      border-radius: var(--radius);
+      transition: background .18s, box-shadow .18s, transform .10s;
+    }
+    button:active { transform: scale(.98); }
+    button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CABECERA
+    ═══════════════════════════════════════════════════ */
+    .site-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .site-header img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      flex-shrink: 0;
+      filter: brightness(0) invert(1);
+    }
+
+    .header-text { flex: 1; }
+
+    .header-text .sup {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.65);
+    }
+
+    .header-text h1 {
+      font-family: var(--font-display);
+      font-size: clamp(15px, 2.4vw, 20px);
+      font-weight: 700;
+      line-height: 1.25;
+      color: #fff;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CONTENEDOR PRINCIPAL
+    ═══════════════════════════════════════════════════ */
+    main {
+      flex: 1;
+      padding: 32px 16px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      width: 100%;
+      max-width: 600px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 18px 28px;
+    }
+
+    .card-header h2 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .card-header .sub {
+      font-size: 12px;
+      color: rgba(255,255,255,.65);
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    .card-body { padding: 28px; }
+
+    /* ═══════════════════════════════════════════════════
+       INDICADOR DE PASOS
+    ═══════════════════════════════════════════════════ */
+    .steps-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .step-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+      transition: background .3s;
+    }
+
+    .step-item.done:not(:last-child)::after { background: var(--accent); }
+
+    .step-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--muted);
+      z-index: 1;
+      transition: background .3s, border-color .3s, color .3s;
+      position: relative;
+    }
+
+    .step-item.active .step-dot {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .step-item.done .step-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: .03em;
+    }
+    .step-item.active .step-label { color: var(--primary); }
+    .step-item.done .step-label { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════════════
+       PANTALLAS (vistas)
+    ═══════════════════════════════════════════════════ */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ═══════════════════════════════════════════════════
+       AUTENTICACIÓN — PASO 1
+    ═══════════════════════════════════════════════════ */
+    .auth-intro {
+      background: var(--surface-2);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 16px;
+      margin-bottom: 22px;
+      font-size: 14px;
+      color: var(--text-body);
+      line-height: 1.6;
+    }
+
+    .auth-intro strong { color: var(--primary); }
+
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+      margin-top: 4px;
+    }
+    .google-btn:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+      background: var(--surface-2);
+    }
+
+    .google-icon {
+      width: 22px; height: 22px;
+      flex-shrink: 0;
+    }
+
+    .domain-note {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ESTADO DE AUTENTICACIÓN
+    ═══════════════════════════════════════════════════ */
+    .auth-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+    }
+
+    .auth-status-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .auth-status-dot.ok  { background: var(--success); }
+    .auth-status-dot.err { background: var(--danger); }
+
+    .auth-status-info { flex: 1; }
+    .auth-status-email { font-size: 13px; font-weight: 600; color: var(--text); }
+    .auth-status-label { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+    /* ═══════════════════════════════════════════════════
+       CÉDULA DE VOTACIÓN — PASO 2
+    ═══════════════════════════════════════════════════ */
+    .cedula {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .cedula-header {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 14px 20px;
+    }
+
+    .cedula-header .cedula-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .cedula-header .cedula-subtitle {
+      font-size: 11px;
+      color: rgba(255,255,255,.65);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .cedula-fold {
+      border-top: 2px dashed var(--fold-line);
+      border-bottom: 2px dashed var(--fold-line);
+      background: var(--surface-2);
+      text-align: center;
+      padding: 4px;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .cedula-opciones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .cedula-opcion {
+      background: var(--surface);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: background .18s, border-color .18s;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .cedula-opcion:hover { background: var(--surface-2); }
+
+    .cedula-opcion.selected {
+      background: var(--selected-bg);
+      border-color: var(--selected);
+      z-index: 1;
+      box-shadow: inset 0 0 0 1px var(--selected);
+    }
+
+    .cedula-opcion input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+
+    .opcion-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .18s, border-color .18s;
+      flex-shrink: 0;
+    }
+
+    .cedula-opcion.selected .opcion-circle {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .opcion-checkmark {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      display: none;
+    }
+    .cedula-opcion.selected .opcion-checkmark { display: block; }
+
+    .opcion-img-wrap {
+      width: 80px; height: 80px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface-2);
+    }
+
+    .opcion-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    .opcion-blank-icon {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      color: var(--muted);
+    }
+
+    .opcion-nombre {
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .opcion-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--surface-2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .cedula-opcion.selected .opcion-tag {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       BOTONES
+    ═══════════════════════════════════════════════════ */
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      padding: 13px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      width: 100%;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-dark);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid var(--border);
+      padding: 11px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      width: 100%;
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-2);
+      border-color: var(--accent);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+      padding: 13px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      width: 100%;
+    }
+    .btn-danger:hover:not(:disabled) { background: #991b1b; }
+
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CONFIRMACIÓN — PASO 3
+    ═══════════════════════════════════════════════════ */
+    .confirm-voto-box {
+      background: var(--surface-2);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .confirm-voto-box .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .confirm-voto-box .opcion-seleccionada {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .confirm-voto-box img {
+      width: 90px; height: 90px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      margin: 12px auto;
+      border: 2px solid var(--border);
+    }
+
+    .confirm-advertencia {
+      background: var(--warning-bg);
+      border-left: 4px solid var(--warning);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 13px 16px;
+      font-size: 13px;
+      color: var(--warning);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .confirm-advertencia strong { font-weight: 700; }
+
+    /* ═══════════════════════════════════════════════════
+       RECIBO — PASO 4
+    ═══════════════════════════════════════════════════ */
+    .recibo {
+      border: 2px solid var(--success);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .recibo-header {
+      background: var(--success);
+      color: #fff;
+      padding: 18px 24px;
+      text-align: center;
+    }
+
+    .recibo-header .check-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .recibo-header h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .recibo-header .sub {
+      font-size: 12px;
+      color: rgba(255,255,255,.75);
+      margin-top: 4px;
+    }
+
+    .recibo-body { padding: 22px; }
+
+    .recibo-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .recibo-row:last-child { border-bottom: none; }
+    .recibo-row .rkey {
+      font-weight: 600;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .recibo-row .rval {
+      color: var(--text);
+      font-weight: 500;
+      text-align: right;
+      word-break: break-all;
+    }
+
+    .recibo-nota {
+      background: var(--surface-2);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 14px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       MENSAJES DE ESTADO
+    ═══════════════════════════════════════════════════ */
+    .alert {
+      padding: 13px 16px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 16px;
+    }
+
+    .alert-danger {
+      background: var(--danger-bg);
+      border: 1px solid #fca5a5;
+      color: var(--danger);
+    }
+
+    .alert-success {
+      background: var(--success-bg);
+      border: 1px solid #86efac;
+      color: var(--success);
+    }
+
+    .alert-warning {
+      background: var(--warning-bg);
+      border: 1px solid #fcd34d;
+      color: var(--warning);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SPINNER
+    ═══════════════════════════════════════════════════ */
+    .spinner-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px;
+      padding: 32px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ═══════════════════════════════════════════════════
+       SECCIÓN DE SEGURIDAD / DISCLAIMER
+    ═══════════════════════════════════════════════════ */
+    .disclaimer {
+      width: 100%;
+      max-width: 600px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .disclaimer summary {
+      padding: 14px 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .disclaimer summary::-webkit-details-marker { display: none; }
+
+    .disclaimer summary::before {
+      content: '▶';
+      font-size: 9px;
+      transition: transform .2s;
+      color: var(--muted);
+    }
+    .disclaimer[open] summary::before { transform: rotate(90deg); }
+
+    .disclaimer-body {
+      padding: 0 20px 18px;
+      font-size: 12.5px;
+      color: var(--text-body);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+    }
+
+    .disclaimer-body p { margin-top: 10px; }
+
+    /* ═══════════════════════════════════════════════════
+       PIE DE PÁGINA
+    ═══════════════════════════════════════════════════ */
+    footer {
+      background: var(--primary-dark);
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      padding: 18px 16px;
+      font-size: 11.5px;
+      line-height: 1.7;
+    }
+
+    footer a { color: rgba(255,255,255,.75); }
+    footer strong { color: rgba(255,255,255,.85); font-weight: 600; }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════ */
+    @media (max-width: 480px) {
+      .card-body { padding: 18px; }
+      .cedula-opciones { grid-template-columns: 1fr 1fr; }
+      .opcion-img-wrap { width: 64px; height: 64px; }
+      .btn-row { grid-template-columns: 1fr; }
+      .steps-bar { gap: 0; }
+      .step-label { font-size: 9.5px; }
+    }
+
+    @media (min-width: 640px) {
+      .opcion-img-wrap { width: 100px; height: 100px; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CERRADO
+    ═══════════════════════════════════════════════════ */
+    .closed-banner {
+      background: var(--danger);
+      color: #fff;
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       YA VOTÓ
+    ═══════════════════════════════════════════════════ */
+    .ya-voto-box {
+      border: 2px solid var(--accent);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .ya-voto-box .icon { font-size: 40px; margin-bottom: 12px; }
+
+    .ya-voto-box h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .ya-voto-box p {
+      font-size: 14px;
+      color: var(--text-body);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .ya-voto-box .token {
+      font-family: monospace;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--muted);
+      display: inline-block;
+      margin-top: 8px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════
+       CABECERA INSTITUCIONAL
+  ══════════════════════════════════════════════ -->
+  <header class="site-header">
+    <img src="images/F_biologia_logo.png" alt="Escudo Facultad de Ciencias Biológicas" />
+    <div class="header-text">
+      <div class="sup">UNSAAC · Facultad de Ciencias Biológicas</div>
+      <h1>Elección del Centro Federado de Biología 2026</h1>
+    </div>
+  </header>
+
+  <!-- Banner de votación cerrada (oculto por JS si está abierta) -->
+  <div class="closed-banner" id="closedBanner" style="display:none;">
+    ⚠ El período de votación se encuentra cerrado.
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       CONTENIDO PRINCIPAL
+  ══════════════════════════════════════════════ -->
+  <main>
+
+    <!-- Indicador de pasos -->
+    <nav class="steps-bar" aria-label="Pasos del proceso">
+      <div class="step-item active" id="step1">
+        <div class="step-dot">1</div>
+        <span class="step-label">Acceso</span>
+      </div>
+      <div class="step-item" id="step2">
+        <div class="step-dot">2</div>
+        <span class="step-label">Votación</span>
+      </div>
+      <div class="step-item" id="step3">
+        <div class="step-dot">3</div>
+        <span class="step-label">Confirmar</span>
+      </div>
+      <div class="step-item" id="step4">
+        <div class="step-dot">4</div>
+        <span class="step-label">Recibo</span>
+      </div>
+    </nav>
+
+    <!-- ═══════════════════════════
+         PANTALLA 1: AUTENTICACIÓN
+    ═══════════════════════════ -->
+    <div class="card screen active" id="screenAuth">
+      <div class="card-header">
+        <h2>Identificación del votante</h2>
+        <div class="sub">Autenticación mediante cuenta institucional UNSAAC</div>
+      </div>
+      <div class="card-body">
+        <div class="auth-intro">
+          Para ejercer su derecho al voto debe acceder con su cuenta
+          <strong>@unsaac.edu.pe</strong>. No se almacenará ni se solicitará
+          su contraseña institucional. La autenticación se realiza directamente
+          a través de Google.
+        </div>
+
+        <button class="google-btn" id="btnGoogleLogin" onclick="iniciarLogin()">
+          <!-- SVG Google oficial (sin marca registrada, solo ícono geométrico) -->
+          <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Acceder con cuenta @unsaac.edu.pe
+        </button>
+
+        <p class="domain-note">
+          Solo se aceptan cuentas del dominio <strong>@unsaac.edu.pe</strong>.<br />
+          Se rechazará cualquier otro dominio automáticamente.
+        </p>
+
+        <div id="authAlert"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════
+         PANTALLA 2: CÉDULA
+    ═══════════════════════════ -->
+    <div class="card screen" id="screenCedula">
+      <div class="card-header">
+        <h2>Cédula de votación</h2>
+        <div class="sub">Proceso Electoral CFB · Escuela Profesional de Biología</div>
+      </div>
+      <div class="card-body">
+
+        <!-- Estado autenticado -->
+        <div class="auth-status" id="cedulaUserInfo">
+          <div class="auth-status-dot ok"></div>
+          <div class="auth-status-info">
+            <div class="auth-status-email" id="cedulaEmail">—</div>
+            <div class="auth-status-label">Identidad verificada · Habilitado para votar</div>
+          </div>
+        </div>
+
+        <!-- La cédula -->
+        <div class="cedula" role="group" aria-labelledby="cedulaTitulo">
+          <div class="cedula-header">
+            <div class="cedula-title" id="cedulaTitulo">CÉDULA OFICIAL DE VOTACIÓN</div>
+            <div class="cedula-subtitle">Centro Federado de la Facultad de Ciencias Biológicas · UNSAAC · 2026</div>
+          </div>
+
+          <div class="cedula-fold">Seleccione una opción</div>
+
+          <div class="cedula-opciones">
+
+            <!-- Opción 1: BIOSINERGIA -->
+            <label class="cedula-opcion" id="opcionBiosinergia" onclick="seleccionarOpcion('BIOSINERGIA')">
+              <input type="radio" name="voto" value="BIOSINERGIA" id="radioBiosinergia" />
+              <div class="opcion-circle"><div class="opcion-checkmark"></div></div>
+              <div class="opcion-img-wrap">
+                <img src="images/BIOSINERGIA.jpeg" alt="Lista BIOSINERGIA" id="imgBiosinergia" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+                <div class="opcion-blank-icon" style="display:none;">🧬</div>
+              </div>
+              <div class="opcion-nombre">LISTA<br/>BIOSINERGIA</div>
+              <div class="opcion-tag">Lista Nº 1</div>
+            </label>
+
+            <!-- Opción 2: Voto en blanco -->
+            <label class="cedula-opcion" id="opcionBlanco" onclick="seleccionarOpcion('BLANCO')">
+              <input type="radio" name="voto" value="BLANCO" id="radioBlanco" />
+              <div class="opcion-circle"><div class="opcion-checkmark"></div></div>
+              <div class="opcion-img-wrap">
+                <div class="opcion-blank-icon" style="display:flex;">☐</div>
+              </div>
+              <div class="opcion-nombre">VOTO<br/>EN BLANCO</div>
+              <div class="opcion-tag">En blanco</div>
+            </label>
+
+          </div>
+        </div>
+
+        <div id="cedulaAlert"></div>
+
+        <button class="btn-primary" onclick="irAConfirmar()" id="btnEmitir" style="margin-top:4px;" disabled>
+          Continuar →
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════
+         PANTALLA 3: CONFIRMACIÓN
+    ═══════════════════════════ -->
+    <div class="card screen" id="screenConfirmar">
+      <div class="card-header">
+        <h2>Confirmar voto</h2>
+        <div class="sub">Revise su selección antes de emitir el voto</div>
+      </div>
+      <div class="card-body">
+
+        <div class="confirm-voto-box" id="confirmBox">
+          <div class="label">Su voto será emitido por</div>
+          <div class="opcion-seleccionada" id="confirmNombre">—</div>
+          <img id="confirmImg" src="" alt="" style="display:none;" />
+        </div>
+
+        <div class="confirm-advertencia">
+          <strong>⚠ Esta acción es definitiva.</strong>
+          Una vez que confirme, su voto quedará registrado y no podrá ser
+          modificado. Solo se permite un voto por estudiante.
+        </div>
+
+        <div id="confirmAlert"></div>
+
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="volverACedula()" id="btnVolver">← Volver</button>
+          <button class="btn-danger"    onclick="confirmarVoto()" id="btnConfirmar">Confirmar voto</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════
+         PANTALLA 4: RECIBO
+    ═══════════════════════════ -->
+    <div class="card screen" id="screenRecibo">
+      <div class="card-header">
+        <h2>Voto emitido</h2>
+        <div class="sub">Proceso Electoral CFB 2026</div>
+      </div>
+      <div class="card-body">
+
+        <div class="recibo">
+          <div class="recibo-header">
+            <div class="check-icon">✓</div>
+            <h3>Voto registrado correctamente</h3>
+            <div class="sub">Su participación ha sido registrada</div>
+          </div>
+          <div class="recibo-body">
+            <div class="recibo-row">
+              <span class="rkey">Proceso</span>
+              <span class="rval">Elección CFB · Facultad de Ciencias Biológicas</span>
+            </div>
+            <div class="recibo-row">
+              <span class="rkey">Fecha y hora</span>
+              <span class="rval" id="reciboFecha">—</span>
+            </div>
+            <div class="recibo-row">
+              <span class="rkey">Token de recibo</span>
+              <span class="rval rval-mono" id="reciboToken" style="font-family:monospace;font-size:11px;">—</span>
+            </div>
+            <div class="recibo-row">
+              <span class="rkey">Estado</span>
+              <span class="rval" style="color:var(--success);font-weight:700;">✓ Registrado</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recibo-nota">
+          <strong>Nota:</strong> El token de recibo es su constancia de participación.
+          Guárdelo si desea conservar un registro personal. El token no revela
+          el sentido de su voto; solo acredita que usted participó en el proceso.
+          Los resultados serán anunciados por el Comité Electoral al cierre de la votación.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════
+         PANTALLA: YA VOTÓ
+    ═══════════════════════════ -->
+    <div class="card screen" id="screenYaVoto">
+      <div class="card-header">
+        <h2>Participación registrada</h2>
+        <div class="sub">Ya ejerció su derecho al voto</div>
+      </div>
+      <div class="card-body">
+        <div class="ya-voto-box">
+          <div class="icon">✓</div>
+          <h3>Ya votó en este proceso</h3>
+          <p>Su voto fue registrado en el proceso electoral del Centro Federado 2026.
+             Solo se permite un voto por estudiante y su participación ya fue contabilizada.</p>
+          <p>Si tiene dudas sobre el registro de su voto, puede comunicarse
+             con el Comité Electoral presentando su token de recibo.</p>
+          <div class="token" id="yaVotoToken" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════
+         PANTALLA: CARGANDO
+    ═══════════════════════════ -->
+    <div class="card screen" id="screenLoading">
+      <div class="card-body">
+        <div class="spinner-wrap">
+          <div class="spinner"></div>
+          <span id="loadingMsg">Verificando...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════
+         DISCLAIMER DE SEGURIDAD
+    ═══════════════════════════ -->
+    <details class="disclaimer">
+      <summary>🔒 Seguridad y transparencia del sistema</summary>
+      <div class="disclaimer-body">
+        <p>Esta plataforma ha sido implementada específicamente para el presente proceso
+        electoral. La aplicación utiliza autenticación mediante cuentas institucionales,
+        validación de elegibilidad en el servidor y controles destinados a impedir la
+        emisión de más de un voto por estudiante.</p>
+
+        <p>El código fuente del frontend se encuentra disponible para revisión pública.
+        La publicación del código tiene como finalidad favorecer la transparencia y
+        permitir la revisión de su funcionamiento.</p>
+
+        <p>Por razones de seguridad, las credenciales, claves de acceso y configuraciones
+        privadas del servidor no son publicadas. Ningún sistema informático puede garantizar
+        seguridad absoluta. Por ello, además de los controles técnicos, los resultados serán
+        conservados y podrán ser sometidos a revisión por el Comité Electoral y/o las
+        instancias correspondientes.</p>
+
+        <p>La plataforma <strong>no solicita ni almacena contraseñas</strong> de las cuentas
+        institucionales. La autenticación ocurre directamente con Google; este sistema
+        solo recibe la confirmación de identidad.</p>
+
+        <p>
+          <a href="https://github.com/TU_USUARIO/TU_REPOSITORIO" target="_blank" rel="noopener">
+            📄 Código fuente y documentación técnica
+          </a>
+        </p>
+      </div>
+    </details>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════════
+       PIE DE PÁGINA
+  ══════════════════════════════════════════════ -->
+  <footer>
+    <strong>Centro Federado de Biología · UNSAAC</strong><br />
+    Facultad de Ciencias Biológicas · Proceso Electoral 2026<br />
+    Este sistema es de uso exclusivo para estudiantes habilitados de la Escuela Profesional de Biología.
+  </footer>
+
+  <!-- ══════════════════════════════════════════════
+       GOOGLE IDENTITY SERVICES (GIS)
+       Autenticación real mediante OAuth2/GIS.
+       Carga el SDK de Google para One Tap / Sign-In.
+  ══════════════════════════════════════════════ -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <script>
+    /* ════════════════════════════════════════════════════════
+       CONFIGURACIÓN — editar antes del despliegue
+    ════════════════════════════════════════════════════════ */
+    const CONFIG = {
+      // ID de cliente OAuth2 de Google Cloud Console
+      // (el ID es público; el secreto nunca va aquí)
+      GOOGLE_CLIENT_ID: 'TU_CLIENT_ID.apps.googleusercontent.com',
+
+      // URL del Web App de Google Apps Script (doPost/doGet)
+      // Se obtiene al publicar el Apps Script como "Web app"
+      BACKEND_URL: 'https://script.google.com/macros/s/TU_DEPLOYMENT_ID/exec',
+
+      // Dominio institucional permitido
+      DOMINIO_PERMITIDO: 'unsaac.edu.pe',
+    };
+
+    /* ════════════════════════════════════════════════════════
+       ESTADO DE LA APLICACIÓN
+       Nunca almacenamos la opción de voto en estado global
+       hasta que el servidor confirma; solo mostramos al usuario.
+    ════════════════════════════════════════════════════════ */
+    const estado = {
+      pantalla: 'auth',   // auth | cedula | confirmar | recibo | yaVoto | loading
+      idToken: null,      // token JWT de Google — se envía al backend para verificar
+      email: null,        // solo para mostrar; el backend no confía en esto
+      opcionSeleccionada: null,
+    };
+
+    /* ════════════════════════════════════════════════════════
+       NAVEGACIÓN ENTRE PANTALLAS
+    ════════════════════════════════════════════════════════ */
+    function mostrarPantalla(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      estado.pantalla = id;
+      actualizarPasos(id);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function actualizarPasos(id) {
+      const mapa = {
+        screenAuth:      1,
+        screenLoading:   1,
+        screenCedula:    2,
+        screenConfirmar: 3,
+        screenRecibo:    4,
+        screenYaVoto:    4,
+      };
+      const actual = mapa[id] || 1;
+      [1, 2, 3, 4].forEach(n => {
+        const el = document.getElementById('step' + n);
+        el.classList.remove('active', 'done');
+        if (n < actual)  el.classList.add('done');
+        if (n === actual) el.classList.add('active');
+      });
+    }
+
+    /* ════════════════════════════════════════════════════════
+       UTILIDADES
+    ════════════════════════════════════════════════════════ */
+    function mostrarAlerta(contenedorId, mensaje, tipo = 'danger') {
+      const el = document.getElementById(contenedorId);
+      if (!el) return;
+      el.innerHTML = `<div class="alert alert-${tipo}">${sanitize(mensaje)}</div>`;
+    }
+
+    function limpiarAlerta(contenedorId) {
+      const el = document.getElementById(contenedorId);
+      if (el) el.innerHTML = '';
+    }
+
+    // Sanitización básica para evitar XSS al insertar texto del servidor
+    function sanitize(str) {
+      const d = document.createElement('div');
+      d.textContent = String(str);
+      return d.innerHTML;
+    }
+
+    function formatearFecha(isoString) {
+      if (!isoString) return '—';
+      try {
+        return new Date(isoString).toLocaleString('es-PE', {
+          dateStyle: 'long', timeStyle: 'short'
+        });
+      } catch { return isoString; }
+    }
+
+    function setLoadingMsg(msg) {
+      const el = document.getElementById('loadingMsg');
+      if (el) el.textContent = msg;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       GOOGLE IDENTITY SERVICES — AUTENTICACIÓN
+       El flujo correcto:
+         1. El usuario hace clic en "Acceder con Google"
+         2. GIS muestra el selector de cuentas de Google
+         3. El usuario selecciona su cuenta @unsaac.edu.pe
+         4. Google devuelve un id_token JWT firmado
+         5. Enviamos el id_token al BACKEND para verificación
+         6. El backend llama a Google tokeninfo/cert para validarlo
+         7. El backend extrae el email verificado
+         8. El backend comprueba dominio, elegibilidad y voto previo
+       El frontend NUNCA valida la identidad; solo inicia el flujo.
+    ════════════════════════════════════════════════════════ */
+
+    // Callback llamado por GIS cuando el usuario completa el login
+    function handleCredentialResponse(response) {
+      if (!response || !response.credential) {
+        mostrarAlerta('authAlert', 'No se pudo obtener la credencial de Google. Intente nuevamente.');
+        return;
+      }
+
+      // Guardamos el id_token para enviarlo al backend
+      // (NO lo decodificamos en el cliente para tomar decisiones de seguridad)
+      estado.idToken = response.credential;
+
+      // Extraemos el email solo para mostrarlo al usuario (UX), no para decisiones
+      try {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        estado.email = payload.email || '(desconocido)';
+      } catch {
+        estado.email = '(no disponible)';
+      }
+
+      // Verificar en el backend
+      verificarIdentidadEnBackend();
+    }
+
+    function iniciarLogin() {
+      limpiarAlerta('authAlert');
+
+      if (!window.google || !window.google.accounts) {
+        mostrarAlerta('authAlert',
+          'El módulo de autenticación de Google aún no está listo. ' +
+          'Verifique su conexión a internet e intente nuevamente en unos segundos.');
+        return;
+      }
+
+      // Inicializar GIS con nuestro client ID
+      google.accounts.id.initialize({
+        client_id: CONFIG.GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+        // Restringir hint de dominio para UX (no es una restricción de seguridad)
+        hosted_domain: CONFIG.DOMINIO_PERMITIDO,
+      });
+
+      // Mostrar el selector de cuentas de Google
+      google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          // Si el One Tap no puede mostrarse, usamos el popup explícito
+          google.accounts.id.renderButton(
+            document.createElement('div'), { theme: 'outline' }
+          );
+          // Alternativa: popup directo
+          google.accounts.id.prompt();
+        }
+      });
+    }
+
+    /* ════════════════════════════════════════════════════════
+       VERIFICACIÓN EN BACKEND — PASO 1
+       El backend recibe el id_token, lo verifica con Google,
+       comprueba dominio, elegibilidad y voto previo.
+    ════════════════════════════════════════════════════════ */
+    async function verificarIdentidadEnBackend() {
+      setLoadingMsg('Verificando identidad...');
+      mostrarPantalla('screenLoading');
+
+      try {
+        const respuesta = await llamarBackend({
+          accion: 'verificarVotante',
+          idToken: estado.idToken,
+        });
+
+        if (respuesta.ok) {
+          if (respuesta.yaVoto) {
+            // El estudiante ya votó: mostrar pantalla informativa
+            const tokEl = document.getElementById('yaVotoToken');
+            if (respuesta.tokenRecibo) {
+              tokEl.textContent = 'Token de recibo: ' + respuesta.tokenRecibo;
+              tokEl.style.display = 'inline-block';
+            }
+            mostrarPantalla('screenYaVoto');
+          } else {
+            // Habilitado y sin voto previo → ir a la cédula
+            document.getElementById('cedulaEmail').textContent = estado.email;
+            mostrarPantalla('screenCedula');
+          }
+        } else {
+          // Backend rechazó: volver a auth con mensaje
+          mostrarPantalla('screenAuth');
+          mostrarAlerta('authAlert', respuesta.mensaje || 'No se pudo verificar su identidad. Verifique que su cuenta sea válida y que esté habilitado para votar.');
+        }
+
+      } catch (err) {
+        mostrarPantalla('screenAuth');
+        mostrarAlerta('authAlert',
+          'Error de conexión con el servidor. Verifique su conexión a internet e intente nuevamente. ' +
+          'Si el problema persiste, contacte al Comité Electoral.');
+        console.error('[CFB Votación] Error al verificar identidad:', err.message);
+      }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       SELECCIÓN DE OPCIÓN EN LA CÉDULA
+    ════════════════════════════════════════════════════════ */
+    function seleccionarOpcion(opcion) {
+      // Validar que la opción sea una de las permitidas
+      const OPCIONES_VALIDAS = ['BIOSINERGIA', 'BLANCO'];
+      if (!OPCIONES_VALIDAS.includes(opcion)) return;
+
+      estado.opcionSeleccionada = opcion;
+
+      // Actualizar UI
+      document.getElementById('opcionBiosinergia').classList.toggle('selected', opcion === 'BIOSINERGIA');
+      document.getElementById('opcionBlanco').classList.toggle('selected', opcion === 'BLANCO');
+      document.getElementById('radioBiosinergia').checked = opcion === 'BIOSINERGIA';
+      document.getElementById('radioBlanco').checked = opcion === 'BLANCO';
+
+      // Habilitar botón de continuar
+      document.getElementById('btnEmitir').disabled = false;
+      limpiarAlerta('cedulaAlert');
+    }
+
+    /* ════════════════════════════════════════════════════════
+       IR A PANTALLA DE CONFIRMACIÓN
+    ════════════════════════════════════════════════════════ */
+    function irAConfirmar() {
+      if (!estado.opcionSeleccionada) {
+        mostrarAlerta('cedulaAlert', 'Debe seleccionar una opción antes de continuar.', 'warning');
+        return;
+      }
+
+      // Actualizar pantalla de confirmación
+      const nombres = { BIOSINERGIA: 'Lista BIOSINERGIA', BLANCO: 'Voto en blanco' };
+      document.getElementById('confirmNombre').textContent = nombres[estado.opcionSeleccionada] || '—';
+
+      const imgEl = document.getElementById('confirmImg');
+      if (estado.opcionSeleccionada === 'BIOSINERGIA') {
+        imgEl.src = 'images/BIOSINERGIA.jpeg';
+        imgEl.alt = 'Lista BIOSINERGIA';
+        imgEl.style.display = 'block';
+      } else {
+        imgEl.style.display = 'none';
+      }
+
+      limpiarAlerta('confirmAlert');
+      mostrarPantalla('screenConfirmar');
+    }
+
+    /* ════════════════════════════════════════════════════════
+       VOLVER A LA CÉDULA
+    ════════════════════════════════════════════════════════ */
+    function volverACedula() {
+      mostrarPantalla('screenCedula');
+    }
+
+    /* ════════════════════════════════════════════════════════
+       CONFIRMAR Y EMITIR VOTO
+       El backend es quien registra; el frontend solo envía
+       la solicitud con el id_token y la opción.
+       El backend:
+         1. Verifica el id_token con Google
+         2. Extrae el email real
+         3. Comprueba dominio
+         4. Comprueba elegibilidad en padrón
+         5. Adquiere lock (LockService)
+         6. Comprueba si ya votó
+         7. Registra el voto en hoja VOTOS (sin email)
+         8. Marca al estudiante en hoja ELECTORES
+         9. Genera token de recibo
+        10. Libera lock
+        11. Devuelve token
+    ════════════════════════════════════════════════════════ */
+    async function confirmarVoto() {
+      const btnConfirmar = document.getElementById('btnConfirmar');
+      const btnVolver    = document.getElementById('btnVolver');
+
+      // Validaciones finales en cliente (no son de seguridad, solo UX)
+      if (!estado.idToken) {
+        mostrarAlerta('confirmAlert', 'Sesión expirada. Por favor, inicie el proceso nuevamente.');
+        return;
+      }
+
+      const OPCIONES_VALIDAS = ['BIOSINERGIA', 'BLANCO'];
+      if (!OPCIONES_VALIDAS.includes(estado.opcionSeleccionada)) {
+        mostrarAlerta('confirmAlert', 'Opción no válida. Por favor, vuelva a la cédula y seleccione una opción.');
+        return;
+      }
+
+      // Deshabilitar botones para evitar doble clic
+      btnConfirmar.disabled = true;
+      btnVolver.disabled    = true;
+      limpiarAlerta('confirmAlert');
+
+      setLoadingMsg('Registrando su voto...');
+      mostrarPantalla('screenLoading');
+
+      try {
+        const respuesta = await llamarBackend({
+          accion:  'emitirVoto',
+          idToken: estado.idToken,
+          opcion:  estado.opcionSeleccionada,
+          // El backend NO confiará en ningún otro campo
+          // No enviamos email, no enviamos nombre, no enviamos contador
+        });
+
+        if (respuesta.ok) {
+          // Mostrar recibo
+          document.getElementById('reciboFecha').textContent  = formatearFecha(respuesta.timestamp);
+          document.getElementById('reciboToken').textContent  = respuesta.tokenRecibo || '(no disponible)';
+          mostrarPantalla('screenRecibo');
+
+          // Invalidar el token localmente para no poder reutilizarlo en este tab
+          estado.idToken = null;
+          estado.opcionSeleccionada = null;
+
+        } else if (respuesta.yaVoto) {
+          // Caso raza: ya había votado (detección en backend)
+          const tokEl = document.getElementById('yaVotoToken');
+          if (respuesta.tokenRecibo) {
+            tokEl.textContent = 'Token de recibo: ' + respuesta.tokenRecibo;
+            tokEl.style.display = 'inline-block';
+          }
+          mostrarPantalla('screenYaVoto');
+
+        } else {
+          // Error del backend
+          mostrarPantalla('screenConfirmar');
+          btnConfirmar.disabled = false;
+          btnVolver.disabled    = false;
+          mostrarAlerta('confirmAlert',
+            respuesta.mensaje || 'No fue posible registrar el voto. Por favor, intente nuevamente o contacte al Comité Electoral.');
+        }
+
+      } catch (err) {
+        mostrarPantalla('screenConfirmar');
+        btnConfirmar.disabled = false;
+        btnVolver.disabled    = false;
+        mostrarAlerta('confirmAlert',
+          'Error de conexión. Su voto puede NO haber sido registrado. ' +
+          'Verifique su conexión a internet. Si el problema persiste, contacte al Comité Electoral antes de intentar nuevamente.');
+        console.error('[CFB Votación] Error al emitir voto:', err.message);
+      }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       LLAMADA AL BACKEND (Google Apps Script)
+       POST con JSON. El backend responde con JSON.
+       Timeout de 30 s para evitar esperas indefinidas.
+    ════════════════════════════════════════════════════════ */
+    async function llamarBackend(payload) {
+      const controller  = new AbortController();
+      const timeoutId   = setTimeout(() => controller.abort(), 30000);
+
+      try {
+        const resp = await fetch(CONFIG.BACKEND_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+          redirect: 'follow',  // Apps Script puede redirigir
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
+        }
+
+        const data = await resp.json();
+        return data;
+
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+          throw new Error('La solicitud tardó demasiado. Verifique su conexión e intente nuevamente.');
+        }
+        throw err;
+      }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       INICIALIZACIÓN
+       Verificar estado de la votación al cargar la página.
+    ════════════════════════════════════════════════════════ */
+    async function verificarEstadoVotacion() {
+      try {
+        const resp = await llamarBackend({ accion: 'estadoVotacion' });
+        if (resp && !resp.abierta) {
+          document.getElementById('closedBanner').style.display = 'block';
+          document.getElementById('btnGoogleLogin').disabled = true;
+          mostrarAlerta('authAlert',
+            'El período de votación está actualmente cerrado. ' +
+            'Contacte al Comité Electoral para más información.', 'warning');
+        }
+      } catch {
+        // Si falla la verificación de estado, no bloqueamos — el backend rechazará los votos si está cerrado
+        console.warn('[CFB Votación] No se pudo verificar el estado de la votación. Continuando...');
+      }
+    }
+
+    // Al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      verificarEstadoVotacion();
+    });
+
+    /* ════════════════════════════════════════════════════════
+       SEGURIDAD ADICIONAL EN CLIENTE
+       — No confiar en ninguna variable de estado para
+         decisiones de seguridad. El backend es quien decide.
+       — Evitar que el botón de confirmar se active sin pasar
+         por el flujo correcto.
+       — Detectar manipulaciones evidentes (no reemplaza
+         la validación del backend).
+    ════════════════════════════════════════════════════════ */
+
+    // Prevenir que el usuario navegue hacia atrás al recibo y reenvíe
+    window.addEventListener('popstate', () => {
+      if (estado.pantalla === 'screenRecibo' || estado.pantalla === 'screenYaVoto') {
+        history.pushState(null, '', window.location.href);
+      }
+    });
+
+    // Intentar prevenir que se abra el depurador facilmente (solo disuasión, no seguridad real)
+    // La seguridad real está en el backend — esto es solo UX
+  </script>
+</body>
+</html>
