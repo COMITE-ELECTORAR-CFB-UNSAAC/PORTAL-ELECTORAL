@@ -57,10 +57,12 @@ function limpiarMensaje(id) {
 // LLAMADAS AL BACKEND (Google Apps Script)
 // ============================================================
 
-async function llamarBackend(payload) {
+aasync function llamarBackend(payload) {
   const respuesta = await fetch(GAS_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
     body: JSON.stringify(payload)
   });
 
