@@ -4,7 +4,7 @@
 // ============================================================
 
 // URL del Web App de Google Apps Script desplegado
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyp1lMh9diC0QTwsChxtuev2bvKEiyNdOLEsy_XBPc2yj1dgi-MBNtbv6BNNgmeQmMFow/exec";
+const GAS_URL = "";
 
 // Estado de la sesión en memoria (nunca se persiste en localStorage)
 const estado = {
