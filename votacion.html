@@ -1,454 +1,193 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Votación Centro Federado de Biología — UNSAAC 2026</title>
-<style>
-  /* ============================================================
-     VARIABLES DE DISEÑO
-     Cambiar solo estos valores para ajustar la paleta/tipografía.
-     ============================================================ */
-  :root {
-    --color-bg: #f7f8f6;
-    --color-surface: #ffffff;
-    --color-primary: #1f6f4a;   /* verde institucional */
-    --color-primary-dark: #16543a;
-    --color-text: #212623;
-    --color-text-muted: #5c6660;
-    --color-border: #dde3df;
-    --color-danger: #b3261e;
-    --color-danger-bg: #fbeceb;
-    --color-success-bg: #eaf5ee;
-    --radius: 10px;
-    --max-width: 480px;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    min-height: 100vh;
-    background: var(--color-bg);
-    color: var(--color-text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-
-  .contenedor {
-    width: 100%;
-    max-width: var(--max-width);
-  }
-
-  .tarjeta {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    padding: 28px 24px;
-  }
-
-  .pantalla { display: none; }
-  .pantalla.activa { display: block; }
-
-  .logo {
-    display: block;
-    margin: 0 auto 16px auto;
-    max-width: 90px;
-    height: auto;
-  }
-
-  h1 {
-    font-size: 1.15rem;
-    text-align: center;
-    margin: 0 0 4px 0;
-  }
-
-  h2 {
-    font-size: 1rem;
-    text-align: center;
-    margin: 0 0 20px 0;
-    color: var(--color-text-muted);
-    font-weight: 500;
-  }
-
-  p { line-height: 1.5; }
-
-  .texto-muted {
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
-  }
-
-  .boton {
-    display: block;
-    width: 100%;
-    padding: 12px 16px;
-    background: var(--color-primary);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 8px;
-  }
-  .boton:hover { background: var(--color-primary-dark); }
-  .boton:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .boton-secundario {
-    background: transparent;
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-  }
-  .boton-secundario:hover { background: var(--color-success-bg); }
-
-  .opcion-voto {
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius);
-    padding: 14px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--color-surface);
-  }
-  .opcion-voto:hover { border-color: var(--color-primary); }
-  .opcion-voto.seleccionada {
-    border-color: var(--color-primary);
-    background: var(--color-success-bg);
-  }
-  .opcion-voto img {
-    width: 56px;
-    height: 56px;
-    object-fit: cover;
-    border-radius: 6px;
-    flex-shrink: 0;
-  }
-  .opcion-voto .nombre-opcion {
-    font-weight: 600;
-    font-size: 1rem;
-  }
-  .opcion-voto .marca-blanco {
-    width: 56px;
-    height: 56px;
-    border: 2px dashed var(--color-border);
-    border-radius: 6px;
-    flex-shrink: 0;
-  }
-
-  .aviso {
-    padding: 12px 14px;
-    border-radius: var(--radius);
-    font-size: 0.9rem;
-    margin-bottom: 16px;
-  }
-  .aviso-error {
-    background: var(--color-danger-bg);
-    color: var(--color-danger);
-    border: 1px solid var(--color-danger);
-  }
-  .aviso-info {
-    background: var(--color-success-bg);
-    color: var(--color-primary-dark);
-    border: 1px solid var(--color-primary);
-  }
-
-  .recibo {
-    background: var(--color-success-bg);
-    border: 1px solid var(--color-primary);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin: 16px 0;
-  }
-  .recibo dt { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 8px; }
-  .recibo dd { margin: 2px 0 0 0; font-weight: 600; word-break: break-all; }
-
-  .cargando {
-    text-align: center;
-    color: var(--color-text-muted);
-    padding: 24px 0;
-  }
-
-  details.transparencia {
-    margin-top: 20px;
-    font-size: 0.82rem;
-    color: var(--color-text-muted);
-  }
-  details.transparencia summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--color-text);
-    margin-bottom: 8px;
-  }
-  details.transparencia ul {
-    padding-left: 18px;
-    margin: 8px 0;
-  }
-  details.transparencia li { margin-bottom: 4px; }
-
-  .email-actual {
-    text-align: center;
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    margin-bottom: 16px;
-    word-break: break-all;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Votación CFB UNSAAC 2026</title>
+  <meta name="description" content="Sistema de votación del Centro Federado de Biología – UNSAAC 2026" />
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+  <link rel="stylesheet" href="css/votacion.css" />
 </head>
 <body>
+  <div id="app">
+    <div class="tarjeta">
 
-<div class="contenedor">
-  <div class="tarjeta">
+      <!-- PANTALLA 1: Acceso -->
+      <div id="pantalla-acceso" class="pantalla activa">
+        <div class="cabecera">
+          <img src="images/F_biologia_logo.png" alt="Facultad de Ciencias Biológicas UNSAAC" />
+          <h1>Centro Federado de Biología<br>UNSAAC 2026</h1>
+          <p>Autenticación mediante correo institucional</p>
+        </div>
 
-    <img class="logo" src="images/F_biologia_logo.png" alt="Facultad de Ciencias Biológicas UNSAAC">
-    <h1>Votación Centro Federado de Biología</h1>
-    <h2>UNSAAC 2026</h2>
+        <hr class="divisor" />
 
-    <!-- ============ PANTALLA: CARGANDO ============ -->
-    <div id="screenCargando" class="pantalla activa">
-      <p class="cargando">Verificando su identidad institucional…</p>
-    </div>
+        <div class="grupo">
+          <label for="campo-correo">Correo institucional</label>
+          <input
+            type="email"
+            id="campo-correo"
+            placeholder="123456@unsaac.edu.pe"
+            autocomplete="email"
+            inputmode="email"
+          />
+        </div>
 
-    <!-- ============ PANTALLA 1: ACCESO ============ -->
-    <div id="screenAuth" class="pantalla">
-      <p>Autenticación mediante cuenta institucional UNSAAC.</p>
-      <p class="texto-muted">No se solicita ni almacena contraseña. El sistema utiliza la sesión de Google con la que usted ya inició sesión en este navegador (correo @unsaac.edu.pe).</p>
-      <div id="authAviso"></div>
-      <button class="boton" id="btnReintentar">Reintentar verificación</button>
-      <p class="texto-muted" style="text-align:center; margin-top:16px;">
-        Si no ha iniciado sesión, hágalo en
-        <a href="https://accounts.google.com/" target="_blank" rel="noopener">accounts.google.com</a>
-        con su correo institucional y vuelva a intentar.
-      </p>
-    </div>
+        <button class="btn btn-primario" id="btn-enviar-codigo">
+          Enviar código de verificación
+        </button>
 
-    <!-- ============ PANTALLA: YA VOTÓ ============ -->
-    <div id="screenYaVoto" class="pantalla">
-      <div class="aviso aviso-info">Ya emitió su voto en este proceso.</div>
-      <p class="texto-muted">No es posible votar más de una vez por elector. Si considera que esto es un error, comuníquese con el Comité Electoral.</p>
-    </div>
-
-    <!-- ============ PANTALLA 2: CÉDULA ============ -->
-    <div id="screenCedula" class="pantalla">
-      <p class="email-actual" id="cedulaEmail"></p>
-      <p class="texto-muted">Seleccione una opción:</p>
-
-      <div class="opcion-voto" data-opcion="BIOSINERGIA">
-        <img src="images/BIOSINERGIA.jpeg" alt="Lista BIOSINERGIA">
-        <span class="nombre-opcion">BIOSINERGIA</span>
+        <div class="mensaje" id="msg-acceso"></div>
       </div>
 
-      <div class="opcion-voto" data-opcion="BLANCO">
-        <div class="marca-blanco"></div>
-        <span class="nombre-opcion">VOTO EN BLANCO</span>
+      <!-- PANTALLA 2: Verificación -->
+      <div id="pantalla-verificacion" class="pantalla">
+        <div class="cabecera">
+          <img src="images/F_biologia_logo.png" alt="Facultad de Ciencias Biológicas UNSAAC" />
+          <h1>Verificación de identidad</h1>
+          <p id="texto-correo-enviado">Ingrese el código enviado a su correo.</p>
+        </div>
+
+        <hr class="divisor" />
+
+        <div class="grupo">
+          <label for="campo-codigo">Código de 6 dígitos</label>
+          <input
+            type="text"
+            id="campo-codigo"
+            placeholder="000000"
+            maxlength="6"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+          />
+        </div>
+
+        <button class="btn btn-primario" id="btn-verificar">
+          Verificar código
+        </button>
+        <button class="btn btn-secundario" id="btn-volver-acceso">
+          Volver
+        </button>
+
+        <div class="mensaje" id="msg-verificacion"></div>
       </div>
 
-      <button class="boton" id="btnContinuar" disabled>Continuar</button>
-    </div>
+      <!-- PANTALLA 3: Cédula de votación -->
+      <div id="pantalla-cedula" class="pantalla">
+        <div class="cabecera">
+          <img src="images/F_biologia_logo.png" alt="Facultad de Ciencias Biológicas UNSAAC" />
+          <h1>Cédula de votación</h1>
+          <p>Seleccione una opción para continuar.</p>
+        </div>
 
-    <!-- ============ PANTALLA 3: CONFIRMACIÓN ============ -->
-    <div id="screenConfirmar" class="pantalla">
-      <p>Usted ha seleccionado:</p>
-      <p style="font-size:1.2rem; font-weight:700; text-align:center;" id="confirmarOpcion"></p>
-      <p class="texto-muted">Esta acción no se puede deshacer. Una vez confirmado, su voto quedará registrado.</p>
-      <div id="confirmarAviso"></div>
-      <button class="boton" id="btnConfirmar">Confirmar voto</button>
-      <button class="boton boton-secundario" id="btnVolver">Volver</button>
-    </div>
+        <hr class="divisor" />
 
-    <!-- ============ PANTALLA 4: RECIBO ============ -->
-    <div id="screenRecibo" class="pantalla">
-      <div class="aviso aviso-info">Su voto fue registrado correctamente.</div>
-      <dl class="recibo">
-        <dt>Fecha y hora</dt>
-        <dd id="reciboFecha"></dd>
-        <dt>Token de recibo</dt>
-        <dd id="reciboToken"></dd>
-      </dl>
-      <p class="texto-muted">Conserve este token como constancia de su participación. El token no está vinculado públicamente a su identidad.</p>
-    </div>
+        <p class="titulo-seccion">Elecciones CFB 2026</p>
 
-    <!-- ============ PANTALLA: ERROR GENERAL ============ -->
-    <div id="screenError" class="pantalla">
-      <div class="aviso aviso-error" id="errorMensaje"></div>
-    </div>
+        <div class="opciones-lista">
 
-    <!-- ============ TRANSPARENCIA ============ -->
-    <details class="transparencia">
-      <summary>Transparencia del proceso</summary>
-      <ul>
-        <li>La plataforma usa autenticación institucional (cuenta @unsaac.edu.pe).</li>
-        <li>El servidor valida la elegibilidad de cada elector antes de aceptar un voto.</li>
-        <li>El sistema evita que un elector emita más de un voto.</li>
-        <li>No se almacenan contraseñas en ningún momento.</li>
-        <li>El código del frontend puede revisarse públicamente.</li>
-        <li>Las configuraciones privadas del servidor no se publican, por seguridad.</li>
-        <li>Ningún sistema informático garantiza seguridad absoluta.</li>
-        <li>El Comité Electoral conserva capacidad de revisión sobre el proceso.</li>
-      </ul>
-    </details>
+          <!-- Lista BIOSINERGIA -->
+          <label class="opcion-tarjeta" id="tarjeta-biosinergia">
+            <input type="radio" name="voto" value="BIOSINERGIA" />
+            <img
+              src="images/BIOSINERGIA.jpeg"
+              alt="Lista BIOSINERGIA"
+              class="opcion-imagen"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="opcion-imagen-placeholder" style="display:none;">
+              <span>🌿</span>
+            </div>
+            <div>
+              <div class="opcion-nombre">BIOSINERGIA</div>
+              <div class="opcion-sub">Lista candidata</div>
+            </div>
+          </label>
 
-  </div>
-</div>
+          <!-- Voto en blanco -->
+          <label class="opcion-tarjeta" id="tarjeta-blanco">
+            <input type="radio" name="voto" value="BLANCO" />
+            <div class="opcion-imagen-placeholder">
+              <span>○</span>
+            </div>
+            <div>
+              <div class="opcion-nombre">Voto en blanco</div>
+              <div class="opcion-sub">Ninguna de las anteriores</div>
+            </div>
+          </label>
 
-<script>
-(function () {
-  'use strict';
+        </div>
 
-  // ============================================================
-  // CONFIGURACIÓN
-  // ============================================================
-  // URL del Web App de Apps Script publicado. Debe terminar en
-  // /exec (sufijo estándar de un despliegue de Web App).
-  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyp1lMh9diC0QTwsChxtuev2bvKEiyNdOLEsy_XBPc2yj1dgi-MBNtbv6BNNgmeQmMFow/exec';
+        <button class="btn btn-primario" id="btn-ir-confirmar" disabled>
+          Continuar
+        </button>
 
-  var opcionSeleccionada = null;
+        <div class="mensaje" id="msg-cedula"></div>
+      </div>
 
-  // ============================================================
-  // MANEJO DE PANTALLAS
-  // ============================================================
-  function mostrarPantalla(id) {
-    document.querySelectorAll('.pantalla').forEach(function (el) {
-      el.classList.remove('activa');
-    });
-    document.getElementById(id).classList.add('activa');
-  }
+      <!-- PANTALLA 4: Confirmación -->
+      <div id="pantalla-confirmacion" class="pantalla">
+        <div class="cabecera">
+          <img src="images/F_biologia_logo.png" alt="Facultad de Ciencias Biológicas UNSAAC" />
+          <h1>Confirme su voto</h1>
+        </div>
 
-  function mostrarError(mensaje) {
-    document.getElementById('errorMensaje').textContent = mensaje;
-    mostrarPantalla('screenError');
-  }
+        <hr class="divisor" />
 
-  // Traduce los códigos de error del backend a mensajes claros.
-  var MENSAJES_ERROR = {
-    NO_AUTENTICADO: 'No se pudo identificar su cuenta institucional. Inicie sesión con su correo @unsaac.edu.pe y vuelva a intentar.',
-    DOMINIO_NO_AUTORIZADO: 'Su cuenta no pertenece al dominio institucional @unsaac.edu.pe.',
-    NO_REGISTRADO: 'Su correo no figura en el padrón electoral de esta elección.',
-    NO_HABILITADO: 'Su cuenta no está habilitada para votar en este proceso.',
-    OPCION_INVALIDA: 'La opción seleccionada no es válida. Vuelva a intentarlo.',
-    YA_VOTO: 'Ya emitió su voto en este proceso.',
-    SISTEMA_OCUPADO: 'El sistema está procesando otra solicitud. Intente nuevamente en unos segundos.',
-    PETICION_INVALIDA: 'Ocurrió un error al enviar la solicitud. Recargue la página.',
-    ERROR_INTERNO: 'Ocurrió un error inesperado. Intente nuevamente o contacte al Comité Electoral.',
-    ACCION_DESCONOCIDA: 'Ocurrió un error inesperado. Recargue la página.'
-  };
+        <div class="confirmacion-cuadro">
+          <div class="etiqueta-voto">Su voto será emitido por</div>
+          <div class="valor-voto" id="texto-confirmacion">—</div>
+        </div>
 
-  function mensajeParaError(codigo) {
-    return MENSAJES_ERROR[codigo] || 'Ocurrió un error inesperado. Intente nuevamente.';
-  }
+        <p class="advertencia">
+          Esta acción es irreversible. Una vez confirmado, no podrá modificar su voto.
+        </p>
 
-  // ============================================================
-  // COMUNICACIÓN CON EL BACKEND
-  // ============================================================
-  function verificarEstado() {
-    mostrarPantalla('screenCargando');
+        <button class="btn btn-primario" id="btn-confirmar-voto">
+          Confirmar voto
+        </button>
+        <button class="btn btn-secundario" id="btn-volver-cedula">
+          Cambiar selección
+        </button>
 
-    fetch(WEBAPP_URL + '?accion=estado')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        if (!data.ok) {
-          if (data.error === 'NO_AUTENTICADO') {
-            document.getElementById('authAviso').innerHTML = '';
-            mostrarPantalla('screenAuth');
-            return;
-          }
-          document.getElementById('authAviso').innerHTML =
-            '<div class="aviso aviso-error">' + mensajeParaError(data.error) + '</div>';
-          mostrarPantalla('screenAuth');
-          return;
-        }
+        <div class="mensaje" id="msg-confirmacion"></div>
+      </div>
 
-        if (data.yaVoto) {
-          mostrarPantalla('screenYaVoto');
-          return;
-        }
+      <!-- PANTALLA 5: Recibo -->
+      <div id="pantalla-recibo" class="pantalla">
+        <div class="cabecera">
+          <img src="images/F_biologia_logo.png" alt="Facultad de Ciencias Biológicas UNSAAC" />
+          <h1>Voto registrado</h1>
+        </div>
 
-        document.getElementById('cedulaEmail').textContent = data.email;
-        mostrarPantalla('screenCedula');
-      })
-      .catch(function () {
-        mostrarError('No se pudo conectar con el servidor de votación. Verifique su conexión e intente nuevamente.');
-      });
-  }
+        <hr class="divisor" />
 
-  function enviarVoto() {
-    var btn = document.getElementById('btnConfirmar');
-    btn.disabled = true;
-    btn.textContent = 'Enviando…';
+        <div class="recibo-caja">
+          <div class="recibo-fila">
+            <span class="recibo-clave">Fecha</span>
+            <span class="recibo-valor" id="recibo-fecha">—</span>
+          </div>
+          <div class="recibo-fila">
+            <span class="recibo-clave">Token de participación</span>
+            <span class="recibo-valor mono" id="recibo-token">—</span>
+          </div>
+        </div>
 
-    fetch(WEBAPP_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ accion: 'votar', opcion: opcionSeleccionada })
-    })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        btn.disabled = false;
-        btn.textContent = 'Confirmar voto';
+        <p class="mensaje-final">✓ Su voto ha sido registrado exitosamente.</p>
+        <p class="sub-final">
+          Guarde su token como constancia de participación.<br>
+          No revela la opción que eligió.
+        </p>
+      </div>
 
-        if (!data.ok) {
-          if (data.error === 'YA_VOTO') {
-            mostrarPantalla('screenYaVoto');
-            return;
-          }
-          document.getElementById('confirmarAviso').innerHTML =
-            '<div class="aviso aviso-error">' + mensajeParaError(data.error) + '</div>';
-          return;
-        }
+    </div><!-- /.tarjeta -->
 
-        var fecha = new Date(data.fecha);
-        document.getElementById('reciboFecha').textContent = fecha.toLocaleString('es-PE');
-        document.getElementById('reciboToken').textContent = data.token;
-        mostrarPantalla('screenRecibo');
-      })
-      .catch(function () {
-        btn.disabled = false;
-        btn.textContent = 'Confirmar voto';
-        document.getElementById('confirmarAviso').innerHTML =
-          '<div class="aviso aviso-error">No se pudo conectar con el servidor. Intente nuevamente.</div>';
-      });
-  }
+    <p class="pie">
+      Sistema Electoral · Centro Federado de Biología UNSAAC 2026<br>
+      Universidad Nacional de San Antonio Abad del Cusco
+    </p>
+  </div><!-- /#app -->
 
-  // ============================================================
-  // EVENTOS DE INTERFAZ
-  // ============================================================
-  document.getElementById('btnReintentar').addEventListener('click', verificarEstado);
-
-  document.querySelectorAll('.opcion-voto').forEach(function (el) {
-    el.addEventListener('click', function () {
-      document.querySelectorAll('.opcion-voto').forEach(function (o) {
-        o.classList.remove('seleccionada');
-      });
-      el.classList.add('seleccionada');
-      opcionSeleccionada = el.getAttribute('data-opcion');
-      document.getElementById('btnContinuar').disabled = false;
-    });
-  });
-
-  document.getElementById('btnContinuar').addEventListener('click', function () {
-    if (!opcionSeleccionada) { return; }
-    var etiqueta = opcionSeleccionada === 'BLANCO' ? 'VOTO EN BLANCO' : opcionSeleccionada;
-    document.getElementById('confirmarOpcion').textContent = etiqueta;
-    document.getElementById('confirmarAviso').innerHTML = '';
-    mostrarPantalla('screenConfirmar');
-  });
-
-  document.getElementById('btnVolver').addEventListener('click', function () {
-    mostrarPantalla('screenCedula');
-  });
-
-  document.getElementById('btnConfirmar').addEventListener('click', enviarVoto);
-
-  // ============================================================
-  // INICIO
-  // ============================================================
-  verificarEstado();
-
-})();
-</script>
-
+  <script src="js/votacion.js"></script>
 </body>
 </html>
